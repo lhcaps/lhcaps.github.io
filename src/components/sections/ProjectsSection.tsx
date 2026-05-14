@@ -1,3 +1,5 @@
+'use client'
+
 import { useRef } from 'react'
 import { Github, ArrowRight, CheckCircle2 } from 'lucide-react'
 import { projects, type Project } from '@/data/projects'
@@ -6,49 +8,117 @@ import { TechPill } from '@/components/ui'
 import { useScroll, useTransform, motion } from 'framer-motion'
 
 // -------------------------------------------------------------- //
-// MiniSystemVisual — layered architecture diagram per project         //
+// MiniSystemVisual — full-panel absolute SVG architecture diagram   //
+// Fills the right panel completely. Distinct visual per project.   //
 // -------------------------------------------------------------- //
 function MiniSystemVisual({ project }: { project: Project }) {
   const { layers, archNodes } = project.system
 
+  // Layout nodes across a 3x3 logical grid using tier + indexWithinTier
+  type NodeWithPos = { label: string; tier: number; x: number; y: number; idx: number }
+  const nodePositions: NodeWithPos[] = archNodes.map((node, globalIdx) => {
+    const nodesInSameTier = archNodes.filter(n => n.tier === node.tier)
+    const idxInTier = nodesInSameTier.indexOf(node)
+    const xBase = node.tier === 0 ? 15 : node.tier === 4 ? 85 : node.tier === 2 ? 50 : 35
+    const xSpread = nodesInSameTier.length > 1 ? 18 : 0
+    const x = xBase + (idxInTier - (nodesInSameTier.length - 1) / 2) * xSpread
+    const y = 12 + node.tier * 20
+    return { ...node, x, y, idx: globalIdx }
+  })
+
+  // SVG connector lines: from each node to the next tier's nodes
+  const connectors: { x1: number; y1: number; x2: number; y2: number }[] = []
+  nodePositions.forEach((node) => {
+    const targets = nodePositions.filter(n => n.tier === node.tier + 1)
+    if (targets.length === 0) {
+      // Last tier connects horizontally
+      const sameTier = nodePositions.filter(n => n.tier === node.tier)
+      const nextIdx = sameTier.indexOf(node) + 1
+      if (nextIdx < sameTier.length) {
+        const next = sameTier[nextIdx]
+        connectors.push({ x1: node.x, y1: node.y, x2: next.x, y2: next.y })
+      }
+    } else {
+      targets.forEach(target => {
+        connectors.push({ x1: node.x, y1: node.y, x2: target.x, y2: target.y })
+      })
+    }
+  })
+
   return (
-    <div className="flex flex-col items-center gap-3 py-4 px-2">
-      {/* Architecture nodes grouped by tier */}
-      <div className="flex flex-col gap-2 w-full">
-        {[0, 1, 2, 3, 4].map((tier) => {
-          const nodesAtTier = archNodes.filter(n => n.tier === tier)
-          if (nodesAtTier.length === 0) return null
-          return (
-            <div key={tier} className="flex items-center justify-center gap-2">
-              {nodesAtTier.map((node) => (
-                <div key={node.label} className="flex flex-col items-center gap-0.5">
-                  <div
-                    className="px-2 py-1 rounded-md text-[9px] font-mono font-semibold tracking-wider"
-                    style={{
-                      background: project.color + '12',
-                      border: `1px solid ${project.color}30`,
-                      color: project.color,
-                      opacity: 1 - tier * 0.12,
-                    }}
-                  >
-                    {node.label}
-                  </div>
-                </div>
-              ))}
-            </div>
-          )
-        })}
+    <div className="relative w-full h-full min-h-[300px] md:min-h-full flex flex-col">
+      {/* SVG connectors behind everything */}
+      <svg
+        className="absolute inset-0 w-full h-full pointer-events-none"
+        viewBox="0 0 100 100"
+        preserveAspectRatio="xMidYMid meet"
+        aria-hidden="true"
+      >
+        <defs>
+          <filter id={`glow-${project.id}`} x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur stdDeviation="1.5" result="blur" />
+            <feMerge>
+              <feMergeNode in="blur" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
+          </filter>
+        </defs>
+        {connectors.map((c, i) => (
+          <line
+            key={i}
+            x1={c.x1}
+            y1={c.y1}
+            x2={c.x2}
+            y2={c.y2}
+            stroke={project.color}
+            strokeWidth="0.5"
+            strokeOpacity="0.35"
+            strokeDasharray="2,1"
+          />
+        ))}
+      </svg>
+
+      {/* Architecture nodes absolutely positioned */}
+      <div className="relative flex-1 w-full">
+        {nodePositions.map((node) => (
+          <div
+            key={node.label}
+            className="absolute"
+            style={{
+              left: `${node.x}%`,
+              top: `${node.y}%`,
+              transform: 'translate(-50%, -50%)',
+            }}
+          >
+            <motion.div
+              className="px-3 py-1.5 rounded-lg text-[9px] font-mono font-bold tracking-[0.1em] uppercase whitespace-nowrap"
+              style={{
+                background: project.color + '14',
+                border: `1px solid ${project.color}35`,
+                color: project.color,
+                filter: `url(#glow-${project.id})`,
+              }}
+              initial={{ opacity: 0, scale: 0.7 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.4, delay: node.idx * 0.06 }}
+              whileHover={{ scale: 1.08 }}
+            >
+              {node.label}
+            </motion.div>
+          </div>
+        ))}
       </div>
 
-      {/* Layer bar */}
-      <div className="flex items-center gap-1 pt-2">
+      {/* Pipeline bar at bottom */}
+      <div className="relative flex items-center justify-center gap-0 py-3 px-4 border-t" style={{ borderColor: project.color + '18' }}>
         {layers.map((layer, i) => (
           <div key={layer} className="flex items-center">
             <div
-              className="px-2 py-1 rounded text-[8px] font-mono font-bold tracking-widest uppercase"
+              className="px-2 py-0.5 rounded text-[7px] font-mono font-bold tracking-widest uppercase"
               style={{
                 background: project.color + '10',
-                border: `1px solid ${project.color}25`,
+                border: `1px solid ${project.color}22`,
                 color: project.color + '99',
               }}
             >
@@ -56,12 +126,13 @@ function MiniSystemVisual({ project }: { project: Project }) {
             </div>
             {i < layers.length - 1 && (
               <svg
-                className="w-3 h-3 flex-shrink-0"
-                viewBox="0 0 12 12"
+                className="w-4 h-3 flex-shrink-0"
+                viewBox="0 0 16 12"
                 fill="none"
                 style={{ color: project.color + '30' }}
+                aria-hidden="true"
               >
-                <path d="M2 6h8M8 3l3 3-3 3" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
+                <path d="M1 6h12M10 2l4 4-4 4" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
             )}
           </div>
@@ -72,7 +143,7 @@ function MiniSystemVisual({ project }: { project: Project }) {
 }
 
 // -------------------------------------------------------------- //
-// ProjectCard — split layout: content + visual                       //
+// ProjectCard — split layout: content left, visual right             //
 // -------------------------------------------------------------- //
 function ProjectCard({ project, index }: { project: Project; index: number }) {
   const ref = useRef<HTMLDivElement>(null)
@@ -104,7 +175,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
         />
 
         {/* Split layout: content left, visual right */}
-        <div className="grid md:grid-cols-[1.1fr_0.9fr] gap-6 md:gap-8">
+        <div className="grid md:grid-cols-[1.1fr_0.9fr] gap-6 md:gap-8 items-start">
           {/* Left: Text content */}
           <div>
             {/* Title row */}
@@ -175,7 +246,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
               </ul>
             </div>
 
-            {/* Proof — NEW */}
+            {/* Proof */}
             <div className="mb-5 p-4 rounded-xl" style={{ background: project.color + '06', border: '1px solid ' + project.color + '15' }}>
               <span className="text-[10px] font-bold tracking-[0.15em] uppercase mb-2 block" style={{ color: project.color + '80' }}>
                 Proof
@@ -219,12 +290,14 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
             </div>
           </div>
 
-          {/* Right: Mini system visual */}
+          {/* Right: Full-height mini system visual */}
           <div
             className="rounded-xl overflow-hidden"
             style={{
               background: 'rgba(255,255,255,0.025)',
               border: '1px solid rgba(255,255,255,0.06)',
+              minHeight: 320,
+              height: '100%',
             }}
           >
             <MiniSystemVisual project={project} />
@@ -236,7 +309,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
 }
 
 // -------------------------------------------------------------- //
-// ProjectsSection                                                 //
+// ProjectsSection                                                  //
 // -------------------------------------------------------------- //
 export function ProjectsSection() {
   const sectionRef = useRef<HTMLDivElement>(null)

@@ -1,7 +1,7 @@
 import "./index.css"
 import { Navigation } from "./components/navigation"
 import { BackgroundCanvas } from "./components/BackgroundCanvas"
-import { Hero3DSection } from "./components/sections/Hero3DSection"
+import { CoreHeroSection } from "./components/sections/CoreHeroSection"
 import { ProjectsSection } from "./components/sections/ProjectsSection"
 import { StackSection } from "./components/sections/StackSection"
 import { AboutSection } from "./components/sections/AboutSection"
@@ -15,7 +15,7 @@ function App() {
       <div className="min-h-screen">
         <Navigation />
         <main>
-          <Hero3DSection />
+          <CoreHeroSection />
           <ProjectsSection />
           <StackSection />
           <AboutSection />

@@ -42,6 +42,7 @@ function OrbitNode({
 }) {
   const meshRef = useRef<THREE.Mesh>(null)
   const groupRef = useRef<THREE.Group>(null)
+  const visualFloatRef = useRef<THREE.Group>(null)
   const stemRef = useRef<THREE.Mesh>(null)
   const ringRef = useRef<THREE.Mesh>(null)
   const labelRef = useRef<THREE.Group>(null)
@@ -49,12 +50,12 @@ function OrbitNode({
   const position = getNodePosition(angle)
 
   useFrame(({ clock }) => {
-    if (!groupRef.current) return
+    if (!groupRef.current || !visualFloatRef.current) return
     const t = clock.getElapsedTime()
     const activeIndex = activeIndexRef.current
     const isActive = index === activeIndex
 
-    groupRef.current.position.y = position[1] + Math.sin(t * 0.5 + floatOffset) * 0.08
+    visualFloatRef.current.position.y = Math.sin(t * 0.5 + floatOffset) * 0.08
 
     if (meshRef.current) {
       meshRef.current.rotation.y = t * 0.4
@@ -83,49 +84,52 @@ function OrbitNode({
   })
 
   return (
-    <group ref={groupRef} position={[position[0], 0, position[2]]}>
+    <group ref={groupRef} position={[position[0], position[1], position[2]]}>
       {/* Active pulse ring */}
       <mesh ref={ringRef} rotation={[Math.PI / 2, 0, 0]}>
         <ringGeometry args={[0.24, 0.3, 32]} />
         <meshBasicMaterial color={color} transparent opacity={0} side={THREE.DoubleSide} />
       </mesh>
 
-      {/* Core orb */}
-      <mesh ref={meshRef}>
-        <icosahedronGeometry args={[0.17, 1]} />
-        <meshStandardMaterial
-          color={color}
-          emissive={color}
-          emissiveIntensity={0.55}
-          roughness={0.15}
-          metalness={0.85}
-        />
-      </mesh>
+      {/* Visual float group — only this moves, group stays at fixed orbit position */}
+      <group ref={visualFloatRef}>
+        {/* Core orb */}
+        <mesh ref={meshRef}>
+          <icosahedronGeometry args={[0.17, 1]} />
+          <meshStandardMaterial
+            color={color}
+            emissive={color}
+            emissiveIntensity={0.55}
+            roughness={0.15}
+            metalness={0.85}
+          />
+        </mesh>
 
-      {/* Stem to core */}
-      <mesh ref={stemRef} position={[0, -0.3, 0]}>
-        <cylinderGeometry args={[0.01, 0.006, 0.22, 4]} />
-        <meshBasicMaterial color={color} transparent opacity={0.12} />
-      </mesh>
+        {/* Stem to core */}
+        <mesh ref={stemRef} position={[0, -0.3, 0]}>
+          <cylinderGeometry args={[0.01, 0.006, 0.22, 4]} />
+          <meshBasicMaterial color={color} transparent opacity={0.12} />
+        </mesh>
 
-      {/* Label — only shown for active node */}
-      <group ref={labelRef} visible={false}>
-        <Float speed={2} rotationIntensity={0} floatIntensity={0.12}>
-          <Html center distanceFactor={8} style={{ pointerEvents: "none" }}>
-            <div style={{
-              fontFamily: "'JetBrains Mono', monospace",
-              fontSize: "10px",
-              color,
-              textAlign: "center",
-              whiteSpace: "nowrap",
-              textShadow: `0 0 14px ${color}99`,
-              userSelect: "none",
-            }}>
-              <div style={{ fontWeight: 700, letterSpacing: "0.1em" }}>{label}</div>
-              <div style={{ fontSize: "7px", opacity: 0.65, letterSpacing: "0.05em" }}>{sublabel}</div>
-            </div>
-          </Html>
-        </Float>
+        {/* Label */}
+        <group ref={labelRef} visible={false}>
+          <Float speed={2} rotationIntensity={0} floatIntensity={0.12}>
+            <Html center distanceFactor={8} style={{ pointerEvents: "none" }}>
+              <div style={{
+                fontFamily: "'JetBrains Mono', monospace",
+                fontSize: "10px",
+                color,
+                textAlign: "center",
+                whiteSpace: "nowrap",
+                textShadow: `0 0 14px ${color}99`,
+                userSelect: "none",
+              }}>
+                <div style={{ fontWeight: 700, letterSpacing: "0.1em" }}>{label}</div>
+                <div style={{ fontSize: "7px", opacity: 0.65, letterSpacing: "0.05em" }}>{sublabel}</div>
+              </div>
+            </Html>
+          </Float>
+        </group>
       </group>
     </group>
   )

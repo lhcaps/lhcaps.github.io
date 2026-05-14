@@ -1,3 +1,5 @@
+'use client'
+
 import { useRef } from 'react'
 import { motion, useScroll, useTransform } from 'framer-motion'
 import { MonitorPlay, Zap, Database, Cpu, Brain } from 'lucide-react'
@@ -5,20 +7,9 @@ import { Container, SectionHeader } from '@/components/layout'
 import { stackLayers, type StackLayer } from '@/data/stack'
 
 const LAYER_ICONS = [MonitorPlay, Zap, Database, Cpu, Brain]
-const LAYER_DESCRIPTIONS = [
-  'React / Vite / Tailwind / Framer Motion',
-  'Express / FastAPI / REST / SSE / TypeScript',
-  'PostgreSQL / MariaDB / Redis / Prisma / pgvector',
-  'BullMQ / Docker / Playwright / CI/CD / n8n',
-  'Ollama / OpenCV / ONNX / RAG / Vector Search',
-]
 
-// -------------------------------------------------------------- //
-// StackLayerRow — horizontal panel representing one pipeline tier     //
-// -------------------------------------------------------------- //
 function StackLayerRow({ layer, index }: { layer: StackLayer; index: number }) {
   const Icon = LAYER_ICONS[index]
-  const description = LAYER_DESCRIPTIONS[index]
 
   return (
     <motion.div
@@ -29,7 +20,7 @@ function StackLayerRow({ layer, index }: { layer: StackLayer; index: number }) {
       className="relative"
     >
       {/* Connector line between rows */}
-      {index < 4 && (
+      {index < stackLayers.length - 1 && (
         <div className="absolute left-8 -top-6 w-px h-6 overflow-hidden">
           <motion.div
             className="w-px rounded-full"
@@ -90,13 +81,14 @@ function StackLayerRow({ layer, index }: { layer: StackLayer; index: number }) {
             </span>
           </div>
 
-          <p className="text-[10px] md:text-xs mb-3" style={{ color: layer.accent + '70' }}>
-            {description}
+          {/* Purpose sentence */}
+          <p className="text-[10px] md:text-xs mb-3 leading-relaxed" style={{ color: layer.accent + '70' }}>
+            {layer.purpose}
           </p>
 
-          {/* Tech pills */}
+          {/* Primary tech */}
           <div className="flex flex-wrap gap-1.5">
-            {layer.items.map((item: string) => (
+            {layer.primary.map((item: string) => (
               <span
                 key={item}
                 className="inline-flex items-center px-2 py-0.5 rounded text-[10px] md:text-xs font-mono font-medium"
@@ -110,6 +102,18 @@ function StackLayerRow({ layer, index }: { layer: StackLayer; index: number }) {
               </span>
             ))}
           </div>
+
+          {/* Supporting tech */}
+          {layer.supporting && layer.supporting.length > 0 && (
+            <div className="mt-1.5">
+              <span className="text-[9px] font-mono" style={{ color: layer.accent + '45' }}>
+                Supporting:{' '}
+              </span>
+              <span className="text-[9px] font-mono" style={{ color: layer.accent + '55' }}>
+                {layer.supporting.join(', ')}
+              </span>
+            </div>
+          )}
         </div>
 
         {/* Right status dot */}
@@ -118,7 +122,6 @@ function StackLayerRow({ layer, index }: { layer: StackLayer; index: number }) {
           style={{
             background: layer.accent,
             boxShadow: '0 0 8px ' + layer.accent,
-            animation: 'pulse-glow 2s ease-in-out infinite',
           }}
         />
       </div>
@@ -126,9 +129,6 @@ function StackLayerRow({ layer, index }: { layer: StackLayer; index: number }) {
   )
 }
 
-// -------------------------------------------------------------- //
-// StackSection                                                    //
-// -------------------------------------------------------------- //
 export function StackSection() {
   const sectionRef = useRef<HTMLDivElement>(null)
   const { scrollYProgress } = useScroll({ target: sectionRef, offset: ['start end', 'end start'] })
@@ -154,7 +154,7 @@ export function StackSection() {
       <Container>
         <SectionHeader number='02' label='System Stack' />
 
-        {/* Compact horizontal scroll for quick overview */}
+        {/* Compact horizontal overview */}
         <div className="mb-10 overflow-x-auto pb-4 -mx-6 px-6 md:mx-0 md:px-0">
           <div className="flex items-center gap-3 min-w-max">
             {stackLayers.map((layer: StackLayer, i: number) => (
@@ -192,7 +192,7 @@ export function StackSection() {
           </div>
         </div>
 
-        {/* Vertical pipeline — main stack display */}
+        {/* Vertical pipeline */}
         <div className="space-y-4 max-w-3xl">
           {stackLayers.map((layer: StackLayer, i: number) => (
             <StackLayerRow key={layer.label} layer={layer} index={i} />

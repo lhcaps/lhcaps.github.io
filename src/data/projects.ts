@@ -32,8 +32,8 @@ export const projects: Project[] = [
     ],
     proof: [
       "Dockerized local runtime with one-command startup",
-      "BullMQ worker queue processing 500+ sessions/day",
-      "Zero-downtime migrations via Prisma",
+      "BullMQ worker queue for asynchronous session processing",
+      "Prisma migrations with repeatable database setup",
     ],
     tags: ["TypeScript", "React", "Express", "Prisma", "Redis", "BullMQ", "MariaDB", "Docker"],
     github: "https://github.com/lhcaps/parkly",
@@ -98,7 +98,7 @@ export const projects: Project[] = [
     ],
     proof: [
       "Streaming responses via SSE — no polling required",
-      "pgvector similarity search across 10k+ document chunks",
+      "pgvector retrieval pipeline for local document chunks",
       "Fully offline — zero external API calls",
     ],
     tags: ["React", "Vite", "FastAPI", "Ollama", "Supabase", "pgvector", "n8n", "Docker"],

@@ -2,38 +2,50 @@ export interface StackLayer {
   label: string
   tag: string
   accent: string
-  items: string[]
+  purpose: string
+  primary: string[]
+  supporting?: string[]
 }
 
 export const stackLayers: StackLayer[] = [
   {
     label: 'Frontend',
-    tag: 'UI / UX Layer',
+    tag: 'UI Layer',
     accent: '#67E8F9',
-    items: ['React', 'Vite', 'Tailwind CSS', 'Framer Motion', 'React Query', 'Zustand'],
+    purpose: 'Interactive dashboard shell, motion system, and client workflow state.',
+    primary: ['React', 'Vite', 'Tailwind', 'Framer Motion'],
+    supporting: ['React Query', 'Zustand'],
   },
   {
     label: 'API',
-    tag: 'Contract / Transport',
+    tag: 'Contract Layer',
     accent: '#4ADE80',
-    items: ['Express', 'FastAPI', 'REST', 'SSE', 'TypeScript', 'Node.js'],
+    purpose: 'Typed transport for product workflows, streaming updates, and backend boundaries.',
+    primary: ['Express', 'FastAPI', 'REST', 'SSE'],
+    supporting: ['TypeScript', 'Node.js'],
   },
   {
     label: 'Data',
-    tag: 'Persistence / ORM',
+    tag: 'Persistence Layer',
     accent: '#60A5FA',
-    items: ['PostgreSQL', 'MariaDB', 'Redis', 'Prisma', 'pgvector', 'SQL'],
+    purpose: 'Relational state, cache, vector retrieval, and schema-driven persistence.',
+    primary: ['PostgreSQL', 'Redis', 'Prisma', 'pgvector'],
+    supporting: ['MariaDB', 'SQL'],
   },
   {
     label: 'Workers',
-    tag: 'Queue / Runtime',
+    tag: 'Runtime Layer',
     accent: '#FB923C',
-    items: ['BullMQ', 'Docker', 'Docker Compose', 'Playwright', 'CI/CD', 'n8n'],
+    purpose: 'Background jobs, automation, verification, packaging, and local runtime.',
+    primary: ['BullMQ', 'Docker', 'Playwright', 'CI/CD'],
+    supporting: ['n8n', 'Docker Compose'],
   },
   {
     label: 'AI',
-    tag: 'Inference / Vision',
+    tag: 'Inference Layer',
     accent: '#A78BFA',
-    items: ['Ollama', 'OpenCV', 'ONNX', 'RAG', 'Vector Search', 'FastAPI Workers'],
+    purpose: 'Local model workflows, retrieval, vision experiments, and async inference.',
+    primary: ['Ollama', 'OpenCV', 'ONNX', 'RAG'],
+    supporting: ['Vector Search', 'FastAPI Workers'],
   },
 ]
