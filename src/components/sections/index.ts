@@ -1,0 +1,6 @@
+export { Hero3DSection } from "./Hero3DSection"
+export { ProjectsSection } from "./ProjectsSection"
+export { StackSection } from "./StackSection"
+export { AboutSection } from "./AboutSection"
+export { EducationSection } from "./EducationSection"
+export { ContactSection, Footer } from "./ContactSection"

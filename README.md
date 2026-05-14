@@ -1,73 +1,54 @@
-# React + TypeScript + Vite
+# Le Huy Portfolio
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A cinematic 3D one-page portfolio built with React, TypeScript, Tailwind CSS, Framer Motion, and React Three Fiber.
 
-Currently, two official plugins are available:
+**Builder of operational systems.** Backend-leaning full-stack developer focused on typed APIs, queues, databases, AI/CV pipelines, and local-first infrastructure.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Live Site
 
-## React Compiler
+https://lhcaps.github.io
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Preview
 
-## Expanding the ESLint configuration
+![Portfolio Preview](https://raw.githubusercontent.com/lhcaps/lhcaps.github.io/main/public/preview.jpg)
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Stack
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+- **React 19** + **TypeScript**
+- **Vite** build tooling
+- **Tailwind CSS** for styling
+- **Framer Motion** for DOM animations
+- **Three.js / React Three Fiber / Drei** for 3D system core
+- **Lucide React** for icons
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+## Design Direction
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+System-core inspired portfolio. The 3D hero visualizes a living backend architecture — central core node with orbiting services (API, DB, Queue, Worker, AI, UI) representing the developer's mental model of how systems fit together.
+
+Dark premium palette: deep navy backgrounds, cyan/blue primary accents, violet secondary accents.
+
+## Sections
+
+1. **Hero 3D** -- System core visualization with name, role, and CTAs
+2. **Selected Systems** -- Case-study project cards with architecture mini-visuals
+3. **System Stack** -- Layered tech stack by architectural tier
+4. **About** -- Sharp, focused bio
+5. **Education** -- Academic background and certifications
+6. **Contact** -- Reach out
+
+## Run Locally
+
+```bash
+npm install
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Build
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm run build
 ```
+
+## Deploy
+
+Push to `main` -- GitHub Actions automatically builds and deploys to GitHub Pages.
