@@ -62,6 +62,8 @@ function TiltCard({ project }: { project: (typeof projects)[0] }) {
       style={{ rotateX: springX, rotateY: springY, transformStyle: "preserve-3d" }}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
+      whileHover={{ y: -3 }}
+      transition={{ duration: 0.25 }}
     >
       <div
         className="relative p-6 md:p-8 rounded-2xl glass-card"

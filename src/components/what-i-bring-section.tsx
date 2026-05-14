@@ -59,7 +59,7 @@ export function WhatIBringSection() {
   const bgY = useTransform(scrollYProgress, [0, 1], [0, -30])
 
   return (
-    <section id="what-i-bring" ref={sectionRef} className="relative py-16 md:py-24 lg:py-32 overflow-hidden">
+    <section id="what-i-bring" ref={sectionRef} className="relative py-20 md:py-32 lg:py-44 overflow-hidden">
       <motion.div
         className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[12vw] md:text-[10vw] font-black select-none pointer-events-none leading-none section-num"
         style={{ y: bgY }}

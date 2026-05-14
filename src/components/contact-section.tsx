@@ -25,7 +25,7 @@ export function ContactSection() {
   const bgY = useTransform(scrollYProgress, [0, 1], [0, -30])
 
   return (
-    <section id="contact" ref={sectionRef} className="relative py-12 md:py-16 overflow-hidden">
+    <section id="contact" ref={sectionRef} className="relative py-20 md:py-32 lg:py-44 overflow-hidden">
       <motion.div
         className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[8vw] md:text-[6vw] font-black select-none pointer-events-none leading-none section-num"
         style={{ y: bgY }}
@@ -35,21 +35,25 @@ export function ContactSection() {
 
       <div className="relative z-10 max-w-4xl mx-auto px-6 md:px-8">
         {/* Header */}
-        <Reveal direction="left" className="flex items-center gap-3 mb-8 md:mb-10">
-          <span className="text-4xl md:text-5xl lg:text-6xl font-black select-none leading-none pb-1 section-num">
+        <Reveal direction="left" className="flex items-center gap-4 mb-12 md:mb-16">
+          <span className="text-5xl md:text-6xl lg:text-7xl font-black select-none leading-none pb-2 section-num">
             06
           </span>
           <div>
             <h2 className="text-[10px] md:text-xs font-bold tracking-[0.25em] uppercase" style={{ color: "hsl(var(--muted-fg))" }}>
               Let's Connect
             </h2>
-            <div className="accent-line mt-2" />
+            <div className="accent-line mt-3" />
           </div>
         </Reveal>
 
         {/* CTA block */}
         <Reveal direction="up" className="mb-8 md:mb-10">
-          <div className="glass-card p-6 md:p-8 rounded-2xl">
+          <motion.div
+            className="glass-card p-6 md:p-8 rounded-2xl"
+            whileHover={{ y: -2 }}
+            transition={{ duration: 0.25 }}
+          >
             <p className="text-sm md:text-base max-w-xl leading-relaxed mb-4 md:mb-5" style={{ color: "hsl(var(--muted-fg))" }}>
               I'm always open to discussing new opportunities, interesting projects, or just having a chat about technology.
             </p>
@@ -68,7 +72,7 @@ export function ContactSection() {
                 <ArrowUpRight className="w-4 h-4 md:w-5 md:h-5" />
               </motion.span>
             </motion.a>
-          </div>
+          </motion.div>
         </Reveal>
 
         {/* Contact info row — email & phone as text links */}
@@ -84,6 +88,8 @@ export function ContactSection() {
             href="mailto:huyle210525@gmail.com"
             className="flex items-center gap-2.5 text-sm md:text-base font-medium"
             style={{ color: "hsl(var(--muted-fg))" }}
+            whileHover={{ y: -2, color: "hsl(var(--fg))" }}
+            transition={{ duration: 0.2 }}
           >
             <Mail className="w-4 h-4 flex-shrink-0" style={{ color: "#60A5FA" }} />
             huyle210525@gmail.com
@@ -93,6 +99,8 @@ export function ContactSection() {
             href="tel:+84902845303"
             className="flex items-center gap-2.5 text-sm md:text-base font-medium"
             style={{ color: "hsl(var(--muted-fg))" }}
+            whileHover={{ y: -2, color: "hsl(var(--fg))" }}
+            transition={{ duration: 0.2 }}
           >
             <Phone className="w-4 h-4 flex-shrink-0" style={{ color: "#4ADE80" }} />
             +84 902 845 303
@@ -143,12 +151,13 @@ export function Footer() {
         <div className="flex items-center justify-center">
           <motion.a
             href="#"
-            className="flex items-center gap-2 text-xs md:text-sm transition-colors"
+            className="flex items-center gap-2 text-xs md:text-sm"
             style={{ color: "hsl(var(--muted-fg))" }}
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
-            whileHover={{ y: -2 }}
+            whileHover={{ y: -2, color: "hsl(var(--fg))" }}
+            transition={{ duration: 0.2 }}
             onClick={(e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: "smooth" }) }}
           >
             <motion.svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"

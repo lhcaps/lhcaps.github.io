@@ -133,7 +133,7 @@ export function Navigation() {
           {/* CTA button */}
           <motion.a
             href="#contact"
-            className="hidden md:flex items-center gap-1.5 liquid-glass rounded-full px-4 py-2 text-sm font-semibold text-foreground hover:glow-primary transition-shadow duration-300"
+            className="hidden md:flex items-center gap-1.5 liquid-glass rounded-full px-4 py-2 text-sm font-semibold text-foreground nav-cta transition-shadow duration-300"
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.4, delay: 2.0 }}
@@ -208,11 +208,11 @@ export function Navigation() {
                 <div className="pt-2 px-2">
                   <motion.a
                     href="#contact"
-                    className="flex items-center justify-center gap-2 liquid-glass-strong rounded-xl py-3 text-sm font-semibold"
+                    className="flex items-center justify-center gap-2 liquid-glass-strong rounded-xl py-3 text-sm font-semibold text-foreground nav-cta-mobile"
                     onClick={() => setIsMobileMenuOpen(false)}
                     whileTap={{ scale: 0.97 }}
                   >
-                    <span className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ background: "hsl(120, 80%, 60%)" }} />
+                    <span className="w-1.5 h-1.5 rounded-full animate-pulse-glow" style={{ background: "hsl(120, 80%, 60%)" }} />
                     Let's Talk
                   </motion.a>
                 </div>
