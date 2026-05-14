@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { CoreHaloCanvas } from '@/components/hero/CoreHaloCanvas'
+import { HaloDecoration } from '@/components/hero/HaloDecoration'
 import { SatelliteSystem } from '@/components/hero/SatelliteSystem'
 import { Button } from '@/components/ui'
 import { Github, Mail, ArrowDown } from 'lucide-react'
@@ -13,33 +13,19 @@ export function CoreHeroSection() {
   const [prefersReduced, setPrefersReduced] = useState(false)
 
   useEffect(() => {
-    const t = setTimeout(() => setMounted(true), 50)
+    const id = setTimeout(() => setMounted(true), 50)
     const mq = window.matchMedia('(prefers-reduced-motion: reduce)')
     setPrefersReduced(mq.matches)
     const handler = (e: MediaQueryListEvent) => setPrefersReduced(e.matches)
     mq.addEventListener('change', handler)
     return () => {
-      clearTimeout(t)
+      clearTimeout(id)
       mq.removeEventListener('change', handler)
     }
   }, [])
 
   return (
     <section className="relative min-h-screen flex items-center overflow-hidden">
-      {/* CoreHalo — local to the core composition, not full-screen */}
-      <div className="absolute inset-0 pointer-events-none z-0">
-        <CoreHaloCanvas className="w-full h-full" />
-      </div>
-
-      {/* Ambient center glow */}
-      <div
-        className="absolute inset-0 pointer-events-none z-0"
-        aria-hidden="true"
-        style={{
-          background: 'radial-gradient(ellipse 60% 55% at 50% 48%, rgba(103,232,249,0.07) 0%, transparent 65%)',
-        }}
-      />
-
       <div className="relative z-10 w-full max-w-6xl mx-auto px-6 md:px-8">
         {/* Availability badge */}
         <motion.div
@@ -67,17 +53,14 @@ export function CoreHeroSection() {
           </span>
         </motion.div>
 
-        {/*
-          CORE COMPOSITION WRAPPER
-          One unified coordinate system: h1 absolute center, halo behind,
-          satellites inset-0, all sharing the same origin.
-        */}
+        {/* Core composition */}
         <div className="flex flex-col items-center">
+          {/* Stage: one unified coordinate system centered on Le Huy */}
           <div
-            className="relative mx-auto w-full max-w-[900px] sm:max-w-[700px]"
+            className="relative mx-auto w-full max-w-[480px]"
             style={{ height: 340 }}
           >
-            {/* CoreHaloCanvas — anchored to center of this wrapper */}
+            {/* CSS/SVG halo — behind text */}
             <div
               className="absolute left-1/2 top-1/2 pointer-events-none"
               style={{
@@ -86,21 +69,19 @@ export function CoreHeroSection() {
                 transform: 'translate(-50%, -50%)',
               }}
             >
-              <CoreHaloCanvas className="w-full h-full" />
+              <HaloDecoration width={420} height={280} />
             </div>
 
-            {/* SatelliteSystem — absolute inset-0, orbits around center */}
-            <div className="absolute inset-0">
-              <SatelliteSystem reduced={prefersReduced} />
-            </div>
+            {/* SVG connector lines */}
+            <SatelliteSystem reduced={prefersReduced} />
 
-            {/* h1 — the actual core, absolute centered */}
+            {/* Le Huy — the actual core */}
             <motion.h1
               className="absolute left-1/2 top-1/2 text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold tracking-tighter leading-none text-center"
               style={{
                 fontFamily: 'var(--font-heading)',
                 transform: 'translate(-50%, -50%)',
-                textShadow: '0 0 40px rgba(103,232,249,0.12), 0 0 80px rgba(103,232,249,0.06)',
+                textShadow: '0 0 40px rgba(103,232,249,0.15), 0 0 80px rgba(103,232,249,0.07)',
               }}
               initial={{ opacity: 0, scale: 0.9 }}
               animate={mounted ? { opacity: 1, scale: 1 } : {}}
@@ -110,7 +91,7 @@ export function CoreHeroSection() {
             </motion.h1>
           </div>
 
-          {/* Role — below core composition */}
+          {/* Role */}
           <motion.div
             initial={{ opacity: 0, y: 14 }}
             animate={mounted ? { opacity: 1, y: 0 } : {}}

@@ -19,25 +19,20 @@ const satellites: Satellite[] = [
   { id: 'ui', label: 'UI', sub: 'React', color: '#4ADE80', x: 0, y: 140 },
 ]
 
-function ConnectorLines({ reduced }: { reduced: boolean }) {
-  const revealed = reduced
-
-  if (!revealed) return null
+function OrbitalLines({ reduced }: { reduced: boolean }) {
+  if (!reduced) return null
 
   return (
-    <motion.svg
+    <svg
       className="absolute inset-0 w-full h-full pointer-events-none"
       viewBox="0 0 100 100"
       preserveAspectRatio="xMidYMid meet"
       aria-hidden="true"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.01 }}
     >
       {satellites.map((s) => {
         const cx = 50
         const cy = 50
-        const sx = cx + (s.x / 480) * 100
+        const sx = cx + (s.x / 340) * 100
         const sy = cy + (s.y / 340) * 100
         return (
           <motion.line
@@ -48,88 +43,78 @@ function ConnectorLines({ reduced }: { reduced: boolean }) {
             y2={sy}
             stroke={s.color}
             strokeWidth="0.06"
-            strokeDasharray="100"
             initial={{ strokeDashoffset: 100, strokeOpacity: 0 }}
-            animate={{ strokeDashoffset: 0, strokeOpacity: 0.22 }}
-            transition={{ duration: 0.7, delay: 0.05, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] }}
+            animate={{ strokeDashoffset: 0, strokeOpacity: 0.18 }}
+            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] }}
           />
         )
       })}
-    </motion.svg>
+    </svg>
   )
 }
 
 function SatelliteNode({ sat, index, reduced }: { sat: Satellite; index: number; reduced: boolean }) {
-  const initialState = reduced
-    ? { x: sat.x, y: sat.y, opacity: 1, scale: 1, filter: 'blur(0px)' }
-    : { x: 0, y: 0, opacity: 0, scale: 0.15, filter: 'blur(8px)' }
-
-  const animateState = { x: sat.x, y: sat.y, opacity: 1, scale: 1, filter: 'blur(0px)' }
+  const init = reduced
+    ? { x: sat.x, y: sat.y, opacity: 1 as const, scale: 1, filter: 'blur(0px)' }
+    : { x: 0, y: 0, opacity: 0 as const, scale: 0.15, filter: 'blur(8px)' }
 
   return (
     <motion.div
       className="absolute pointer-events-none"
-      style={{
-        left: '50%',
-        top: '50%',
-        translateX: '-50%',
-        translateY: '-50%',
-      }}
-      initial={initialState}
-      animate={animateState}
+      style={{ left: '50%', top: '50%', translateX: '-50%', translateY: '-50%' }}
+      initial={init}
+      animate={{ x: sat.x, y: sat.y, opacity: 1, scale: 1, filter: 'blur(0px)' }}
       transition={
         reduced
           ? { duration: 0, delay: index * 0.01 }
-          : { duration: 0.9, delay: index * 0.07, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] }
+          : { duration: 0.9, delay: 0.55 + index * 0.06, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] }
       }
     >
-      <div className="relative flex flex-col items-center gap-0.5 group">
-        {/* Outer ring glow */}
+      <div className="relative flex flex-col items-center gap-1 group">
+        {/* Module shell */}
         <div
-          className="absolute -inset-3 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+          className="relative px-3 py-1.5 rounded-xl flex flex-col items-center gap-0.5"
           style={{
-            background: `radial-gradient(circle, ${sat.color}18 0%, transparent 70%)`,
-            filter: 'blur(4px)',
-          }}
-        />
-
-        {/* Orb dot */}
-        <div
-          className="w-1.5 h-1.5 rounded-full mb-0.5"
-          style={{
-            background: sat.color,
-            boxShadow: `0 0 6px ${sat.color}, 0 0 12px ${sat.color}50`,
-          }}
-        />
-
-        {/* Glass chip */}
-        <div
-          className="relative px-2.5 py-1 rounded-lg text-[9px] font-bold font-mono tracking-[0.12em] uppercase"
-          style={{
-            background: `${sat.color}14`,
-            border: `1px solid ${sat.color}30`,
-            color: sat.color,
+            background: `${sat.color}0D`,
+            border: `1px solid ${sat.color}28`,
             boxShadow: `
-              0 1px 0 rgba(255,255,255,0.06) inset,
-              0 -1px 3px rgba(0,0,0,0.3),
-              0 0 12px ${sat.color}20
+              0 0 0 1px ${sat.color}08 inset,
+              0 2px 8px rgba(0,0,0,0.4),
+              0 0 16px ${sat.color}14
             `,
+            backdropFilter: 'blur(4px)',
           }}
         >
-          {/* Subtle top shine */}
+          {/* Top-edge shine */}
           <div
-            className="absolute inset-x-1 top-px h-px rounded-full"
-            style={{ background: `${sat.color}40` }}
+            className="absolute inset-x-2 top-px h-px rounded-full"
+            style={{ background: `${sat.color}30` }}
           />
-          {sat.label}
-        </div>
 
-        {/* Sublabel */}
-        <div
-          className="text-[7px] font-mono tracking-wider"
-          style={{ color: `${sat.color}60` }}
-        >
-          {sat.sub}
+          {/* Mini orb */}
+          <div
+            className="w-1.5 h-1.5 rounded-full mb-0.5"
+            style={{
+              background: sat.color,
+              boxShadow: `0 0 5px ${sat.color}, 0 0 10px ${sat.color}60`,
+            }}
+          />
+
+          {/* Label */}
+          <span
+            className="text-[9px] font-bold font-mono tracking-[0.1em] uppercase whitespace-nowrap"
+            style={{ color: sat.color }}
+          >
+            {sat.label}
+          </span>
+
+          {/* Sublabel */}
+          <span
+            className="text-[7px] font-mono tracking-wider"
+            style={{ color: `${sat.color}55` }}
+          >
+            {sat.sub}
+          </span>
         </div>
       </div>
     </motion.div>
@@ -152,11 +137,11 @@ export function SatelliteSystem({ reduced = false }: SatelliteSystemProps) {
 
   return (
     <div
-      className="relative w-full max-w-[480px] mx-auto"
+      className="absolute inset-0"
       style={{ height: 340 }}
       aria-hidden="true"
     >
-      <ConnectorLines reduced={reduced} />
+      <OrbitalLines reduced={reduced} />
       {satellites.map((sat, i) => (
         <SatelliteNode key={sat.id} sat={sat} index={i} reduced={reduced} />
       ))}

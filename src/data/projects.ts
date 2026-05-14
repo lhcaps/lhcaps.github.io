@@ -11,11 +11,12 @@ export interface Project {
   color: string
   system: {
     layers: string[]
-    archNodes: {
+    nodes: {
+      id: string
       label: string
       x: number
       y: number
-      type?: 'primary' | 'secondary' | 'runtime'
+      kind?: 'primary' | 'process' | 'storage' | 'runtime'
     }[]
     connections: [string, string][]
   }
@@ -45,22 +46,22 @@ export const projects: Project[] = [
     color: "#4ADE80",
     system: {
       layers: ["UI", "API", "DB", "Queue", "Worker"],
-      archNodes: [
-        { label: "Gate", x: 50, y: 12, type: "primary" },
-        { label: "Session", x: 50, y: 30, type: "primary" },
-        { label: "Review", x: 28, y: 50 },
-        { label: "Incident", x: 50, y: 50 },
-        { label: "Evidence", x: 72, y: 50 },
-        { label: "Device", x: 50, y: 70, type: "runtime" },
+      nodes: [
+        { id: "gate", label: "Gate", x: 50, y: 13, kind: "primary" },
+        { id: "session", label: "Session", x: 50, y: 33, kind: "primary" },
+        { id: "review", label: "Review", x: 28, y: 55, kind: "process" },
+        { id: "incident", label: "Incident", x: 50, y: 55, kind: "process" },
+        { id: "evidence", label: "Evidence", x: 72, y: 55, kind: "storage" },
+        { id: "device", label: "Device", x: 50, y: 78, kind: "runtime" },
       ],
       connections: [
-        ["Gate", "Session"],
-        ["Session", "Review"],
-        ["Session", "Incident"],
-        ["Session", "Evidence"],
-        ["Review", "Device"],
-        ["Incident", "Device"],
-        ["Evidence", "Device"],
+        ["gate", "session"],
+        ["session", "review"],
+        ["session", "incident"],
+        ["session", "evidence"],
+        ["review", "device"],
+        ["incident", "device"],
+        ["evidence", "device"],
       ],
     },
   },
@@ -87,22 +88,22 @@ export const projects: Project[] = [
     color: "#FB923C",
     system: {
       layers: ["UI", "API", "DB", "Worker", "AI"],
-      archNodes: [
-        { label: "Media", x: 50, y: 12, type: "primary" },
-        { label: "Dataset", x: 50, y: 30, type: "primary" },
-        { label: "Annotate", x: 30, y: 50 },
-        { label: "Review", x: 50, y: 50 },
-        { label: "Inference", x: 70, y: 50 },
-        { label: "Export", x: 50, y: 70, type: "runtime" },
+      nodes: [
+        { id: "media", label: "Media", x: 50, y: 13, kind: "primary" },
+        { id: "dataset", label: "Dataset", x: 50, y: 33, kind: "primary" },
+        { id: "annotate", label: "Annotate", x: 28, y: 55, kind: "process" },
+        { id: "review", label: "Review", x: 50, y: 55, kind: "process" },
+        { id: "inference", label: "Inference", x: 72, y: 55, kind: "runtime" },
+        { id: "export", label: "Export", x: 50, y: 78, kind: "runtime" },
       ],
       connections: [
-        ["Media", "Dataset"],
-        ["Dataset", "Annotate"],
-        ["Dataset", "Review"],
-        ["Dataset", "Inference"],
-        ["Annotate", "Export"],
-        ["Review", "Export"],
-        ["Inference", "Export"],
+        ["media", "dataset"],
+        ["dataset", "annotate"],
+        ["dataset", "review"],
+        ["dataset", "inference"],
+        ["annotate", "export"],
+        ["review", "export"],
+        ["inference", "export"],
       ],
     },
   },
@@ -129,21 +130,21 @@ export const projects: Project[] = [
     color: "#A78BFA",
     system: {
       layers: ["UI", "API", "DB", "Queue", "AI"],
-      archNodes: [
-        { label: "Chunk", x: 50, y: 12, type: "primary" },
-        { label: "Embed", x: 30, y: 32 },
-        { label: "Vector DB", x: 70, y: 32 },
-        { label: "Retriever", x: 50, y: 52 },
-        { label: "Ollama", x: 30, y: 72 },
-        { label: "Stream", x: 70, y: 72 },
+      nodes: [
+        { id: "chunk", label: "Chunk", x: 50, y: 13, kind: "primary" },
+        { id: "embed", label: "Embed", x: 30, y: 35, kind: "process" },
+        { id: "vectordb", label: "Vector DB", x: 70, y: 35, kind: "storage" },
+        { id: "retriever", label: "Retriever", x: 50, y: 55, kind: "process" },
+        { id: "ollama", label: "Ollama", x: 30, y: 78, kind: "runtime" },
+        { id: "stream", label: "Stream", x: 70, y: 78, kind: "runtime" },
       ],
       connections: [
-        ["Chunk", "Embed"],
-        ["Chunk", "Vector DB"],
-        ["Embed", "Retriever"],
-        ["Vector DB", "Retriever"],
-        ["Retriever", "Ollama"],
-        ["Retriever", "Stream"],
+        ["chunk", "embed"],
+        ["chunk", "vectordb"],
+        ["embed", "retriever"],
+        ["vectordb", "retriever"],
+        ["retriever", "ollama"],
+        ["retriever", "stream"],
       ],
     },
   },
