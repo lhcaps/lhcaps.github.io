@@ -1,4 +1,4 @@
-import { useScroll, useTransform } from 'framer-motion'
+import { motion, useScroll, useTransform } from 'framer-motion'
 
 export function BackgroundCanvas() {
   const { scrollYProgress } = useScroll()
