@@ -3,18 +3,125 @@ import { motion, useScroll, useTransform } from "framer-motion"
 import { Reveal } from "@/lib/reveal"
 
 const skillCategories = [
-  { label: "LANGUAGES", skills: ["TypeScript", "JavaScript", "Python", "SQL", "HTML/CSS"], color: "#60A5FA" },
-  { label: "FRONTEND", skills: ["React", "Vite", "Tailwind CSS", "React Query", "Zustand"], color: "#67E8F9" },
-  { label: "BACKEND", skills: ["Node.js", "Express", "FastAPI", "REST APIs", "SSE", "Background Jobs"], color: "#4ADE80" },
-  { label: "DATABASE / INFRA", skills: ["PostgreSQL", "MySQL", "MongoDB", "Redis", "Prisma", "Docker"], color: "#F472B6" },
-  { label: "AI / CV", skills: ["Local RAG", "Vector Search", "Ollama", "pgvector", "OpenCV", "ONNX"], color: "#A78BFA" },
-  { label: "QUALITY & ARCH", skills: ["Clean Architecture", "Typed Contracts", "Playwright", "Vitest", "CI/CD"], color: "#FB923C" },
+  {
+    label: "LANGUAGES",
+    skills: ["TypeScript", "JavaScript", "Python", "SQL", "HTML/CSS"],
+    color: "#60A5FA",
+    dotColor: "#60A5FA",
+  },
+  {
+    label: "FRONTEND",
+    skills: ["React", "Vite", "Tailwind CSS", "React Query", "Zustand"],
+    color: "#67E8F9",
+    dotColor: "#67E8F9",
+  },
+  {
+    label: "BACKEND",
+    skills: ["Node.js", "Express", "FastAPI", "REST APIs", "SSE", "Background Jobs"],
+    color: "#4ADE80",
+    dotColor: "#4ADE80",
+  },
+  {
+    label: "DATABASE / INFRA",
+    skills: ["PostgreSQL", "MySQL", "MongoDB", "Redis", "Prisma", "Docker"],
+    color: "#F472B6",
+    dotColor: "#F472B6",
+  },
+  {
+    label: "AI / CV",
+    skills: ["Local RAG", "Vector Search", "Ollama", "pgvector", "OpenCV", "ONNX"],
+    color: "#A78BFA",
+    dotColor: "#A78BFA",
+  },
+  {
+    label: "QUALITY & ARCH",
+    skills: ["Clean Architecture", "Typed Contracts", "Playwright", "Vitest", "CI/CD"],
+    color: "#FB923C",
+    dotColor: "#FB923C",
+  },
 ]
+
+function SkillTag({
+  skill,
+  color,
+  index,
+}: {
+  skill: string
+  color: string
+  index: number
+}) {
+  return (
+    <motion.span
+      key={skill}
+      className="inline-flex items-center px-3 py-1.5 rounded-lg text-xs md:text-sm font-medium select-none"
+      style={{
+        background: `${color}12`,
+        border: `1px solid ${color}28`,
+        color: color,
+      }}
+      initial={{ opacity: 0, scale: 0.85 }}
+      whileInView={{ opacity: 1, scale: 1 }}
+      viewport={{ once: true, margin: "-20px" }}
+      transition={{
+        duration: 0.3,
+        delay: index * 0.04,
+        ease: [0.22, 1, 0.36, 1],
+      }}
+      whileHover={{
+        scale: 1.07,
+        borderColor: `${color}60`,
+        background: `${color}1A`,
+      }}
+    >
+      {skill}
+    </motion.span>
+  )
+}
+
+function SkillCard({
+  category,
+  index,
+}: {
+  category: (typeof skillCategories)[0]
+  index: number
+}) {
+  return (
+    <Reveal direction="up" delay={index * 0.07}>
+      <div className="glass-card rounded-2xl p-5 md:p-6">
+        {/* Category header */}
+        <div className="flex items-center gap-3 mb-4">
+          <motion.div
+            className="w-2 h-2 rounded-full flex-shrink-0"
+            style={{
+              background: category.color,
+              boxShadow: `0 0 8px ${category.color}80`,
+            }}
+            animate={{ scale: [1, 1.5, 1], opacity: [0.7, 1, 0.7] }}
+            transition={{ duration: 2.5, repeat: Infinity, delay: index * 0.35 }}
+          />
+          <h3
+            className="text-[10px] md:text-xs font-bold tracking-widest uppercase"
+            style={{ color: category.color }}
+          >
+            {category.label}
+          </h3>
+          <div className="flex-1 h-px rounded-full" style={{ background: `${category.color}20` }} />
+        </div>
+
+        {/* Tags */}
+        <div className="flex flex-wrap gap-2">
+          {category.skills.map((skill, si) => (
+            <SkillTag key={skill} skill={skill} color={category.color} index={si} />
+          ))}
+        </div>
+      </div>
+    </Reveal>
+  )
+}
 
 export function SkillsSection() {
   const sectionRef = useRef<HTMLDivElement>(null)
   const { scrollYProgress } = useScroll({ target: sectionRef, offset: ["start end", "end start"] })
-
   const bgY = useTransform(scrollYProgress, [0, 1], [0, -60])
 
   return (
@@ -42,38 +149,9 @@ export function SkillsSection() {
         </Reveal>
 
         {/* Skill grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-x-12 md:gap-y-10">
-          {skillCategories.map((category, ci) => (
-            <Reveal key={category.label} direction="up" delay={ci * 0.07}>
-              {/* Category header */}
-              <div className="mb-3 md:mb-4 flex items-center gap-3">
-                <motion.div
-                  className="w-1.5 h-1.5 rounded-full flex-shrink-0"
-                  style={{ background: category.color, boxShadow: `0 0 8px ${category.color}60` }}
-                  animate={{ scale: [1, 1.4, 1], opacity: [0.7, 1, 0.7] }}
-                  transition={{ duration: 3, repeat: Infinity, delay: ci * 0.4 }}
-                />
-                <h3 className="text-[10px] md:text-xs font-bold tracking-wider uppercase" style={{ color: "hsl(var(--muted-fg))" }}>
-                  {category.label}
-                </h3>
-                <div className="flex-1 h-px" style={{ background: `${category.color}18` }} />
-              </div>
-
-              {/* Skill tags */}
-              <div className="flex flex-wrap gap-1.5 md:gap-2">
-                {category.skills.map((skill) => (
-                  <motion.span
-                    key={skill}
-                    className="inline-flex items-center px-2.5 py-1 md:py-1.5 rounded-lg text-xs md:text-sm font-medium"
-                    style={{ background: `${category.color}10`, border: `1px solid ${category.color}25`, color: category.color }}
-                    whileHover={{ scale: 1.08, borderColor: `${category.color}50` }}
-                    transition={{ duration: 0.2 }}
-                  >
-                    {skill}
-                  </motion.span>
-                ))}
-              </div>
-            </Reveal>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-5">
+          {skillCategories.map((category, i) => (
+            <SkillCard key={category.label} category={category} index={i} />
           ))}
         </div>
       </div>
