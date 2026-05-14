@@ -1,0 +1,6 @@
+export { projects } from './projects'
+export type { Project } from './projects'
+export { stackLayers } from './stack'
+export type { StackLayer } from './stack'
+export { profile } from './profile'
+export { navItems } from './navigation'

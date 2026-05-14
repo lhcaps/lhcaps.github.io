@@ -1,77 +1,137 @@
-import { useRef } from "react"
-import { motion } from "framer-motion"
-import { Container } from "@/components/layout/Container"
-import { SectionHeader } from "@/components/layout/SectionHeader"
-import { skillLayers, type SkillLayer } from "@/data/skills"
-import { TechPill } from "@/components/ui/TechPill"
+import { Container, SectionHeader } from '@/components/layout'
+import { stackLayers, type StackLayer } from '@/data/stack'
 
-function LayerCard({ layer, index }: { layer: SkillLayer; index: number }) {
+function StackLayerCard({ layer }: { layer: StackLayer }) {
   return (
-    <motion.div
-      initial={{ opacity: 0, x: -20 }}
-      whileInView={{ opacity: 1, x: 0 }}
-      viewport={{ once: true, margin: "-40px" }}
-      transition={{ duration: 0.5, delay: index * 0.1, ease: [0.22, 1, 0.36, 1] }}
-      className="group"
+    <div
+      className='rounded-2xl p-5 md:p-6 relative overflow-hidden'
+      style={{
+        background: 'linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02))',
+        border: '1px solid rgba(255,255,255,0.07)',
+        boxShadow: '0 16px 48px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.05)',
+      }}
     >
       <div
-        className="relative rounded-2xl p-6 md:p-7"
+        className='absolute left-0 top-3 bottom-3 w-0.5 rounded-full'
         style={{
-          background: "linear-gradient(180deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.015) 100%)",
-          border: `1px solid ${layer.color}18`,
-          boxShadow: `inset 0 1px 0 ${layer.color}10`,
+          background: 'linear-gradient(to bottom, ' + layer.accent + ', transparent)',
+          boxShadow: '0 0 8px ' + layer.accent + '40',
         }}
-      >
-        <div
-          className="absolute top-0 left-6 right-6 h-px rounded-b-full"
-          style={{ background: `linear-gradient(90deg, transparent, ${layer.color}60, transparent)` }}
-        />
-        <div className="flex items-start gap-5">
-          <div
-            className="flex-shrink-0 w-10 h-10 md:w-12 md:h-12 rounded-xl flex items-center justify-center text-lg md:text-xl font-bold font-mono"
-            style={{ background: `${layer.color}10`, border: `1px solid ${layer.color}25`, color: layer.color }}
-          >
-            {String(index + 1).padStart(2, "0")}
-          </div>
-          <div className="flex-1 min-w-0">
-            <h3 className="text-base md:text-lg font-bold mb-1" style={{ color: layer.color }}>
-              {layer.label}
-            </h3>
-            <p className="text-xs mb-4" style={{ color: "hsl(var(--muted-fg))", opacity: 0.6 }}>
-              {layer.description}
-            </p>
-            <div className="flex flex-wrap gap-2">
-              {layer.skills.map((skill) => (
-                <TechPill key={skill} label={skill} color={layer.color} />
-              ))}
-            </div>
-          </div>
+      />
+
+      <div className='flex items-center justify-between mb-4 pl-3'>
+        <div>
+          <h3 className='text-base md:text-lg font-bold font-heading' style={{ color: layer.accent }}>
+            {layer.label}
+          </h3>
+          <p className='text-[10px] md:text-xs tracking-[0.1em] uppercase' style={{ color: layer.accent + '70' }}>
+            {layer.tag}
+          </p>
         </div>
+
         <div
-          className="absolute left-0 top-4 bottom-4 w-0.5 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-          style={{ background: `linear-gradient(180deg, transparent, ${layer.color}80, transparent)` }}
-        />
+          className='w-7 h-7 md:w-8 md:h-8 rounded-lg flex items-center justify-center'
+          style={{
+            background: layer.accent + '10',
+            border: '1px solid ' + layer.accent + '25',
+          }}
+        >
+          <div
+            className='w-1.5 h-1.5 rounded-full'
+            style={{
+              background: layer.accent,
+              boxShadow: '0 0 6px ' + layer.accent,
+            }}
+          />
+        </div>
       </div>
-    </motion.div>
+
+      <div className='flex flex-wrap gap-2 pl-3'>
+        {layer.items.map((item: string) => (
+          <span
+            key={item}
+            className='inline-flex items-center px-2.5 py-1 rounded-md text-[10px] md:text-xs font-mono font-medium'
+            style={{
+              background: layer.accent + '08',
+              border: '1px solid ' + layer.accent + '18',
+              color: layer.accent + '90',
+            }}
+          >
+            {item}
+          </span>
+        ))}
+      </div>
+    </div>
   )
 }
 
 export function StackSection() {
-  const sectionRef = useRef<HTMLDivElement>(null)
-
   return (
-    <section id="stack" ref={sectionRef} className="relative py-20 md:py-32 lg:py-44 overflow-hidden">
+    <section
+      id='stack'
+      className='relative py-24 md:py-32 lg:py-44 overflow-hidden'
+    >
       <div
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[14vw] font-black select-none pointer-events-none leading-none section-num"
-        style={{ opacity: 0.03 }}
+        className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[12vw] font-black select-none pointer-events-none leading-none'
+        style={{
+          fontFamily: 'var(--font-heading)',
+          fontStyle: 'italic',
+          WebkitTextStroke: '1px rgba(139, 232, 249, 0.03)',
+          color: 'transparent',
+        }}
       >
         STACK
       </div>
+
       <Container>
-        <SectionHeader number="02" label="System Stack" />
-        <div className="space-y-4 max-w-3xl">
-          {skillLayers.map((layer: SkillLayer, index: number) => (
-            <LayerCard key={layer.id} layer={layer} index={index} />
+        <SectionHeader number='02' label='System Stack' />
+
+        <div className='mb-10 overflow-x-auto pb-4 -mx-6 px-6 md:mx-0 md:px-0'>
+          <div className='flex items-center gap-3 min-w-max'>
+            {stackLayers.map((layer: StackLayer, i: number) => (
+              <div key={layer.label} className='flex items-center'>
+                <div
+                  className='flex items-center gap-2 px-4 py-2 rounded-xl'
+                  style={{
+                    background: layer.accent + '08',
+                    border: '1px solid ' + layer.accent + '20',
+                  }}
+                >
+                  <div
+                    className='w-1.5 h-1.5 rounded-full'
+                    style={{
+                      background: layer.accent,
+                      boxShadow: '0 0 4px ' + layer.accent,
+                    }}
+                  />
+                  <span className='text-xs font-semibold font-mono whitespace-nowrap' style={{ color: layer.accent }}>
+                    {layer.label}
+                  </span>
+                </div>
+                {i < stackLayers.length - 1 && (
+                  <svg
+                    className='w-5 h-4 mx-1 flex-shrink-0'
+                    viewBox='0 0 20 16'
+                    fill='none'
+                    style={{ color: 'rgba(139,149,167,0.2)' }}
+                  >
+                    <path
+                      d='M0 8h16M12 4l4 4-4 4'
+                      stroke='currentColor'
+                      strokeWidth='1.5'
+                      strokeLinecap='round'
+                      strokeLinejoin='round'
+                    />
+                  </svg>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4'>
+          {stackLayers.map((layer: StackLayer) => (
+            <StackLayerCard key={layer.label} layer={layer} />
           ))}
         </div>
       </Container>
