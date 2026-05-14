@@ -17,26 +17,13 @@ export function Hero3DSection() {
 
   return (
     <section className="relative min-h-screen flex items-center overflow-hidden">
-      {/* Technical grid background */}
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          backgroundImage: `
-            linear-gradient(rgba(103, 232, 249, 0.04) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(103, 232, 249, 0.04) 1px, transparent 1px)
-          `,
-          backgroundSize: "60px 60px",
-        }}
-        aria-hidden="true"
-      />
-
-      {/* Soft center glow */}
+      {/* Soft center glow — no duplicate grid, BackgroundCanvas handles the global grid */}
       <div
         className="absolute inset-0 pointer-events-none"
         aria-hidden="true"
         style={{
           background:
-            "radial-gradient(ellipse 70% 50% at 60% 50%, rgba(103, 232, 249, 0.05) 0%, transparent 60%)",
+            "radial-gradient(ellipse 70% 50% at 60% 50%, rgba(103, 232, 249, 0.06) 0%, transparent 60%)",
         }}
       />
 
@@ -133,13 +120,13 @@ export function Hero3DSection() {
             </motion.div>
           </div>
 
-          {/* Right: 3D Canvas */}
-          <div className="flex-1 w-full max-w-md lg:max-w-none">
+          {/* Right: 3D Canvas — enlarged desktop, mobile-safe */}
+          <div className="flex-1 w-full">
             <motion.div
               initial={{ opacity: 0, scale: 0.9 }}
               animate={mounted ? { opacity: 1, scale: 1 } : {}}
               transition={{ duration: 1.0, delay: 0.4, ease: easeOutExpo as unknown as number[] }}
-              className="w-full aspect-square max-w-[420px] mx-auto"
+              className="w-full aspect-square max-w-[340px] sm:max-w-[420px] lg:max-w-[560px] xl:max-w-[620px] mx-auto"
             >
               <SceneCanvas className="w-full h-full" />
             </motion.div>

@@ -168,6 +168,92 @@
 }
 
 /* ================================================================
+   4b. GLASS MORPHISM UTILITIES
+   ================================================================ */
+
+/* Glass button variants */
+.btn-glass {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(12px);
+  transition: all 0.3s ease;
+}
+
+.btn-glass:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(103, 232, 249, 0.25);
+  box-shadow: 0 0 20px rgba(103, 232, 249, 0.08);
+}
+
+.liquid-glass {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(8px);
+  transition: all 0.3s ease;
+}
+
+.liquid-glass:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.14);
+}
+
+.liquid-glass-strong {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(16px);
+}
+
+.glass-medium {
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.glass-subtle {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+/* ================================================================
+   4c. COMPONENT UTILITIES
+   ================================================================ */
+
+/* Section number watermark text */
+.section-num {
+  font-family: var(--font-heading);
+  font-style: italic;
+  -webkit-text-stroke: 1px rgba(103, 232, 249, 0.08);
+  color: transparent;
+}
+
+/* Accent line under section headers */
+.accent-line {
+  height: 1px;
+  background: linear-gradient(to right, hsl(200 100% 65% / 0.6), hsl(270 100% 70% / 0.2), transparent);
+  width: 60px;
+}
+
+/* Navigation CTA button */
+.nav-cta {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(12px);
+  transition: all 0.3s ease;
+}
+
+.nav-cta:hover {
+  background: rgba(103, 232, 249, 0.08);
+  border-color: rgba(103, 232, 249, 0.2);
+  box-shadow: 0 0 20px rgba(103, 232, 249, 0.1);
+}
+
+.nav-cta-mobile {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(16px);
+}
+
+/* ================================================================
    5. REDUCED MOTION
    ================================================================ */
 @media (prefers-reduced-motion: reduce) {

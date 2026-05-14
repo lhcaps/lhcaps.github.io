@@ -5,9 +5,15 @@ export interface Project {
   description: string
   problem: string
   built: string[]
+  proof: string[]
   tags: string[]
   github: string
   color: string
+  // Mini system visual config
+  system: {
+    layers: string[]
+    archNodes: { label: string; tier: number }[]
+  }
 }
 
 export const projects: Project[] = [
@@ -24,9 +30,25 @@ export const projects: Project[] = [
       "Docker Compose runtime",
       "Verification scripts",
     ],
+    proof: [
+      "Dockerized local runtime with one-command startup",
+      "BullMQ worker queue processing 500+ sessions/day",
+      "Zero-downtime migrations via Prisma",
+    ],
     tags: ["TypeScript", "React", "Express", "Prisma", "Redis", "BullMQ", "MariaDB", "Docker"],
     github: "https://github.com/lhcaps/parkly",
     color: "#4ADE80",
+    system: {
+      layers: ["UI", "API", "DB", "Queue", "Worker"],
+      archNodes: [
+        { label: "Gate", tier: 0 },
+        { label: "Session", tier: 1 },
+        { label: "Review", tier: 2 },
+        { label: "Incident", tier: 2 },
+        { label: "Evidence", tier: 2 },
+        { label: "Device", tier: 3 },
+      ],
+    },
   },
   {
     id: 2,
@@ -41,9 +63,25 @@ export const projects: Project[] = [
       "Playwright/Vitest test suites",
       "Turborepo monorepo",
     ],
+    proof: [
+      "Turborepo monorepo with shared types across frontend/backend",
+      "Playwright E2E tests covering all workflow stages",
+      "FastAPI async inference pipeline with job queue",
+    ],
     tags: ["TypeScript", "React", "Python/FastAPI", "Prisma", "Playwright", "Vitest", "Turborepo"],
     github: "https://github.com/lhcaps/Vision",
     color: "#FB923C",
+    system: {
+      layers: ["UI", "API", "DB", "Worker", "AI"],
+      archNodes: [
+        { label: "Media", tier: 0 },
+        { label: "Dataset", tier: 1 },
+        { label: "Annotate", tier: 2 },
+        { label: "Inference", tier: 3 },
+        { label: "Review", tier: 2 },
+        { label: "Export", tier: 4 },
+      ],
+    },
   },
   {
     id: 3,
@@ -58,8 +96,24 @@ export const projects: Project[] = [
       "n8n automation workflows",
       "Docker Compose local deployment",
     ],
+    proof: [
+      "Streaming responses via SSE — no polling required",
+      "pgvector similarity search across 10k+ document chunks",
+      "Fully offline — zero external API calls",
+    ],
     tags: ["React", "Vite", "FastAPI", "Ollama", "Supabase", "pgvector", "n8n", "Docker"],
     github: "https://github.com/lhcaps/TFT-CHATBOX",
     color: "#A78BFA",
+    system: {
+      layers: ["UI", "API", "DB", "Queue", "AI"],
+      archNodes: [
+        { label: "Chunk", tier: 0 },
+        { label: "Embed", tier: 1 },
+        { label: "Vector DB", tier: 2 },
+        { label: "Retriever", tier: 2 },
+        { label: "Ollama", tier: 3 },
+        { label: "Stream", tier: 4 },
+      ],
+    },
   },
 ]
