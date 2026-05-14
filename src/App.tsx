@@ -1,5 +1,5 @@
 import "./index.css"
-import { Navigation } from "./components/Navigation"
+import { Navigation } from "./components/navigation"
 import { BackgroundCanvas } from "./components/BackgroundCanvas"
 import { Hero3DSection } from "./components/sections/Hero3DSection"
 import { ProjectsSection } from "./components/sections/ProjectsSection"
