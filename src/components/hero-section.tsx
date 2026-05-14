@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect, useState, useRef } from "react"
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion"
 import { ArrowDown, Github, Mail } from "lucide-react"
 import { easeOutExpo } from "@/lib/animations"
@@ -6,8 +6,8 @@ import { easeOutExpo } from "@/lib/animations"
 /* ── SVG Tech Icons ──────────────────────────────────────────────── */
 function TsIcon({ color }: { color: string }) {
   return (
-    <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
-      <rect width="28" height="28" rx="6" fill={color} fillOpacity="0.12" />
+    <svg width="26" height="26" viewBox="0 0 28 28" fill="none">
+      <rect width="28" height="28" rx="6" fill={color} fillOpacity="0.15" />
       <path d="M13.5 2L11 4.5H17L13.5 2Z" fill={color} />
       <path d="M11 23.5L13.5 21H17L13.5 23.5H11Z" fill={color} />
       <path d="M11 4.5V19L13.5 21.5M11 4.5H17V10.5H13M17 4.5V13.5L17 17.5H13M13 13.5L11 19L17 21.5V14.5H13.5" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
@@ -17,8 +17,8 @@ function TsIcon({ color }: { color: string }) {
 
 function ReactIcon({ color }: { color: string }) {
   return (
-    <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
-      <rect width="28" height="28" rx="6" fill={color} fillOpacity="0.12" />
+    <svg width="26" height="26" viewBox="0 0 28 28" fill="none">
+      <rect width="28" height="28" rx="6" fill={color} fillOpacity="0.15" />
       <circle cx="14" cy="14" r="2.5" stroke={color} strokeWidth="1.5" />
       <ellipse cx="14" cy="14" rx="8.5" ry="4" stroke={color} strokeWidth="1.5" strokeDasharray="4 2" />
       <ellipse cx="14" cy="14" rx="8.5" ry="4" stroke={color} strokeWidth="1.5" strokeDasharray="4 2" transform="rotate(60 14 14)" />
@@ -29,8 +29,8 @@ function ReactIcon({ color }: { color: string }) {
 
 function PythonIcon({ color }: { color: string }) {
   return (
-    <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
-      <rect width="28" height="28" rx="6" fill={color} fillOpacity="0.12" />
+    <svg width="26" height="26" viewBox="0 0 28 28" fill="none">
+      <rect width="28" height="28" rx="6" fill={color} fillOpacity="0.15" />
       <path d="M13.5 3C9 3 8 5 8 7V9H14V10.5H5.5C4.5 10.5 3 11 3 13.5V15.5C3 18 4.5 18.5 5.5 18.5H8V22.5C8 25 10 26.5 13 26.5C15.5 26.5 17 25.5 18 24H18.5C18.5 24 18.5 25.5 20.5 25.5C22 25.5 23.5 24 23.5 22V12C23.5 9.5 21.5 8 20 8L21 4C21 4 19 3 17 3H13.5Z" fill={color} fillOpacity="0.3" />
       <path d="M13.5 3C17 3 18 5 18 7V9H12V10.5H20.5C21.5 10.5 23 11 23 13.5V15.5C23 18 21.5 18.5 20.5 18.5H18V22.5C18 25 16 26.5 13 26.5C10.5 26.5 9 25.5 8 24H7.5C7.5 24 7.5 25.5 5.5 25.5C4 25.5 2.5 24 2.5 22V12C2.5 9.5 4.5 8 6 8L5 4C5 4 7 3 9 3H13.5Z" fill={color} />
     </svg>
@@ -39,8 +39,8 @@ function PythonIcon({ color }: { color: string }) {
 
 function NodeIcon({ color }: { color: string }) {
   return (
-    <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
-      <rect width="28" height="28" rx="6" fill={color} fillOpacity="0.12" />
+    <svg width="26" height="26" viewBox="0 0 28 28" fill="none">
+      <rect width="28" height="28" rx="6" fill={color} fillOpacity="0.15" />
       <path d="M21.5 16.5C21.8 17.3 21.5 18 20.5 18.5C18.5 19.5 17.5 18 17.2 17.5L16 18.5C16.3 19 17.5 20.5 20 19.5C22 18.7 22.5 17.5 22.2 16.5C21.9 15.5 20.5 15 19 15.3L18 15.5C17.8 15.5 17.6 15.6 17.5 15.7C17.3 15.9 17.2 16 17.2 16.3C17.2 16.6 17.4 16.8 17.7 17C18.5 17.5 19.5 18 20.5 17.7C21.2 17.5 21.5 17 21.3 16.5C21.1 16 20 15.7 19 15.8L18.5 15.9C17.9 16 17.4 16.2 17 16.4C16.5 16.6 16.2 16.8 16 17.1C15.7 17.5 15.7 18 16 18.5C16.3 19 17 19.2 17.7 19.5C18.3 19.7 18.9 20 19.5 20.2C20.3 20.4 20.8 20.7 21.1 21C21.6 21.5 21.8 22.3 21.5 23C21.2 23.8 20.5 24 19.5 24C18.7 24 18 23.5 17.5 23L16.5 24C17.2 24.5 18 25 19 25C20.5 25 21.5 24 22 23C22.5 22 22.2 21 21.5 20.5C21 20.1 20.3 20 19.7 20L20.2 19.8C20.8 19.6 21.4 19.2 21.8 18.7C22.2 18.2 22.3 17.6 22.1 17C21.9 16.4 21.3 16 20.6 15.7C19.8 15.3 19 15.3 18.3 15.5L19 15.3C19.8 15 20.7 15.2 21.5 15.8V16.5Z" fill={color} />
       <path d="M10.5 11.5C10.2 10.7 10.5 10 11.5 9.5C13.5 8.5 14.5 10 14.8 10.5L16 9.5C15.7 9 14.5 7.5 12 8.5C10 9.3 9.5 10.5 9.8 11.5C10.1 12.5 11.5 13 13 12.7L14 12.5C14.2 12.5 14.4 12.4 14.5 12.3C14.7 12.1 14.8 12 14.8 11.7C14.8 11.4 14.6 11.2 14.3 11C13.5 10.5 12.5 10 11.5 10.3C10.8 10.5 10.5 11 10.7 11.5C10.9 12 12 12.3 13 12.2L13.5 12.1C14.1 12 14.6 11.8 15 11.6C15.5 11.4 15.8 11.2 16 10.9C16.3 10.5 16.3 10 16 9.5C15.7 9 15 8.8 14.3 8.5C13.7 8.3 13.1 8 12.5 7.8C11.7 7.6 11.2 7.3 10.9 7C10.4 6.5 10.2 5.7 10.5 5C10.8 4.2 11.5 4 12.5 4C13.3 4 14 4.5 14.5 5L15.5 4C14.8 3.5 14 3 13 3C11.5 3 10.5 4 10 5C9.5 6 9.8 7 10.5 7.5C11 7.9 11.7 8 12.3 8L11.8 8.2C11.2 8.4 10.6 8.8 10.2 9.3C9.8 9.8 9.7 10.4 9.9 11C10.1 11.6 10.7 12 11.4 12.3C12.2 12.7 13 12.7 13.7 12.5L13 12.7C12.2 13 11.3 12.8 10.5 12.2V11.5Z" fill={color} />
     </svg>
@@ -49,8 +49,8 @@ function NodeIcon({ color }: { color: string }) {
 
 function DockerIcon({ color }: { color: string }) {
   return (
-    <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
-      <rect width="28" height="28" rx="6" fill={color} fillOpacity="0.12" />
+    <svg width="26" height="26" viewBox="0 0 28 28" fill="none">
+      <rect width="28" height="28" rx="6" fill={color} fillOpacity="0.15" />
       <path d="M14 3C8 3 5.5 5 5 7H14V3Z" fill={color} fillOpacity="0.4" />
       <path d="M5 7.5C4 8.5 3 10.5 3 14C3 17.5 4 19.5 5 20.5V24H23V20.5C24 19.5 25 17.5 25 14C25 10.5 24 8.5 23 7.5V14H17V7.5C16 8.5 15 10.5 15 14H9C9 10.5 8 8.5 7 7.5V14H5.5V7.5C5.5 7.5 5.5 7.5 5 7.5Z" fill={color} fillOpacity="0.3" />
       <path d="M5 7H14V9H5V7ZM5 10.5H14V12.5H5V10.5Z" fill={color} />
@@ -62,8 +62,8 @@ function DockerIcon({ color }: { color: string }) {
 
 function PostgresIcon({ color }: { color: string }) {
   return (
-    <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
-      <rect width="28" height="28" rx="6" fill={color} fillOpacity="0.12" />
+    <svg width="26" height="26" viewBox="0 0 28 28" fill="none">
+      <rect width="28" height="28" rx="6" fill={color} fillOpacity="0.15" />
       <ellipse cx="14" cy="9" rx="5.5" ry="2.5" stroke={color} strokeWidth="1.5" />
       <path d="M8.5 9V15C8.5 18 11 20 14 20C17 20 19.5 18 19.5 15V9" stroke={color} strokeWidth="1.5" strokeLinejoin="round" />
       <path d="M8.5 12.5C8.5 15.5 11 17.5 14 17.5C17 17.5 19.5 15.5 19.5 12.5" stroke={color} strokeWidth="1.5" />
@@ -74,8 +74,8 @@ function PostgresIcon({ color }: { color: string }) {
 
 function FastApiIcon({ color }: { color: string }) {
   return (
-    <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
-      <rect width="28" height="28" rx="6" fill={color} fillOpacity="0.12" />
+    <svg width="26" height="26" viewBox="0 0 28 28" fill="none">
+      <rect width="28" height="28" rx="6" fill={color} fillOpacity="0.15" />
       <path d="M6 20L10 8H14L11 14H14L10 20H6Z" fill={color} />
       <path d="M14 8H18L14 20H10L14 14H11L14 8Z" fill={color} fillOpacity="0.5" />
       <path d="M18 8H22L18 20H14L18 14H21L18 8Z" fill={color} fillOpacity="0.25" />
@@ -85,8 +85,8 @@ function FastApiIcon({ color }: { color: string }) {
 
 function AIMLIcon({ color }: { color: string }) {
   return (
-    <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
-      <rect width="28" height="28" rx="6" fill={color} fillOpacity="0.12" />
+    <svg width="26" height="26" viewBox="0 0 28 28" fill="none">
+      <rect width="28" height="28" rx="6" fill={color} fillOpacity="0.15" />
       <circle cx="14" cy="14" r="3" stroke={color} strokeWidth="1.5" />
       <path d="M14 5V8M14 20V23M5 14H8M20 14H23M7.9 7.9L9.8 9.8M18.2 18.2L20.1 20.1M20.1 7.9L18.2 9.8M9.8 18.2L7.9 20.1" stroke={color} strokeWidth="1.5" strokeLinecap="round" />
       <circle cx="14" cy="14" r="0.75" fill={color} />
@@ -106,92 +106,113 @@ const skillTiles = [
   { label: "AI / ML", color: "#FB923C", Icon: AIMLIcon },
 ]
 
-/* Float animation variants per tile — 8 distinct trajectories */
-const floatVariants = [
-  { y: [-8, 8, -8], rotate: [-2, 2, -2] },
-  { y: [8, -8, 8], rotate: [2, -2, 2] },
-  { y: [-5, 10, -5], rotate: [1, -1, 1] },
-  { y: [10, -5, 10], rotate: [-1.5, 1.5, -1.5] },
-  { y: [-10, 5, -10], rotate: [-3, 1, -3] },
-  { y: [5, -10, 5], rotate: [1.5, -3, 1.5] },
-  { y: [-6, 6, -6], rotate: [2.5, -1.5, 2.5] },
-  { y: [6, -6, 6], rotate: [-2.5, 1.5, -2.5] },
-]
+/* ── Orbital position helper ─────────────────────────────────────── */
+function getOrbitalPosition(
+  index: number,
+  total: number,
+  radiusX: number,
+  radiusY: number,
+  extraDegOffset = 0
+) {
+  const angleDeg = (index / total) * 360 + extraDegOffset
+  const angleRad = (angleDeg * Math.PI) / 180
+  return {
+    x: Math.cos(angleRad) * radiusX,
+    y: Math.sin(angleRad) * radiusY,
+    rotate: angleDeg + 90,
+  }
+}
 
-/* ── Individual Skill Tile ───────────────────────────────────────── */
-function SkillTile({
+/* ── Single Orbiting Tile ────────────────────────────────────────── */
+function OrbitingTile({
   tile,
   index,
+  totalTiles,
+  radiusX,
+  radiusY,
+  orbitAngle,
   mouseX,
   mouseY,
+  entranceDelay,
 }: {
   tile: (typeof skillTiles)[0]
   index: number
+  totalTiles: number
+  radiusX: number
+  radiusY: number
+  orbitAngle: number
   mouseX: number
   mouseY: number
+  entranceDelay: number
 }) {
   const Icon = tile.Icon
-  const delay = index * 0.15
-  const variant = floatVariants[index % floatVariants.length]
-  const duration = 5 + (index % 3) * 1.5
+  const pos = getOrbitalPosition(index, totalTiles, radiusX, radiusY, orbitAngle)
 
-  /* Mouse parallax — each tile gets a different parallax multiplier */
-  const parallaxMultiplier = 0.3 + (index % 4) * 0.1
+  /* Each tile has a slightly different parallax depth */
+  const depthFactor = 0.15 + (index % 3) * 0.08
 
   const px = useMotionValue(0)
   const py = useMotionValue(0)
-  const springPx = useSpring(px, { stiffness: 40, damping: 12 })
-  const springPy = useSpring(py, { stiffness: 40, damping: 12 })
+  const springPx = useSpring(px, { stiffness: 35, damping: 14 })
+  const springPy = useSpring(py, { stiffness: 35, damping: 14 })
 
-  /* Update spring targets when mouse moves */
   useEffect(() => {
-    px.set(mouseX * parallaxMultiplier * 20)
-    py.set(mouseY * parallaxMultiplier * 12)
-  }, [mouseX, mouseY, px, py, parallaxMultiplier])
+    px.set(mouseX * depthFactor * 30)
+    py.set(mouseY * depthFactor * 20)
+  }, [mouseX, mouseY, px, py, depthFactor])
 
   return (
     <motion.div
-      className="absolute hidden xl:flex items-center pointer-events-none"
-      style={{ x: springPx, y: springPy }}
-      initial={{ opacity: 0, scale: 0.5, rotate: -8 }}
-      animate={{ opacity: 1, scale: 1, rotate: 0 }}
+      className="absolute hidden xl:flex items-center justify-center pointer-events-none"
+      style={{
+        x: springPx,
+        y: springPy,
+        left: "50%",
+        top: "50%",
+        translateX: pos.x,
+        translateY: pos.y,
+        rotate: pos.rotate,
+      }}
+      initial={{ opacity: 0, scale: 0, rotate: pos.rotate - 360 }}
+      animate={{ opacity: 1, scale: 1, rotate: pos.rotate }}
       transition={{
-        opacity: { duration: 0.7, delay, ease: easeOutExpo as unknown as string },
-        scale: { duration: 0.7, delay, ease: easeOutExpo as unknown as string },
-        rotate: { duration: 0.7, delay, ease: easeOutExpo as unknown as string },
+        opacity: { duration: 0.8, delay: entranceDelay, ease: "easeOut" },
+        scale: { duration: 0.8, delay: entranceDelay, ease: "easeOut" },
+        rotate: { duration: 1.0, delay: entranceDelay, ease: [0.22, 1, 0.36, 1] },
       }}
     >
+      {/* Orbiting tile — glass-card + spinning + tilt shadow */}
       <motion.div
-        className="glass-card relative flex flex-col items-center justify-center rounded-2xl cursor-default select-none group"
-        style={{ width: 72, height: 72, gap: 0 }}
-        animate={variant}
-        transition={{
-          duration,
-          repeat: Infinity,
-          repeatType: "mirror",
-          ease: "easeInOut",
-          delay,
-        }}
+        className="relative flex flex-col items-center justify-center rounded-2xl glass-card group"
+        style={{ width: 80, height: 80 }}
+        whileHover={{ scale: 1.15, zIndex: 99 }}
+        transition={{ type: "spring", stiffness: 300, damping: 20 }}
       >
-        {/* Inner icon area */}
+        {/* Glowing top accent bar */}
+        <motion.div
+          className="absolute top-0 left-2 right-2 h-px rounded-full"
+          style={{ background: tile.color, boxShadow: `0 0 6px ${tile.color}` }}
+          animate={{ opacity: [0.6, 1, 0.6], scaleX: [0.7, 1, 0.7] }}
+          transition={{ duration: 2 + index * 0.2, repeat: Infinity, ease: "easeInOut" }}
+        />
+
+        {/* Icon */}
         <div className="flex items-center justify-center flex-1">
           <Icon color={tile.color} />
         </div>
 
         {/* Label */}
         <span
-          className="text-[9px] font-bold tracking-wide pb-1.5 transition-opacity duration-200"
-          style={{ color: tile.color, opacity: 0.75 }}
+          className="text-[8px] font-bold tracking-wider pb-1.5 uppercase"
+          style={{ color: tile.color, opacity: 0.8 }}
         >
           {tile.label}
         </span>
 
-        {/* Animated top border accent */}
-        <motion.div
-          className="absolute top-0 left-3 right-3 h-px rounded-full"
-          style={{ background: tile.color }}
-          animate={{ opacity: [0.5, 1, 0.5], scaleX: [0.8, 1, 0.8] }}
-          transition={{ duration: 2.5, repeat: Infinity, delay: index * 0.3 }}
+        {/* Self-spin shadow ring on hover */}
+        <div
+          className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
+          style={{ boxShadow: `0 0 16px ${tile.color}30, 0 0 32px ${tile.color}15` }}
         />
       </motion.div>
     </motion.div>
@@ -217,53 +238,55 @@ function AnimatedText({ text, delayStart = 0.1 }: { text: string; delayStart?: n
   )
 }
 
-/* ── Tile positions — viewport-relative, won't overlap hero text ── */
-const tileLayout = [
-  { x: "-42%", y: "-48%" },  //  TypeScript — upper-left
-  { x: "38%",  y: "-52%" },  //  React     — upper-right
-  { x: "-46%", y: "0%"   },  //  Python    — left-center
-  { x: "42%",  y: "0%"   },  //  Node.js   — right-center
-  { x: "-38%", y: "48%"  },  //  Docker    — lower-left
-  { x: "40%",  y: "48%"  },  //  PostgreSQL— lower-right
-  { x: "-20%", y: "36%"  },  //  FastAPI   — mid-left
-  { x: "22%",  y: "36%"  },  //  AI / ML   — mid-right
-]
-
 /* ── Hero Section ───────────────────────────────────────────────── */
 export function HeroSection() {
   const [mounted, setMounted] = useState(false)
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 })
+  const [orbitAngle, setOrbitAngle] = useState(0)
+  const animFrameRef = useRef<number>(0)
 
   useEffect(() => {
     const t = setTimeout(() => setMounted(true), 50)
     return () => clearTimeout(t)
   }, [])
 
+  /* Mouse tracking — normalized [-1, 1] */
   useEffect(() => {
     const h = (e: MouseEvent) => {
       const ww = window.innerWidth
       const wh = window.innerHeight
-      /* Normalize to [-1, 1] range */
       setMousePos({ x: (e.clientX / ww) * 2 - 1, y: (e.clientY / wh) * 2 - 1 })
     }
     window.addEventListener("mousemove", h, { passive: true })
     return () => window.removeEventListener("mousemove", h)
   }, [])
 
-  const spotX = useTransform(
-    useMotionValue(mousePos.x),
-    [-1, 1],
-    ["-12%", "12%"]
-  )
-  const spotY = useTransform(
-    useMotionValue(mousePos.y),
-    [-1, 1],
-    ["-12%", "12%"]
-  )
+  /* Continuous slow orbit — rotates the whole ring */
+  useEffect(() => {
+    let last = 0
+    const tick = (now: number) => {
+      if (last) {
+        const delta = (now - last) / 1000
+        setOrbitAngle((a) => (a + delta * 3) % 360)
+      }
+      last = now
+      animFrameRef.current = requestAnimationFrame(tick)
+    }
+    animFrameRef.current = requestAnimationFrame(tick)
+    return () => cancelAnimationFrame(animFrameRef.current)
+  }, [])
+
+  /* Spotlight parallax */
+  const spotX = useTransform(useMotionValue(mousePos.x), [-1, 1], ["-12%", "12%"])
+  const spotY = useTransform(useMotionValue(mousePos.y), [-1, 1], ["-12%", "12%"])
+
+  /* Orbit radius — adapts to viewport width */
+  const orbitRX = typeof window !== "undefined" ? Math.min(window.innerWidth * 0.34, 340) : 300
+  const orbitRY = typeof window !== "undefined" ? Math.min(window.innerHeight * 0.28, 240) : 200
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Spotlight — moves with mouse */}
+      {/* Spotlight */}
       <motion.div
         className="absolute inset-0 pointer-events-none"
         style={{ x: spotX, y: spotY }}
@@ -277,25 +300,24 @@ export function HeroSection() {
         />
       </motion.div>
 
-      {/* Skill tiles layer — absolutely positioned around hero */}
-      <div className="absolute inset-0" aria-hidden="true">
-        {mounted &&
-          skillTiles.map((tile, i) => (
-            <div
-              key={tile.label}
-              className="absolute"
-              style={{
-                left: tileLayout[i].x,
-                top: tileLayout[i].y,
-                transform: "translate(-50%, -50%)",
-              }}
-            >
-              <SkillTile tile={tile} index={i} mouseX={mousePos.x} mouseY={mousePos.y} />
-            </div>
-          ))}
-      </div>
+      {/* Orbiting skill tiles */}
+      {mounted &&
+        skillTiles.map((tile, i) => (
+          <OrbitingTile
+            key={tile.label}
+            tile={tile}
+            index={i}
+            totalTiles={skillTiles.length}
+            radiusX={orbitRX}
+            radiusY={orbitRY}
+            orbitAngle={orbitAngle}
+            mouseX={mousePos.x}
+            mouseY={mousePos.y}
+            entranceDelay={0.7 + i * 0.1}
+          />
+        ))}
 
-      {/* Main content — centered, z-10 above tiles */}
+      {/* Main content — centered, z-10 */}
       <div className="relative z-10 text-center px-4 max-w-5xl mx-auto">
         {/* Availability badge */}
         <motion.div
@@ -318,7 +340,7 @@ export function HeroSection() {
           </span>
         </motion.div>
 
-        {/* Name — clip-path reveal */}
+        {/* Name */}
         <div className="overflow-hidden mb-2">
           <motion.div
             initial={{ clipPath: "inset(0 100% 0 0)" }}
