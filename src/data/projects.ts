@@ -9,10 +9,15 @@ export interface Project {
   tags: string[]
   github: string
   color: string
-  // Mini system visual config
   system: {
     layers: string[]
-    archNodes: { label: string; tier: number }[]
+    archNodes: {
+      label: string
+      x: number
+      y: number
+      type?: 'primary' | 'secondary' | 'runtime'
+    }[]
+    connections: [string, string][]
   }
 }
 
@@ -41,12 +46,21 @@ export const projects: Project[] = [
     system: {
       layers: ["UI", "API", "DB", "Queue", "Worker"],
       archNodes: [
-        { label: "Gate", tier: 0 },
-        { label: "Session", tier: 1 },
-        { label: "Review", tier: 2 },
-        { label: "Incident", tier: 2 },
-        { label: "Evidence", tier: 2 },
-        { label: "Device", tier: 3 },
+        { label: "Gate", x: 50, y: 12, type: "primary" },
+        { label: "Session", x: 50, y: 30, type: "primary" },
+        { label: "Review", x: 28, y: 50 },
+        { label: "Incident", x: 50, y: 50 },
+        { label: "Evidence", x: 72, y: 50 },
+        { label: "Device", x: 50, y: 70, type: "runtime" },
+      ],
+      connections: [
+        ["Gate", "Session"],
+        ["Session", "Review"],
+        ["Session", "Incident"],
+        ["Session", "Evidence"],
+        ["Review", "Device"],
+        ["Incident", "Device"],
+        ["Evidence", "Device"],
       ],
     },
   },
@@ -74,12 +88,21 @@ export const projects: Project[] = [
     system: {
       layers: ["UI", "API", "DB", "Worker", "AI"],
       archNodes: [
-        { label: "Media", tier: 0 },
-        { label: "Dataset", tier: 1 },
-        { label: "Annotate", tier: 2 },
-        { label: "Inference", tier: 3 },
-        { label: "Review", tier: 2 },
-        { label: "Export", tier: 4 },
+        { label: "Media", x: 50, y: 12, type: "primary" },
+        { label: "Dataset", x: 50, y: 30, type: "primary" },
+        { label: "Annotate", x: 30, y: 50 },
+        { label: "Review", x: 50, y: 50 },
+        { label: "Inference", x: 70, y: 50 },
+        { label: "Export", x: 50, y: 70, type: "runtime" },
+      ],
+      connections: [
+        ["Media", "Dataset"],
+        ["Dataset", "Annotate"],
+        ["Dataset", "Review"],
+        ["Dataset", "Inference"],
+        ["Annotate", "Export"],
+        ["Review", "Export"],
+        ["Inference", "Export"],
       ],
     },
   },
@@ -107,12 +130,20 @@ export const projects: Project[] = [
     system: {
       layers: ["UI", "API", "DB", "Queue", "AI"],
       archNodes: [
-        { label: "Chunk", tier: 0 },
-        { label: "Embed", tier: 1 },
-        { label: "Vector DB", tier: 2 },
-        { label: "Retriever", tier: 2 },
-        { label: "Ollama", tier: 3 },
-        { label: "Stream", tier: 4 },
+        { label: "Chunk", x: 50, y: 12, type: "primary" },
+        { label: "Embed", x: 30, y: 32 },
+        { label: "Vector DB", x: 70, y: 32 },
+        { label: "Retriever", x: 50, y: 52 },
+        { label: "Ollama", x: 30, y: 72 },
+        { label: "Stream", x: 70, y: 72 },
+      ],
+      connections: [
+        ["Chunk", "Embed"],
+        ["Chunk", "Vector DB"],
+        ["Embed", "Retriever"],
+        ["Vector DB", "Retriever"],
+        ["Retriever", "Ollama"],
+        ["Retriever", "Stream"],
       ],
     },
   },

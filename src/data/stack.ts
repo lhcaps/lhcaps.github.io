@@ -5,6 +5,7 @@ export interface StackLayer {
   purpose: string
   primary: string[]
   supporting?: string[]
+  icon: 'frontend' | 'api' | 'data' | 'workers' | 'ai'
 }
 
 export const stackLayers: StackLayer[] = [
@@ -15,6 +16,7 @@ export const stackLayers: StackLayer[] = [
     purpose: 'Interactive dashboard shell, motion system, and client workflow state.',
     primary: ['React', 'Vite', 'Tailwind', 'Framer Motion'],
     supporting: ['React Query', 'Zustand'],
+    icon: 'frontend',
   },
   {
     label: 'API',
@@ -23,6 +25,7 @@ export const stackLayers: StackLayer[] = [
     purpose: 'Typed transport for product workflows, streaming updates, and backend boundaries.',
     primary: ['Express', 'FastAPI', 'REST', 'SSE'],
     supporting: ['TypeScript', 'Node.js'],
+    icon: 'api',
   },
   {
     label: 'Data',
@@ -31,6 +34,7 @@ export const stackLayers: StackLayer[] = [
     purpose: 'Relational state, cache, vector retrieval, and schema-driven persistence.',
     primary: ['PostgreSQL', 'Redis', 'Prisma', 'pgvector'],
     supporting: ['MariaDB', 'SQL'],
+    icon: 'data',
   },
   {
     label: 'Workers',
@@ -39,6 +43,7 @@ export const stackLayers: StackLayer[] = [
     purpose: 'Background jobs, automation, verification, packaging, and local runtime.',
     primary: ['BullMQ', 'Docker', 'Playwright', 'CI/CD'],
     supporting: ['n8n', 'Docker Compose'],
+    icon: 'workers',
   },
   {
     label: 'AI',
@@ -47,5 +52,6 @@ export const stackLayers: StackLayer[] = [
     purpose: 'Local model workflows, retrieval, vision experiments, and async inference.',
     primary: ['Ollama', 'OpenCV', 'ONNX', 'RAG'],
     supporting: ['Vector Search', 'FastAPI Workers'],
+    icon: 'ai',
   },
 ]

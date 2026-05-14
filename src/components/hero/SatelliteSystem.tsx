@@ -1,9 +1,5 @@
-'use client'
-
 import { useState, useEffect } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
-
-const easeOutExpo = [0.16, 1, 0.3, 1]
+import { motion } from 'framer-motion'
 
 interface Satellite {
   id: string
@@ -12,150 +8,157 @@ interface Satellite {
   color: string
   x: number
   y: number
-  angle: number
 }
 
 const satellites: Satellite[] = [
-  { id: 'api', label: 'API', sub: 'REST / SSE', color: '#67E8F9', x: 0, y: -180, angle: -Math.PI / 2 },
-  { id: 'db', label: 'DB', sub: 'PostgreSQL', color: '#60A5FA', x: -295, y: -65, angle: (Math.PI * 2) / 3 },
-  { id: 'queue', label: 'QUEUE', sub: 'BullMQ', color: '#A78BFA', x: 295, y: -65, angle: Math.PI / 3 },
-  { id: 'worker', label: 'WORKER', sub: 'FastAPI', color: '#FB923C', x: -240, y: 155, angle: (Math.PI * 4) / 3 },
-  { id: 'ai', label: 'AI', sub: 'Ollama', color: '#8B5CF6', x: 240, y: 155, angle: (Math.PI * 5) / 3 },
-  { id: 'ui', label: 'UI', sub: 'React', color: '#4ADE80', x: 0, y: 230, angle: 0 },
+  { id: 'api', label: 'API', sub: 'REST / SSE', color: '#67E8F9', x: 0, y: -110 },
+  { id: 'db', label: 'DB', sub: 'PostgreSQL', color: '#60A5FA', x: -190, y: -50 },
+  { id: 'queue', label: 'QUEUE', sub: 'BullMQ', color: '#A78BFA', x: 190, y: -50 },
+  { id: 'worker', label: 'WORKER', sub: 'FastAPI', color: '#FB923C', x: -155, y: 85 },
+  { id: 'ai', label: 'AI', sub: 'Ollama', color: '#8B5CF6', x: 155, y: 85 },
+  { id: 'ui', label: 'UI', sub: 'React', color: '#4ADE80', x: 0, y: 140 },
 ]
 
-// SVG connector data: from center (50, 50) to each satellite position in percent
-const connectorData = satellites.map((s) => {
-  const cx = 50
-  const cy = 50
-  const sx = cx + (s.x / 620) * 100
-  const sy = cy + (s.y / 480) * 100
-  return { id: s.id, x1: cx, y1: cy, x2: sx, y2: sy, color: s.color }
-})
+function ConnectorLines({ reduced }: { reduced: boolean }) {
+  const revealed = reduced
 
-function SatelliteNode({ sat, index }: { sat: Satellite; index: number }) {
-  const [visible, setVisible] = useState(false)
-  const delay = 550 + index * 60
-
-  useEffect(() => {
-    const t = setTimeout(() => setVisible(true), delay)
-    return () => clearTimeout(t)
-  }, [delay])
+  if (!revealed) return null
 
   return (
-    <AnimatePresence>
-      {visible && (
-        <motion.div
-          className="absolute pointer-events-none"
-          style={{
-            left: '50%',
-            top: '50%',
-            translateX: '-50%',
-            translateY: '-50%',
-          }}
-          initial={{
-            x: 0,
-            y: 0,
-            opacity: 0,
-            scale: 0.15,
-            filter: 'blur(8px)',
-          }}
-          animate={{
-            x: sat.x,
-            y: sat.y,
-            opacity: 1,
-            scale: 1,
-            filter: 'blur(0px)',
-          }}
-          transition={{
-            duration: 0.9,
-            delay: index * 0.07,
-            ease: easeOutExpo as unknown as number[],
-          }}
-        >
-          <div
-            className="flex flex-col items-center gap-0.5"
-          >
-            <div
-              className="px-2.5 py-1 rounded-lg text-[9px] font-bold font-mono tracking-[0.12em] uppercase"
-              style={{
-                background: sat.color + '14',
-                border: `1px solid ${sat.color}30`,
-                color: sat.color,
-                textShadow: `0 0 12px ${sat.color}60`,
-              }}
-            >
-              {sat.label}
-            </div>
-            <div
-              className="text-[7px] font-mono tracking-wider"
-              style={{ color: sat.color + '60' }}
-            >
-              {sat.sub}
-            </div>
-          </div>
-        </motion.div>
-      )}
-    </AnimatePresence>
-  )
-}
-
-function ConnectorLines() {
-  const [visible, setVisible] = useState(false)
-
-  useEffect(() => {
-    const t = setTimeout(() => setVisible(true), 900)
-    return () => clearTimeout(t)
-  }, [])
-
-  if (!visible) return null
-
-  return (
-    <svg
+    <motion.svg
       className="absolute inset-0 w-full h-full pointer-events-none"
       viewBox="0 0 100 100"
       preserveAspectRatio="xMidYMid meet"
       aria-hidden="true"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.01 }}
     >
-      {connectorData.map((conn) => (
-        <motion.line
-          key={conn.id}
-          x1={conn.x1}
-          y1={conn.y1}
-          x2={conn.x2}
-          y2={conn.y2}
-          stroke={conn.color}
-          strokeWidth="0.06"
-          strokeOpacity="0"
-          strokeDasharray="100"
-          initial={{ strokeDashoffset: 100, strokeOpacity: 0 }}
-          animate={{ strokeDashoffset: 0, strokeOpacity: 0.25 }}
-          transition={{ duration: 0.6, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
-        />
-      ))}
-    </svg>
+      {satellites.map((s) => {
+        const cx = 50
+        const cy = 50
+        const sx = cx + (s.x / 480) * 100
+        const sy = cy + (s.y / 340) * 100
+        return (
+          <motion.line
+            key={s.id}
+            x1={cx}
+            y1={cy}
+            x2={sx}
+            y2={sy}
+            stroke={s.color}
+            strokeWidth="0.06"
+            strokeDasharray="100"
+            initial={{ strokeDashoffset: 100, strokeOpacity: 0 }}
+            animate={{ strokeDashoffset: 0, strokeOpacity: 0.22 }}
+            transition={{ duration: 0.7, delay: 0.05, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] }}
+          />
+        )
+      })}
+    </motion.svg>
   )
 }
 
-export function SatelliteSystem() {
+function SatelliteNode({ sat, index, reduced }: { sat: Satellite; index: number; reduced: boolean }) {
+  const initialState = reduced
+    ? { x: sat.x, y: sat.y, opacity: 1, scale: 1, filter: 'blur(0px)' }
+    : { x: 0, y: 0, opacity: 0, scale: 0.15, filter: 'blur(8px)' }
+
+  const animateState = { x: sat.x, y: sat.y, opacity: 1, scale: 1, filter: 'blur(0px)' }
+
+  return (
+    <motion.div
+      className="absolute pointer-events-none"
+      style={{
+        left: '50%',
+        top: '50%',
+        translateX: '-50%',
+        translateY: '-50%',
+      }}
+      initial={initialState}
+      animate={animateState}
+      transition={
+        reduced
+          ? { duration: 0, delay: index * 0.01 }
+          : { duration: 0.9, delay: index * 0.07, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] }
+      }
+    >
+      <div className="relative flex flex-col items-center gap-0.5 group">
+        {/* Outer ring glow */}
+        <div
+          className="absolute -inset-3 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+          style={{
+            background: `radial-gradient(circle, ${sat.color}18 0%, transparent 70%)`,
+            filter: 'blur(4px)',
+          }}
+        />
+
+        {/* Orb dot */}
+        <div
+          className="w-1.5 h-1.5 rounded-full mb-0.5"
+          style={{
+            background: sat.color,
+            boxShadow: `0 0 6px ${sat.color}, 0 0 12px ${sat.color}50`,
+          }}
+        />
+
+        {/* Glass chip */}
+        <div
+          className="relative px-2.5 py-1 rounded-lg text-[9px] font-bold font-mono tracking-[0.12em] uppercase"
+          style={{
+            background: `${sat.color}14`,
+            border: `1px solid ${sat.color}30`,
+            color: sat.color,
+            boxShadow: `
+              0 1px 0 rgba(255,255,255,0.06) inset,
+              0 -1px 3px rgba(0,0,0,0.3),
+              0 0 12px ${sat.color}20
+            `,
+          }}
+        >
+          {/* Subtle top shine */}
+          <div
+            className="absolute inset-x-1 top-px h-px rounded-full"
+            style={{ background: `${sat.color}40` }}
+          />
+          {sat.label}
+        </div>
+
+        {/* Sublabel */}
+        <div
+          className="text-[7px] font-mono tracking-wider"
+          style={{ color: `${sat.color}60` }}
+        >
+          {sat.sub}
+        </div>
+      </div>
+    </motion.div>
+  )
+}
+
+interface SatelliteSystemProps {
+  reduced?: boolean
+}
+
+export function SatelliteSystem({ reduced = false }: SatelliteSystemProps) {
   const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
-    const t = setTimeout(() => setMounted(true), 50)
-    return () => clearTimeout(t)
+    const id = setTimeout(() => setMounted(true), 50)
+    return () => clearTimeout(id)
   }, [])
 
   if (!mounted) return null
 
   return (
     <div
-      className="relative w-full max-w-[620px] mx-auto"
-      style={{ height: 480 }}
+      className="relative w-full max-w-[480px] mx-auto"
+      style={{ height: 340 }}
       aria-hidden="true"
     >
-      <ConnectorLines />
+      <ConnectorLines reduced={reduced} />
       {satellites.map((sat, i) => (
-        <SatelliteNode key={sat.id} sat={sat} index={i} />
+        <SatelliteNode key={sat.id} sat={sat} index={i} reduced={reduced} />
       ))}
     </div>
   )

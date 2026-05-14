@@ -1,5 +1,3 @@
-'use client'
-
 import { useRef } from 'react'
 import { Github, ArrowRight, CheckCircle2 } from 'lucide-react'
 import { projects, type Project } from '@/data/projects'
@@ -7,47 +5,35 @@ import { Container, SectionHeader } from '@/components/layout'
 import { TechPill } from '@/components/ui'
 import { useScroll, useTransform, motion } from 'framer-motion'
 
-// -------------------------------------------------------------- //
-// MiniSystemVisual — full-panel absolute SVG architecture diagram   //
-// Fills the right panel completely. Distinct visual per project.   //
-// -------------------------------------------------------------- //
 function MiniSystemVisual({ project }: { project: Project }) {
-  const { layers, archNodes } = project.system
+  const { layers, archNodes, connections } = project.system
 
-  // Layout nodes across a 3x3 logical grid using tier + indexWithinTier
-  type NodeWithPos = { label: string; tier: number; x: number; y: number; idx: number }
-  const nodePositions: NodeWithPos[] = archNodes.map((node, globalIdx) => {
-    const nodesInSameTier = archNodes.filter(n => n.tier === node.tier)
-    const idxInTier = nodesInSameTier.indexOf(node)
-    const xBase = node.tier === 0 ? 15 : node.tier === 4 ? 85 : node.tier === 2 ? 50 : 35
-    const xSpread = nodesInSameTier.length > 1 ? 18 : 0
-    const x = xBase + (idxInTier - (nodesInSameTier.length - 1) / 2) * xSpread
-    const y = 12 + node.tier * 20
-    return { ...node, x, y, idx: globalIdx }
-  })
+  const nodeMap = new Map(archNodes.map(n => [n.label, n]))
 
-  // SVG connector lines: from each node to the next tier's nodes
-  const connectors: { x1: number; y1: number; x2: number; y2: number }[] = []
-  nodePositions.forEach((node) => {
-    const targets = nodePositions.filter(n => n.tier === node.tier + 1)
-    if (targets.length === 0) {
-      // Last tier connects horizontally
-      const sameTier = nodePositions.filter(n => n.tier === node.tier)
-      const nextIdx = sameTier.indexOf(node) + 1
-      if (nextIdx < sameTier.length) {
-        const next = sameTier[nextIdx]
-        connectors.push({ x1: node.x, y1: node.y, x2: next.x, y2: next.y })
-      }
-    } else {
-      targets.forEach(target => {
-        connectors.push({ x1: node.x, y1: node.y, x2: target.x, y2: target.y })
-      })
-    }
-  })
+  const nodeTypeColor = (type?: string) => {
+    if (type === 'primary') return project.color
+    if (type === 'runtime') return project.color + '99'
+    return project.color + 'CC'
+  }
+
+  const nodeSize = (type?: string) => {
+    if (type === 'primary') return 'px-3.5 py-2 text-[10px]'
+    if (type === 'runtime') return 'px-2.5 py-1.5 text-[8px]'
+    return 'px-3 py-1.5 text-[9px]'
+  }
 
   return (
-    <div className="relative w-full h-full min-h-[300px] md:min-h-full flex flex-col">
-      {/* SVG connectors behind everything */}
+    <div className="relative w-full min-h-[360px] flex flex-col">
+      {/* Radial glow behind the graph */}
+      <div
+        className="absolute inset-0 pointer-events-none rounded-xl"
+        style={{
+          background: `radial-gradient(ellipse 70% 60% at 50% 45%, ${project.color}08 0%, transparent 70%)`,
+        }}
+        aria-hidden="true"
+      />
+
+      {/* SVG connectors — explicit connections only */}
       <svg
         className="absolute inset-0 w-full h-full pointer-events-none"
         viewBox="0 0 100 100"
@@ -55,32 +41,37 @@ function MiniSystemVisual({ project }: { project: Project }) {
         aria-hidden="true"
       >
         <defs>
-          <filter id={`glow-${project.id}`} x="-50%" y="-50%" width="200%" height="200%">
-            <feGaussianBlur stdDeviation="1.5" result="blur" />
+          <filter id={`sys-glow-${project.id}`} x="-80%" y="-80%" width="260%" height="260%">
+            <feGaussianBlur stdDeviation="1.2" result="blur" />
             <feMerge>
               <feMergeNode in="blur" />
               <feMergeNode in="SourceGraphic" />
             </feMerge>
           </filter>
         </defs>
-        {connectors.map((c, i) => (
-          <line
-            key={i}
-            x1={c.x1}
-            y1={c.y1}
-            x2={c.x2}
-            y2={c.y2}
-            stroke={project.color}
-            strokeWidth="0.5"
-            strokeOpacity="0.35"
-            strokeDasharray="2,1"
-          />
-        ))}
+        {connections.map(([from, to], i) => {
+          const a = nodeMap.get(from)
+          const b = nodeMap.get(to)
+          if (!a || !b) return null
+          return (
+            <line
+              key={i}
+              x1={a.x}
+              y1={a.y}
+              x2={b.x}
+              y2={b.y}
+              stroke={project.color}
+              strokeWidth="0.5"
+              strokeOpacity="0.3"
+              strokeDasharray="2,1.5"
+            />
+          )
+        })}
       </svg>
 
-      {/* Architecture nodes absolutely positioned */}
+      {/* Nodes at explicit x/y positions */}
       <div className="relative flex-1 w-full">
-        {nodePositions.map((node) => (
+        {archNodes.map((node, idx) => (
           <div
             key={node.label}
             className="absolute"
@@ -91,17 +82,17 @@ function MiniSystemVisual({ project }: { project: Project }) {
             }}
           >
             <motion.div
-              className="px-3 py-1.5 rounded-lg text-[9px] font-mono font-bold tracking-[0.1em] uppercase whitespace-nowrap"
+              className={`rounded-lg font-mono font-bold tracking-[0.1em] uppercase whitespace-nowrap ${nodeSize(node.type)}`}
               style={{
-                background: project.color + '14',
-                border: `1px solid ${project.color}35`,
-                color: project.color,
-                filter: `url(#glow-${project.id})`,
+                background: project.color + '12',
+                border: `1px solid ${project.color}30`,
+                color: nodeTypeColor(node.type),
+                filter: `url(#sys-glow-${project.id})`,
               }}
               initial={{ opacity: 0, scale: 0.7 }}
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.4, delay: node.idx * 0.06 }}
+              transition={{ duration: 0.4, delay: idx * 0.07 }}
               whileHover={{ scale: 1.08 }}
             >
               {node.label}
@@ -111,7 +102,10 @@ function MiniSystemVisual({ project }: { project: Project }) {
       </div>
 
       {/* Pipeline bar at bottom */}
-      <div className="relative flex items-center justify-center gap-0 py-3 px-4 border-t" style={{ borderColor: project.color + '18' }}>
+      <div
+        className="relative flex items-center justify-center gap-0 py-3 px-4 border-t"
+        style={{ borderColor: project.color + '18' }}
+      >
         {layers.map((layer, i) => (
           <div key={layer} className="flex items-center">
             <div
@@ -142,9 +136,6 @@ function MiniSystemVisual({ project }: { project: Project }) {
   )
 }
 
-// -------------------------------------------------------------- //
-// ProjectCard — split layout: content left, visual right             //
-// -------------------------------------------------------------- //
 function ProjectCard({ project, index }: { project: Project; index: number }) {
   const ref = useRef<HTMLDivElement>(null)
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] })
@@ -171,21 +162,19 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
         {/* Top accent line */}
         <div
           className="absolute top-0 left-0 right-0 h-px rounded-t-2xl"
-          style={{ background: 'linear-gradient(90deg, transparent, ' + project.color + ', transparent)' }}
+          style={{ background: `linear-gradient(90deg, transparent, ${project.color}, transparent)` }}
         />
 
-        {/* Split layout: content left, visual right */}
         <div className="grid md:grid-cols-[1.1fr_0.9fr] gap-6 md:gap-8 items-start">
           {/* Left: Text content */}
           <div>
-            {/* Title row */}
             <div className="flex items-start justify-between mb-5">
               <div className="flex items-start gap-3">
                 <span
                   className="text-3xl md:text-4xl font-black font-heading select-none leading-none mt-1"
                   style={{
                     fontStyle: 'italic',
-                    WebkitTextStroke: '1px ' + project.color + '30',
+                    WebkitTextStroke: `1px ${project.color}30`,
                     color: 'transparent',
                   }}
                 >
@@ -217,7 +206,6 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
               </motion.a>
             </div>
 
-            {/* Problem */}
             <div className="mb-4">
               <span className="text-[10px] font-bold tracking-[0.15em] uppercase mb-1.5 block" style={{ color: project.color + '80' }}>
                 Problem
@@ -227,7 +215,6 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
               </p>
             </div>
 
-            {/* Built */}
             <div className="mb-4">
               <span className="text-[10px] font-bold tracking-[0.15em] uppercase mb-2 block" style={{ color: project.color + '80' }}>
                 Built
@@ -246,8 +233,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
               </ul>
             </div>
 
-            {/* Proof */}
-            <div className="mb-5 p-4 rounded-xl" style={{ background: project.color + '06', border: '1px solid ' + project.color + '15' }}>
+            <div className="mb-5 p-4 rounded-xl" style={{ background: project.color + '06', border: `1px solid ${project.color}15` }}>
               <span className="text-[10px] font-bold tracking-[0.15em] uppercase mb-2 block" style={{ color: project.color + '80' }}>
                 Proof
               </span>
@@ -265,14 +251,12 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
               </ul>
             </div>
 
-            {/* Tags */}
             <div className="flex flex-wrap gap-1.5">
               {project.tags.map((tag: string, i: number) => (
                 <TechPill key={tag} label={tag} color={project.color} index={i} />
               ))}
             </div>
 
-            {/* CTA */}
             <div className="flex items-center gap-4 mt-5">
               <motion.a
                 href={project.github}
@@ -290,7 +274,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
             </div>
           </div>
 
-          {/* Right: Full-height mini system visual */}
+          {/* Right: System visual */}
           <div
             className="rounded-xl overflow-hidden"
             style={{
@@ -308,9 +292,6 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
   )
 }
 
-// -------------------------------------------------------------- //
-// ProjectsSection                                                  //
-// -------------------------------------------------------------- //
 export function ProjectsSection() {
   const sectionRef = useRef<HTMLDivElement>(null)
   const { scrollYProgress } = useScroll({ target: sectionRef, offset: ['start end', 'end start'] })

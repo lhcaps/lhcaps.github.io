@@ -1,5 +1,3 @@
-'use client'
-
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { CoreHaloCanvas } from '@/components/hero/CoreHaloCanvas'
@@ -8,7 +6,7 @@ import { Button } from '@/components/ui'
 import { Github, Mail, ArrowDown } from 'lucide-react'
 import { profile } from '@/data/profile'
 
-const easeOutExpo = [0.16, 1, 0.3, 1]
+const easeOutExpo: [number, number, number, number] = [0.16, 1, 0.3, 1]
 
 export function CoreHeroSection() {
   const [mounted, setMounted] = useState(false)
@@ -28,27 +26,27 @@ export function CoreHeroSection() {
 
   return (
     <section className="relative min-h-screen flex items-center overflow-hidden">
-      {/* CoreHalo — decorative R3F behind text only */}
+      {/* CoreHalo — local to the core composition, not full-screen */}
       <div className="absolute inset-0 pointer-events-none z-0">
         <CoreHaloCanvas className="w-full h-full" />
       </div>
 
-      {/* Center glow */}
+      {/* Ambient center glow */}
       <div
         className="absolute inset-0 pointer-events-none z-0"
         aria-hidden="true"
         style={{
-          background: 'radial-gradient(ellipse 60% 55% at 50% 48%, rgba(103, 232, 249, 0.07) 0%, transparent 65%)',
+          background: 'radial-gradient(ellipse 60% 55% at 50% 48%, rgba(103,232,249,0.07) 0%, transparent 65%)',
         }}
       />
 
-      <div className="relative z-10 w-full max-w-5xl mx-auto px-6 md:px-8">
+      <div className="relative z-10 w-full max-w-6xl mx-auto px-6 md:px-8">
         {/* Availability badge */}
         <motion.div
           initial={{ opacity: 0, y: 16, scale: 0.9 }}
           animate={mounted ? { opacity: 1, y: 0, scale: 1 } : {}}
           transition={{ duration: 0.5, delay: 0.2 }}
-          className="flex justify-center mb-8"
+          className="flex justify-center mb-4 sm:mb-8"
         >
           <span
             className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-medium tracking-wide"
@@ -69,34 +67,55 @@ export function CoreHeroSection() {
           </span>
         </motion.div>
 
-        {/* Core composition: name + satellites + halo */}
+        {/*
+          CORE COMPOSITION WRAPPER
+          One unified coordinate system: h1 absolute center, halo behind,
+          satellites inset-0, all sharing the same origin.
+        */}
         <div className="flex flex-col items-center">
-          {/* Name — the actual core */}
-          <div className="overflow-hidden mb-2 text-center">
-            <motion.h1
-              className="text-6xl xs:text-7xl sm:text-8xl md:text-[8rem] lg:text-[9.5rem] font-bold tracking-tighter leading-none"
-              style={{ fontFamily: 'var(--font-heading)' }}
-              initial={{ opacity: 0, y: 50 }}
-              animate={mounted ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 1.0, delay: 0.3, ease: easeOutExpo as unknown as number[] }}
+          <div
+            className="relative mx-auto w-full max-w-[900px] sm:max-w-[700px]"
+            style={{ height: 340 }}
+          >
+            {/* CoreHaloCanvas — anchored to center of this wrapper */}
+            <div
+              className="absolute left-1/2 top-1/2 pointer-events-none"
+              style={{
+                width: 420,
+                height: 280,
+                transform: 'translate(-50%, -50%)',
+              }}
             >
-              <span
-                className="text-foreground"
-                style={{
-                  textShadow: '0 0 60px rgba(103,232,249,0.15), 0 0 120px rgba(103,232,249,0.08)',
-                }}
-              >
-                {profile.name}
-              </span>
+              <CoreHaloCanvas className="w-full h-full" />
+            </div>
+
+            {/* SatelliteSystem — absolute inset-0, orbits around center */}
+            <div className="absolute inset-0">
+              <SatelliteSystem reduced={prefersReduced} />
+            </div>
+
+            {/* h1 — the actual core, absolute centered */}
+            <motion.h1
+              className="absolute left-1/2 top-1/2 text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold tracking-tighter leading-none text-center"
+              style={{
+                fontFamily: 'var(--font-heading)',
+                transform: 'translate(-50%, -50%)',
+                textShadow: '0 0 40px rgba(103,232,249,0.12), 0 0 80px rgba(103,232,249,0.06)',
+              }}
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={mounted ? { opacity: 1, scale: 1 } : {}}
+              transition={{ duration: 1.0, delay: 0.3, ease: easeOutExpo }}
+            >
+              {profile.name}
             </motion.h1>
           </div>
 
-          {/* Role */}
+          {/* Role — below core composition */}
           <motion.div
             initial={{ opacity: 0, y: 14 }}
             animate={mounted ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.6, delay: 0.9 }}
-            className="mb-2"
+            transition={{ duration: 0.6, delay: prefersReduced ? 0.1 : 0.9 }}
+            className="mb-2 sm:mb-4"
           >
             <span
               className="text-sm sm:text-base md:text-lg font-light tracking-[0.2em] uppercase"
@@ -106,22 +125,13 @@ export function CoreHeroSection() {
             </span>
           </motion.div>
 
-          {/* Satellite system — orbiting around the name */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={mounted ? { opacity: 1 } : {}}
-            transition={{ duration: 0.4, delay: 0.5 }}
-          >
-            <SatelliteSystem />
-          </motion.div>
-
-          {/* Tagline — below satellites on mobile, inline on large screens */}
+          {/* Tagline */}
           <motion.p
-            className="text-sm sm:text-base md:text-lg max-w-md mx-auto text-center mb-10 px-4 leading-relaxed -mt-2"
+            className="text-sm sm:text-base md:text-lg max-w-md mx-auto text-center mb-6 sm:mb-10 px-4 leading-relaxed"
             style={{ color: 'hsl(var(--muted-fg))' }}
             initial={{ opacity: 0, y: 12 }}
             animate={mounted ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.6, delay: 1.0 }}
+            transition={{ duration: 0.6, delay: prefersReduced ? 0.1 : 1.0 }}
           >
             {profile.tagline}
           </motion.p>
