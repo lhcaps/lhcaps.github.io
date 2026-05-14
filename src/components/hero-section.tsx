@@ -3,106 +3,99 @@ import { motion, useMotionValue, useSpring, useTransform } from "framer-motion"
 import { ArrowDown, Github, Mail } from "lucide-react"
 import { easeOutExpo } from "@/lib/animations"
 
-/* ── Clean geometric icons ─────────────────────────────────────────── */
+/* ── SVG Tech Icons — 28px with background rect ──────────────────── */
 function TsIcon({ color }: { color: string }) {
   return (
-    <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-      <rect x="1" y="1" width="16" height="16" rx="3" fill={color} fillOpacity="0.15" />
-      <path d="M9 3L7 4.5H11L9 3Z" fill={color} />
-      <path d="M7 14L9 12.5H11L7 14Z" fill={color} />
-      <path d="M7 4.5V10.5L9 12.5M7 4.5H11V8H9M11 4.5V10L11 12.5H9M9 10.5L7 12.5L11 12.5" stroke={color} strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
+    <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+      <rect width="28" height="28" rx="6" fill={color} fillOpacity="0.12" />
+      <path d="M13.5 2L11 4.5H17L13.5 2Z" fill={color} />
+      <path d="M11 23.5L13.5 21H17L13.5 23.5H11Z" fill={color} />
+      <path d="M11 4.5V19L13.5 21.5M11 4.5H17V10.5H13M17 4.5V13.5L17 17.5H13M13 13.5L11 19L17 21.5V14.5H13.5" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   )
 }
 
 function ReactIcon({ color }: { color: string }) {
   return (
-    <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-      <circle cx="9" cy="9" r="1.8" stroke={color} strokeWidth="1.2" />
-      <ellipse cx="9" cy="9" rx="6.5" ry="2.8" stroke={color} strokeWidth="1.1" strokeDasharray="2.5 1.5" />
-      <ellipse cx="9" cy="9" rx="6.5" ry="2.8" stroke={color} strokeWidth="1.1" strokeDasharray="2.5 1.5" transform="rotate(60 9 9)" />
-      <ellipse cx="9" cy="9" rx="6.5" ry="2.8" stroke={color} strokeWidth="1.1" strokeDasharray="2.5 1.5" transform="rotate(120 9 9)" />
+    <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+      <rect width="28" height="28" rx="6" fill={color} fillOpacity="0.12" />
+      <circle cx="14" cy="14" r="2.5" stroke={color} strokeWidth="1.5" />
+      <ellipse cx="14" cy="14" rx="8.5" ry="4" stroke={color} strokeWidth="1.5" strokeDasharray="4 2" />
+      <ellipse cx="14" cy="14" rx="8.5" ry="4" stroke={color} strokeWidth="1.5" strokeDasharray="4 2" transform="rotate(60 14 14)" />
+      <ellipse cx="14" cy="14" rx="8.5" ry="4" stroke={color} strokeWidth="1.5" strokeDasharray="4 2" transform="rotate(120 14 14)" />
     </svg>
   )
 }
 
 function PythonIcon({ color }: { color: string }) {
   return (
-    <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-      <circle cx="9" cy="5" r="2.2" fill={color} />
-      <circle cx="9" cy="13" r="2.2" fill={color} />
-      <rect x="7.5" y="5" width="3" height="4.5" rx="1" fill={color} fillOpacity="0.4" />
-      <path d="M5.5 5.5C5.5 5.5 4 4.5 4 5.8C4 7.1 5.5 7.5 5.5 7.5" stroke={color} strokeWidth="1.2" strokeLinecap="round" />
-      <path d="M12.5 10.5C12.5 10.5 14 9.5 14 10.8C14 12.1 12.5 12.5 12.5 12.5" stroke={color} strokeWidth="1.2" strokeLinecap="round" />
+    <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+      <rect width="28" height="28" rx="6" fill={color} fillOpacity="0.12" />
+      <path d="M13.5 3C9 3 8 5 8 7V9H14V10.5H5.5C4.5 10.5 3 11 3 13.5V15.5C3 18 4.5 18.5 5.5 18.5H8V22.5C8 25 10 26.5 13 26.5C15.5 26.5 17 25.5 18 24H18.5C18.5 24 18.5 25.5 20.5 25.5C22 25.5 23.5 24 23.5 22V12C23.5 9.5 21.5 8 20 8L21 4C21 4 19 3 17 3H13.5Z" fill={color} fillOpacity="0.3" />
+      <path d="M13.5 3C17 3 18 5 18 7V9H12V10.5H20.5C21.5 10.5 23 11 23 13.5V15.5C23 18 21.5 18.5 20.5 18.5H18V22.5C18 25 16 26.5 13 26.5C10.5 26.5 9 25.5 8 24H7.5C7.5 24 7.5 25.5 5.5 25.5C4 25.5 2.5 24 2.5 22V12C2.5 9.5 4.5 8 6 8L5 4C5 4 7 3 9 3H13.5Z" fill={color} />
     </svg>
   )
 }
 
 function NodeIcon({ color }: { color: string }) {
   return (
-    <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-      <polygon points="9,1.5 15.6,5.25 15.6,12.75 9,16.5 2.4,12.75 2.4,5.25" stroke={color} strokeWidth="1.2" fill={color} fillOpacity="0.15" strokeLinejoin="round" />
-      <text x="9" y="10.5" textAnchor="middle" fill={color} fontSize="4.5" fontFamily="monospace" fontWeight="bold">N</text>
+    <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+      <rect width="28" height="28" rx="6" fill={color} fillOpacity="0.12" />
+      <path d="M21.5 16.5C21.8 17.3 21.5 18 20.5 18.5C18.5 19.5 17.5 18 17.2 17.5L16 18.5C16.3 19 17.5 20.5 20 19.5C22 18.7 22.5 17.5 22.2 16.5C21.9 15.5 20.5 15 19 15.3L18 15.5C17.8 15.5 17.6 15.6 17.5 15.7C17.3 15.9 17.2 16 17.2 16.3C17.2 16.6 17.4 16.8 17.7 17C18.5 17.5 19.5 18 20.5 17.7C21.2 17.5 21.5 17 21.3 16.5C21.1 16 20 15.7 19 15.8L18.5 15.9C17.9 16 17.4 16.2 17 16.4C16.5 16.6 16.2 16.8 16 17.1C15.7 17.5 15.7 18 16 18.5C16.3 19 17 19.2 17.7 19.5C18.3 19.7 18.9 20 19.5 20.2C20.3 20.4 20.8 20.7 21.1 21C21.6 21.5 21.8 22.3 21.5 23C21.2 23.8 20.5 24 19.5 24C18.7 24 18 23.5 17.5 23L16.5 24C17.2 24.5 18 25 19 25C20.5 25 21.5 24 22 23C22.5 22 22.2 21 21.5 20.5C21 20.1 20.3 20 19.7 20L20.2 19.8C20.8 19.6 21.4 19.2 21.8 18.7C22.2 18.2 22.3 17.6 22.1 17C21.9 16.4 21.3 16 20.6 15.7C19.8 15.3 19 15.3 18.3 15.5L19 15.3C19.8 15 20.7 15.2 21.5 15.8V16.5Z" fill={color} />
+      <path d="M10.5 11.5C10.2 10.7 10.5 10 11.5 9.5C13.5 8.5 14.5 10 14.8 10.5L16 9.5C15.7 9 14.5 7.5 12 8.5C10 9.3 9.5 10.5 9.8 11.5C10.1 12.5 11.5 13 13 12.7L14 12.5C14.2 12.5 14.4 12.4 14.5 12.3C14.7 12.1 14.8 12 14.8 11.7C14.8 11.4 14.6 11.2 14.3 11C13.5 10.5 12.5 10 11.5 10.3C10.8 10.5 10.5 11 10.7 11.5C10.9 12 12 12.3 13 12.2L13.5 12.1C14.1 12 14.6 11.8 15 11.6C15.5 11.4 15.8 11.2 16 10.9C16.3 10.5 16.3 10 16 9.5C15.7 9 15 8.8 14.3 8.5C13.7 8.3 13.1 8 12.5 7.8C11.7 7.6 11.2 7.3 10.9 7C10.4 6.5 10.2 5.7 10.5 5C10.8 4.2 11.5 4 12.5 4C13.3 4 14 4.5 14.5 5L15.5 4C14.8 3.5 14 3 13 3C11.5 3 10.5 4 10 5C9.5 6 9.8 7 10.5 7.5C11 7.9 11.7 8 12.3 8L11.8 8.2C11.2 8.4 10.6 8.8 10.2 9.3C9.8 9.8 9.7 10.4 9.9 11C10.1 11.6 10.7 12 11.4 12.3C12.2 12.7 13 12.7 13.7 12.5L13 12.7C12.2 13 11.3 12.8 10.5 12.2V11.5Z" fill={color} />
     </svg>
   )
 }
 
 function DockerIcon({ color }: { color: string }) {
   return (
-    <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-      <rect x="1" y="1" width="16" height="16" rx="3" stroke={color} strokeWidth="1.2" fill={color} fillOpacity="0.1" />
-      <rect x="5.5" y="7" width="7" height="5" rx="1.5" fill={color} />
-      <rect x="7" y="5" width="4" height="2.5" rx="1" fill={color} fillOpacity="0.6" />
+    <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+      <rect width="28" height="28" rx="6" fill={color} fillOpacity="0.12" />
+      <path d="M14 3C8 3 5.5 5 5 7H14V3Z" fill={color} fillOpacity="0.4" />
+      <path d="M5 7.5C4 8.5 3 10.5 3 14C3 17.5 4 19.5 5 20.5V24H23V20.5C24 19.5 25 17.5 25 14C25 10.5 24 8.5 23 7.5V14H17V7.5C16 8.5 15 10.5 15 14H9C9 10.5 8 8.5 7 7.5V14H5.5V7.5C5.5 7.5 5.5 7.5 5 7.5Z" fill={color} fillOpacity="0.3" />
+      <path d="M5 7H14V9H5V7ZM5 10.5H14V12.5H5V10.5Z" fill={color} />
+      <circle cx="18.5" cy="18" r="1.5" fill={color} />
+      <path d="M22 18.5C22.5 19.5 22.5 20 22 20.5H23.5C24.5 19.5 25 18.5 25 17C25 15.5 24.5 14.5 23.5 14L22 17.5V14H20V18C20 19.5 21 19.5 22 18.5Z" fill={color} />
     </svg>
   )
 }
 
 function PostgresIcon({ color }: { color: string }) {
   return (
-    <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-      <circle cx="9" cy="5.5" r="2" fill={color} />
-      <circle cx="5" cy="10" r="2" fill={color} />
-      <circle cx="13" cy="10" r="2" fill={color} />
-      <circle cx="9" cy="14" r="2" fill={color} />
-      <line x1="9" y1="7.5" x2="9" y2="12" stroke={color} strokeWidth="1.2" strokeLinecap="round" />
-      <line x1="7" y1="10" x2="11" y2="10" stroke={color} strokeWidth="1.2" strokeLinecap="round" />
+    <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+      <rect width="28" height="28" rx="6" fill={color} fillOpacity="0.12" />
+      <ellipse cx="14" cy="9" rx="5.5" ry="2.5" stroke={color} strokeWidth="1.5" />
+      <path d="M8.5 9V15C8.5 18 11 20 14 20C17 20 19.5 18 19.5 15V9" stroke={color} strokeWidth="1.5" strokeLinejoin="round" />
+      <path d="M8.5 12.5C8.5 15.5 11 17.5 14 17.5C17 17.5 19.5 15.5 19.5 12.5" stroke={color} strokeWidth="1.5" />
+      <path d="M11 9C10 10 8.5 11.5 8.5 14M17 9C18 10 19.5 11.5 19.5 14" stroke={color} strokeWidth="1.5" strokeLinecap="round" />
     </svg>
   )
 }
 
 function FastApiIcon({ color }: { color: string }) {
   return (
-    <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-      <rect x="1" y="1" width="16" height="16" rx="3" stroke={color} strokeWidth="1.2" fill={color} fillOpacity="0.12" />
-      <path d="M5 13L8 5H11L9 9.5H11L8 13H5Z" fill={color} />
-      <path d="M11 5H14L11 13H8L11 9.5H9.5L11 5Z" fill={color} fillOpacity="0.5" />
+    <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+      <rect width="28" height="28" rx="6" fill={color} fillOpacity="0.12" />
+      <path d="M6 20L10 8H14L11 14H14L10 20H6Z" fill={color} />
+      <path d="M14 8H18L14 20H10L14 14H11L14 8Z" fill={color} fillOpacity="0.5" />
+      <path d="M18 8H22L18 20H14L18 14H21L18 8Z" fill={color} fillOpacity="0.25" />
     </svg>
   )
 }
 
 function AIMLIcon({ color }: { color: string }) {
   return (
-    <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-      <circle cx="9" cy="9" r="2.5" stroke={color} strokeWidth="1.2" />
-      <circle cx="9" cy="9" r="0.8" fill={color} />
-      <circle cx="9" cy="3" r="1.2" fill={color} fillOpacity="0.7" />
-      <circle cx="9" cy="15" r="1.2" fill={color} fillOpacity="0.7" />
-      <circle cx="3" cy="9" r="1.2" fill={color} fillOpacity="0.7" />
-      <circle cx="15" cy="9" r="1.2" fill={color} fillOpacity="0.7" />
-      <circle cx="4.5" cy="4.5" r="1" fill={color} fillOpacity="0.5" />
-      <circle cx="13.5" cy="4.5" r="1" fill={color} fillOpacity="0.5" />
-      <circle cx="4.5" cy="13.5" r="1" fill={color} fillOpacity="0.5" />
-      <circle cx="13.5" cy="13.5" r="1" fill={color} fillOpacity="0.5" />
-      <line x1="7.5" y1="7.5" x2="4.5" y2="4.5" stroke={color} strokeWidth="0.9" strokeOpacity="0.5" />
-      <line x1="10.5" y1="7.5" x2="13.5" y2="4.5" stroke={color} strokeWidth="0.9" strokeOpacity="0.5" />
-      <line x1="7.5" y1="10.5" x2="4.5" y2="13.5" stroke={color} strokeWidth="0.9" strokeOpacity="0.5" />
-      <line x1="10.5" y1="10.5" x2="13.5" y2="13.5" stroke={color} strokeWidth="0.9" strokeOpacity="0.5" />
+    <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+      <rect width="28" height="28" rx="6" fill={color} fillOpacity="0.12" />
+      <circle cx="14" cy="14" r="3" stroke={color} strokeWidth="1.5" />
+      <path d="M14 5V8M14 20V23M5 14H8M20 14H23M7.9 7.9L9.8 9.8M18.2 18.2L20.1 20.1M20.1 7.9L18.2 9.8M9.8 18.2L7.9 20.1" stroke={color} strokeWidth="1.5" strokeLinecap="round" />
+      <circle cx="14" cy="14" r="0.75" fill={color} />
     </svg>
   )
 }
 
-/* ── Skill pill data ──────────────────────────────────────────────── */
-const skillPills = [
+/* ── Skill tile data ──────────────────────────────────────────────── */
+const skillTiles = [
   { label: "TypeScript", color: "#60A5FA", Icon: TsIcon },
   { label: "React", color: "#67E8F9", Icon: ReactIcon },
   { label: "Python", color: "#A78BFA", Icon: PythonIcon },
@@ -113,95 +106,97 @@ const skillPills = [
   { label: "AI / ML", color: "#FB923C", Icon: AIMLIcon },
 ]
 
-/* ── Arc positions — single clean row, no overlaps, above hero text ── */
-/*
-  Hero name ~176px tall, center at 50%/50%.
-  Pills go in a single horizontal arc row above the name.
-  x: spread evenly from left to right.
-  y: -200px from center (safely above all hero text).
-  Each pill is ~120px wide max. With 8 pills at 8px gap:
-  Total width needed = 8 * 120 + 7 * 8 = ~1016px.
-  At 1440px screen, that's ±508px from center.
-  We space them evenly at ±100, ±225, ±350, ±475 from center.
-*/
-const pillLayout = [
-  { x: -470, y: -200, rot: -5  },  // TypeScript
-  { x: -345, y: -210, rot: -3  },  // React
-  { x: -220, y: -215, rot: -1  },  // Python
-  { x:  -95, y: -210, rot:  0  },  // Node.js
-  { x:   95, y: -210, rot:  0  },  // Docker
-  { x:  220, y: -215, rot:  1  },  // PostgreSQL
-  { x:  345, y: -210, rot:  3  },  // FastAPI
-  { x:  470, y: -200, rot:  5  },  // AI / ML
+/* ── Float variants — 8 distinct trajectories ───────────────────── */
+const floatVariants = [
+  { y: [-8, 8, -8], rotate: [-2, 2, -2] },
+  { y: [8, -8, 8], rotate: [2, -2, 2] },
+  { y: [-5, 10, -5], rotate: [1, -1, 1] },
+  { y: [10, -5, 10], rotate: [-1.5, 1.5, -1.5] },
+  { y: [-10, 5, -10], rotate: [-3, 1, -3] },
+  { y: [5, -10, 5], rotate: [1.5, -3, 1.5] },
+  { y: [-6, 6, -6], rotate: [2.5, -1.5, 2.5] },
+  { y: [6, -6, 6], rotate: [-2.5, 1.5, -2.5] },
 ]
 
-/* ── Single Skill Pill ───────────────────────────────────────────── */
-function SkillPill({
-  pill,
+/* ── Tile positions — pixel offsets from viewport center (correct method) ── */
+const tileLayout = [
+  { x: "-310px", y: "-260px" },  // TypeScript  — upper-left
+  { x: "295px",  y: "-270px" },  // React       — upper-right
+  { x: "-330px", y: "-20px"  },  // Python      — left-center
+  { x: "315px",  y: "-20px"  },  // Node.js     — right-center
+  { x: "-280px", y: "220px"  },  // Docker     — lower-left
+  { x: "295px",  y: "220px"  },  // PostgreSQL  — lower-right
+  { x: "-160px", y: "190px"  },  // FastAPI    — mid-left
+  { x: "175px",  y: "190px"  },  // AI / ML    — mid-right
+]
+
+/* ── Individual Skill Tile ──────────────────────────────────────── */
+function SkillTile({
+  tile,
   index,
   mouseX,
   mouseY,
 }: {
-  pill: (typeof skillPills)[0]
+  tile: (typeof skillTiles)[0]
   index: number
   mouseX: number
   mouseY: number
 }) {
-  const Icon = pill.Icon
-  const pos = pillLayout[index]
-  const depth = 0.12 + (index % 3) * 0.05
+  const Icon = tile.Icon
+  const delay = index * 0.15
+  const variant = floatVariants[index % floatVariants.length]
+  const duration = 5 + (index % 3) * 1.5
+  const parallaxMult = 0.3 + (index % 4) * 0.1
 
   const px = useMotionValue(0)
   const py = useMotionValue(0)
-  const springPx = useSpring(px, { stiffness: 40, damping: 14 })
-  const springPy = useSpring(py, { stiffness: 40, damping: 14 })
+  const springPx = useSpring(px, { stiffness: 40, damping: 12 })
+  const springPy = useSpring(py, { stiffness: 40, damping: 12 })
 
   useEffect(() => {
-    px.set(mouseX * depth * 18)
-    py.set(mouseY * depth * 12)
-  }, [mouseX, mouseY, px, py, depth])
+    px.set(mouseX * parallaxMult * 20)
+    py.set(mouseY * parallaxMult * 12)
+  }, [mouseX, mouseY, px, py, parallaxMult])
 
   return (
     <motion.div
       className="absolute hidden xl:flex items-center pointer-events-none"
-      style={{
-        left: "50%",
-        top: "50%",
-        translateX: pos.x,
-        translateY: pos.y,
-        x: springPx,
-        y: springPy,
-      }}
-      initial={{ opacity: 0, scale: 0.2, rotate: -30 }}
-      animate={{ opacity: 1, scale: 1, rotate: pos.rot }}
+      style={{ x: springPx, y: springPy }}
+      initial={{ opacity: 0, scale: 0.5, rotate: -8 }}
+      animate={{ opacity: 1, scale: 1, rotate: 0 }}
       transition={{
-        opacity: { duration: 0.5, delay: 0.85 + index * 0.07, ease: "easeOut" },
-        scale: { duration: 0.55, delay: 0.85 + index * 0.07, ease: [0.22, 1, 0.36, 1] },
-        rotate: { duration: 0.65, delay: 0.85 + index * 0.07, ease: [0.22, 1, 0.36, 1] },
+        opacity: { duration: 0.7, delay, ease: easeOutExpo as unknown as string },
+        scale: { duration: 0.7, delay, ease: easeOutExpo as unknown as string },
+        rotate: { duration: 0.7, delay, ease: easeOutExpo as unknown as string },
       }}
     >
       <motion.div
-        className="relative flex items-center gap-1.5 px-4 py-2 rounded-full glass-card select-none cursor-default"
-        animate={{ y: [0, -4, 0] }}
+        className="glass-card relative flex flex-col items-center justify-center rounded-2xl cursor-default select-none"
+        style={{ width: 72, height: 72 }}
+        animate={variant}
         transition={{
-          duration: 5 + (index % 3) * 0.8,
+          duration,
           repeat: Infinity,
           repeatType: "mirror",
           ease: "easeInOut",
-          delay: index * 0.4,
+          delay,
         }}
       >
-        <div
-          className="w-1.5 h-1.5 rounded-full flex-shrink-0"
-          style={{ background: pill.color, boxShadow: `0 0 5px ${pill.color}` }}
-        />
-        <Icon color={pill.color} />
+        <div className="flex items-center justify-center flex-1">
+          <Icon color={tile.color} />
+        </div>
         <span
-          className="text-[11px] font-semibold tracking-wide whitespace-nowrap"
-          style={{ color: pill.color }}
+          className="text-[9px] font-bold tracking-wide pb-1.5"
+          style={{ color: tile.color, opacity: 0.75 }}
         >
-          {pill.label}
+          {tile.label}
         </span>
+        <motion.div
+          className="absolute top-0 left-3 right-3 h-px rounded-full"
+          style={{ background: tile.color, boxShadow: `0 0 6px ${tile.color}` }}
+          animate={{ opacity: [0.5, 1, 0.5], scaleX: [0.8, 1, 0.8] }}
+          transition={{ duration: 2.5, repeat: Infinity, delay: index * 0.3 }}
+        />
       </motion.div>
     </motion.div>
   )
@@ -252,27 +247,35 @@ export function HeroSection() {
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
       {/* Spotlight */}
-      <motion.div className="absolute inset-0 pointer-events-none" style={{ x: spotX, y: spotY }}>
+      <motion.div
+        className="absolute inset-0 pointer-events-none"
+        style={{ x: spotX, y: spotY }}
+      >
         <div
           className="absolute inset-0"
-          style={{ background: "radial-gradient(ellipse 600px 400px at 50% 50%, hsl(200, 100%, 60%) / 0.08, transparent)" }}
+          style={{
+            background: "radial-gradient(ellipse 600px 400px at 50% 50%, hsl(200, 100%, 60%) / 0.08, transparent)",
+          }}
         />
       </motion.div>
 
-      {/* Skill pills — arc row above hero */}
-      {mounted && (
-        <div className="absolute inset-0" aria-hidden="true">
-          {skillPills.map((pill, i) => (
-            <SkillPill
-              key={pill.label}
-              pill={pill}
-              index={i}
-              mouseX={mousePos.x}
-              mouseY={mousePos.y}
-            />
+      {/* Skill tiles — pixel-positioned, no percentage drift */}
+      <div className="absolute inset-0" aria-hidden="true">
+        {mounted &&
+          skillTiles.map((tile, i) => (
+            <div
+              key={tile.label}
+              className="absolute hidden xl:block"
+              style={{
+                left: `calc(50% + ${tileLayout[i].x})`,
+                top: `calc(50% + ${tileLayout[i].y})`,
+                transform: "translate(-50%, -50%)",
+              }}
+            >
+              <SkillTile tile={tile} index={i} mouseX={mousePos.x} mouseY={mousePos.y} />
+            </div>
           ))}
-        </div>
-      )}
+      </div>
 
       {/* Main content */}
       <div className="relative z-10 text-center px-4 max-w-5xl mx-auto">
