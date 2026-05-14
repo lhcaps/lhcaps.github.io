@@ -1,104 +1,119 @@
-import { motion } from 'framer-motion'
-
-interface HaloDecorationProps {
-  width?: number
-  height?: number
-}
-
-export function HaloDecoration({ width = 420, height = 280 }: HaloDecorationProps) {
+/**
+ * HaloDecoration — rotating orbit rings around the core sphere.
+ * Pure CSS + inline. No Canvas, no WebGL.
+ */
+export function HaloDecoration() {
   return (
     <div
-      className="absolute pointer-events-none"
-      style={{ width, height }}
+      className="absolute inset-0 pointer-events-none halo-rings"
       aria-hidden="true"
     >
-      {/* Soft radial glow behind text */}
+      {/* Orbit ring 1 — violet */}
       <div
-        className="absolute inset-0 rounded-full"
+        className="halo-ring-1"
         style={{
-          background: 'radial-gradient(ellipse 70% 60% at 50% 50%, rgba(103,232,249,0.08) 0%, transparent 65%)',
+          left: '50%',
+          top: '50%',
+          borderRadius: '50%',
+          border: '1px dashed rgba(167,139,250,0.18)',
+          transform: 'translate(-50%, -50%)',
+          animation: 'orbit-spin-1 30s linear infinite',
         }}
       />
 
-      {/* SVG orbit rings */}
-      <svg
-        className="absolute inset-0"
-        viewBox="0 0 420 280"
-        preserveAspectRatio="xMidYMid meet"
-        fill="none"
-      >
-        {/* Outer ring — violet, slowest */}
-        <ellipse
-          cx="210"
-          cy="140"
-          rx="180"
-          ry="90"
-          stroke="#A78BFA"
-          strokeWidth="0.8"
-          strokeOpacity="0.25"
-          strokeDasharray="4 3"
-        />
+      {/* Orbit ring 2 — cyan */}
+      <div
+        className="halo-ring-2"
+        style={{
+          left: '50%',
+          top: '50%',
+          borderRadius: '50%',
+          border: '0.5px dashed rgba(103,232,249,0.15)',
+          transform: 'translate(-50%, -50%)',
+          animation: 'orbit-spin-2 20s linear infinite reverse',
+        }}
+      />
 
-        {/* Middle ring — cyan, medium speed */}
-        <ellipse
-          cx="210"
-          cy="140"
-          rx="145"
-          ry="72"
-          stroke="#67E8F9"
-          strokeWidth="0.6"
-          strokeOpacity="0.2"
-          strokeDasharray="3 4"
-        />
+      {/* Orbit ring 3 — tight */}
+      <div
+        className="halo-ring-3"
+        style={{
+          left: '50%',
+          top: '50%',
+          borderRadius: '50%',
+          border: '0.5px dashed rgba(103,232,249,0.10)',
+          transform: 'translate(-50%, -50%)',
+          animation: 'orbit-spin-3 14s linear infinite',
+        }}
+      />
 
-        {/* Inner ring — faint cyan */}
-        <ellipse
-          cx="210"
-          cy="140"
-          rx="110"
-          ry="55"
-          stroke="#67E8F9"
-          strokeWidth="0.4"
-          strokeOpacity="0.12"
-          strokeDasharray="2 5"
-        />
+      {/* Orbiting dots on each ring */}
+      <div className="absolute w-1.5 h-1.5 rounded-full halo-dot-1" style={{ animation: 'orbit-dot-1 30s linear infinite' }} />
+      <div className="absolute w-1 h-1 rounded-full halo-dot-2" style={{ animation: 'orbit-dot-2 20s linear infinite' }} />
+      <div className="absolute w-0.75 h-0.75 rounded-full halo-dot-3" style={{ animation: 'orbit-dot-3 14s linear infinite reverse' }} />
 
-        {/* Orbiting dot on outer ring — CSS animation */}
-        <circle
-          cx="390"
-          cy="140"
-          r="3"
-          fill="#A78BFA"
-          opacity="0.5"
-          style={{
-            animation: 'orbit-outer 20s linear infinite',
-            transformOrigin: '210px 140px',
-          }}
-        />
-
-        {/* Orbiting dot on middle ring */}
-        <circle
-          cx="355"
-          cy="140"
-          r="2.5"
-          fill="#67E8F9"
-          opacity="0.4"
-          style={{
-            animation: 'orbit-middle 14s linear infinite',
-            transformOrigin: '210px 140px',
-          }}
-        />
-      </svg>
-
-      {/* CSS keyframes injected via inline style tag */}
       <style>{`
-        @keyframes orbit-outer {
-          from { transform: rotate(0deg) translateX(180px) rotate(0deg); }
-          to   { transform: rotate(360deg) translateX(180px) rotate(-360deg); }
+        .halo-ring-1 { width: 320px; height: 320px; }
+        .halo-ring-2 { width: 240px; height: 240px; }
+        .halo-ring-3 { width: 160px; height: 160px; }
+
+        .halo-dot-1 {
+          left: calc(50% - 160px);
+          top: 50%;
+          margin-left: -4px;
+          margin-top: -4px;
+          background: #A78BFA;
+          box-shadow: 0 0 6px #A78BFA, 0 0 12px #A78BFA80;
         }
-        @keyframes orbit-middle {
-          from { transform: rotate(0deg) translateX(145px) rotate(0deg); }
-          to   { transform: rotate(360deg) translateX(145px) rotate(-360deg); }
+        .halo-dot-2 {
+          left: calc(50% + 120px);
+          top: 50%;
+          margin-left: -2px;
+          margin-top: -2px;
+          background: #67E8F9;
+          box-shadow: 0 0 4px #67E8F9, 0 0 8px #67E8F980;
+        }
+        .halo-dot-3 {
+          left: calc(50% - 80px);
+          top: 50%;
+          margin-left: -2px;
+          margin-top: -2px;
+          background: #67E8F9;
+          box-shadow: 0 0 3px #67E8F9;
+        }
+
+        @keyframes orbit-spin-1 {
+          from { transform: translate(-50%, -50%) rotate(0deg); }
+          to   { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+        @keyframes orbit-spin-2 {
+          from { transform: translate(-50%, -50%) rotate(0deg); }
+          to   { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+        @keyframes orbit-spin-3 {
+          from { transform: translate(-50%, -50%) rotate(0deg); }
+          to   { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+        @keyframes orbit-dot-1 {
+          from { transform: rotate(0deg); }
+          to   { transform: rotate(360deg); }
+        }
+        @keyframes orbit-dot-2 {
+          from { transform: rotate(0deg); }
+          to   { transform: rotate(360deg); }
+        }
+        @keyframes orbit-dot-3 {
+          from { transform: rotate(0deg); }
+          to   { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 639px) {
+          .halo-ring-1 { width: 200px !important; height: 200px !important; }
+          .halo-ring-2 { width: 150px !important; height: 150px !important; }
+          .halo-ring-3 { width: 100px !important; height: 100px !important; }
+          .halo-dot-1 { left: calc(50% - 100px) !important; margin-left: -3px !important; margin-top: -3px !important; }
+          .halo-dot-2 { left: calc(50% + 75px) !important; margin-left: -2px !important; margin-top: -2px !important; }
+          .halo-dot-3 { left: calc(50% - 50px) !important; margin-left: -1px !important; margin-top: -1px !important; }
         }
       `}</style>
     </div>

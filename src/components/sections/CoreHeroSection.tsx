@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
+import { CoreSphere } from '@/components/hero/CoreSphere'
 import { HaloDecoration } from '@/components/hero/HaloDecoration'
 import { SatelliteSystem } from '@/components/hero/SatelliteSystem'
 import { Button } from '@/components/ui'
@@ -32,7 +33,7 @@ export function CoreHeroSection() {
           initial={{ opacity: 0, y: 16, scale: 0.9 }}
           animate={mounted ? { opacity: 1, y: 0, scale: 1 } : {}}
           transition={{ duration: 0.5, delay: 0.2 }}
-          className="flex justify-center mb-4 sm:mb-8"
+          className="flex justify-center mb-4 sm:mb-6"
         >
           <span
             className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-medium tracking-wide"
@@ -53,50 +54,41 @@ export function CoreHeroSection() {
           </span>
         </motion.div>
 
-        {/* Core composition */}
+        {/* Core composition: sphere + orbits + satellites */}
         <div className="flex flex-col items-center">
-          {/* Stage: one unified coordinate system centered on Le Huy */}
           <div
-            className="relative mx-auto w-full max-w-[480px]"
-            style={{ height: 340 }}
+            className="relative mx-auto w-full max-w-[520px] max-sm:max-w-[300px] hero-stage"
           >
-            {/* CSS/SVG halo — behind text */}
-            <div
-              className="absolute left-1/2 top-1/2 pointer-events-none"
-              style={{
-                width: 420,
-                height: 280,
-                transform: 'translate(-50%, -50%)',
-              }}
-            >
-              <HaloDecoration width={420} height={280} />
-            </div>
+            {/* Orbit rings — behind sphere */}
+            <HaloDecoration />
 
-            {/* SVG connector lines */}
+            {/* Core sphere */}
+            <CoreSphere size={96} />
+
+            {/* Satellite modules orbiting sphere */}
             <SatelliteSystem reduced={prefersReduced} />
-
-            {/* Le Huy — the actual core */}
-            <motion.h1
-              className="absolute left-1/2 top-1/2 text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold tracking-tighter leading-none text-center"
-              style={{
-                fontFamily: 'var(--font-heading)',
-                transform: 'translate(-50%, -50%)',
-                textShadow: '0 0 40px rgba(103,232,249,0.15), 0 0 80px rgba(103,232,249,0.07)',
-              }}
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={mounted ? { opacity: 1, scale: 1 } : {}}
-              transition={{ duration: 1.0, delay: 0.3, ease: easeOutExpo }}
-            >
-              {profile.name}
-            </motion.h1>
           </div>
+
+          {/* Le Huy — below the sphere */}
+          <motion.h1
+            className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold tracking-tighter leading-none text-center"
+            style={{
+              fontFamily: 'var(--font-heading)',
+              textShadow: '0 0 40px rgba(103,232,249,0.15), 0 0 80px rgba(103,232,249,0.07)',
+            }}
+            initial={{ opacity: 0, y: 20 }}
+            animate={mounted ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.9, delay: 0.4, ease: easeOutExpo }}
+          >
+            {profile.name}
+          </motion.h1>
 
           {/* Role */}
           <motion.div
             initial={{ opacity: 0, y: 14 }}
             animate={mounted ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.6, delay: prefersReduced ? 0.1 : 0.9 }}
-            className="mb-2 sm:mb-4"
+            transition={{ duration: 0.6, delay: prefersReduced ? 0.1 : 1.0 }}
+            className="mb-3 sm:mb-5 mt-2"
           >
             <span
               className="text-sm sm:text-base md:text-lg font-light tracking-[0.2em] uppercase"
@@ -112,7 +104,7 @@ export function CoreHeroSection() {
             style={{ color: 'hsl(var(--muted-fg))' }}
             initial={{ opacity: 0, y: 12 }}
             animate={mounted ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.6, delay: prefersReduced ? 0.1 : 1.0 }}
+            transition={{ duration: 0.6, delay: prefersReduced ? 0.1 : 1.1 }}
           >
             {profile.tagline}
           </motion.p>
@@ -122,7 +114,7 @@ export function CoreHeroSection() {
             className="flex flex-wrap gap-3 justify-center items-center"
             initial={{ opacity: 0, y: 14 }}
             animate={mounted ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.6, delay: prefersReduced ? 0.1 : 1.1 }}
+            transition={{ duration: 0.6, delay: prefersReduced ? 0.1 : 1.2 }}
           >
             <Button href="#projects" variant="primary" size="md">
               View Systems
