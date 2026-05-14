@@ -8,23 +8,26 @@ import { EducationSection } from "./components/education-section"
 import { ProjectsSection } from "./components/projects-section"
 import { WhatIBringSection } from "./components/what-i-bring-section"
 import { ContactSection, Footer } from "./components/contact-section"
+import { GlobalBackground } from "./components/global-background"
 
 function App() {
   return (
-    <div className="min-h-screen bg-background">
-      <Navigation />
-      <main>
-        <HeroSection />
-        <MarqueeSection />
-        <ProfileSection />
-        <SkillsSection />
-        <EducationSection />
-        <ProjectsSection />
-        <WhatIBringSection />
-        <ContactSection />
-      </main>
-      <Footer />
-    </div>
+    <GlobalBackground>
+      <div className="min-h-screen">
+        <Navigation />
+        <main>
+          <HeroSection />
+          <MarqueeSection />
+          <ProfileSection />
+          <SkillsSection />
+          <EducationSection />
+          <ProjectsSection />
+          <WhatIBringSection />
+          <ContactSection />
+        </main>
+        <Footer />
+      </div>
+    </GlobalBackground>
   )
 }
 

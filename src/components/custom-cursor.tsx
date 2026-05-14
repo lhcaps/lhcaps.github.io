@@ -1,104 +1,75 @@
-import { useEffect, useRef } from "react"
-import { motion, useMotionValue } from "framer-motion"
+import { useEffect, useState } from "react"
+import { motion, useMotionValue, useSpring } from "framer-motion"
 
 export function CustomCursor() {
-  const cursorRef = useRef<HTMLDivElement>(null)
-  const dotRef = useRef<HTMLDivElement>(null)
+  const [hoverState, setHoverState] = useState<"default" | "hover" | "click">("default")
+  const [isVisible, setIsVisible] = useState(false)
 
-  const cursorX = useMotionValue(0)
-  const cursorY = useMotionValue(0)
+  const dotX = useMotionValue(-100)
+  const dotY = useMotionValue(-100)
+  const springX = useSpring(dotX, { stiffness: 500, damping: 40, mass: 0.3 })
+  const springY = useSpring(dotY, { stiffness: 500, damping: 40, mass: 0.3 })
 
   useEffect(() => {
-    let isHovering = false
-
     const handleMouseMove = (e: MouseEvent) => {
-      cursorX.set(e.clientX)
-      cursorY.set(e.clientY)
-
-      if (cursorRef.current) {
-        cursorRef.current.style.left = `${e.clientX}px`
-        cursorRef.current.style.top = `${e.clientY}px`
-      }
-      if (dotRef.current) {
-        dotRef.current.style.left = `${e.clientX}px`
-        dotRef.current.style.top = `${e.clientY}px`
-      }
+      dotX.set(e.clientX)
+      dotY.set(e.clientY)
+      if (!isVisible) setIsVisible(true)
     }
 
     const handleMouseOver = (e: MouseEvent) => {
       const target = e.target as HTMLElement
-      if (
+      const isInteractive =
         target.tagName === "A" ||
         target.tagName === "BUTTON" ||
         target.closest("a") ||
-        target.closest("button")
-      ) {
-        isHovering = true
-        if (cursorRef.current) {
-          cursorRef.current.style.width = "40px"
-          cursorRef.current.style.height = "40px"
-          cursorRef.current.style.borderColor = "hsl(var(--primary))"
-        }
-      } else if (isHovering) {
-        isHovering = false
-        if (cursorRef.current) {
-          cursorRef.current.style.width = "16px"
-          cursorRef.current.style.height = "16px"
-          cursorRef.current.style.borderColor = "hsl(var(--primary) / 0.5)"
-        }
-      }
+        target.closest("button") ||
+        target.getAttribute("role") === "button"
+      setHoverState(isInteractive ? "hover" : "default")
     }
 
-    const handleMouseLeave = () => {
-      if (cursorRef.current) cursorRef.current.style.opacity = "0"
-      if (dotRef.current) dotRef.current.style.opacity = "0"
-    }
-
-    const handleMouseEnter = () => {
-      if (cursorRef.current) cursorRef.current.style.opacity = "1"
-      if (dotRef.current) dotRef.current.style.opacity = "1"
-    }
+    const handleMouseDown = () => setHoverState("click")
+    const handleMouseUp = () => setHoverState("default")
+    const handleMouseLeave = () => setIsVisible(false)
+    const handleMouseEnter = () => setIsVisible(true)
 
     window.addEventListener("mousemove", handleMouseMove, { passive: true })
     window.addEventListener("mouseover", handleMouseOver, { passive: true })
+    window.addEventListener("mousedown", handleMouseDown, { passive: true })
+    window.addEventListener("mouseup", handleMouseUp, { passive: true })
     document.documentElement.addEventListener("mouseleave", handleMouseLeave)
     document.documentElement.addEventListener("mouseenter", handleMouseEnter)
 
     return () => {
       window.removeEventListener("mousemove", handleMouseMove)
       window.removeEventListener("mouseover", handleMouseOver)
+      window.removeEventListener("mousedown", handleMouseDown)
+      window.removeEventListener("mouseup", handleMouseUp)
       document.documentElement.removeEventListener("mouseleave", handleMouseLeave)
       document.documentElement.removeEventListener("mouseenter", handleMouseEnter)
     }
-  }, [cursorX, cursorY])
+  }, [dotX, dotY, isVisible])
+
+  const size = hoverState === "click" ? 6 : hoverState === "hover" ? 10 : 8
+  const opacity = isVisible ? 1 : 0
 
   return (
-    <>
-      <div className="hidden md:block pointer-events-none fixed inset-0 z-[9999]">
-        <motion.div
-          ref={cursorRef}
-          className="absolute w-4 h-4 rounded-full border border-primary/50 bg-primary/10"
+    <div className="hidden md:block pointer-events-none fixed inset-0 z-[9999]">
+      <motion.div
+        className="absolute rounded-full pointer-events-none"
+        style={{ x: springX, y: springY, translateX: "-50%", translateY: "-50%" }}
+        animate={{ width: size, height: size, opacity }}
+        transition={{ width: { type: "spring", stiffness: 400, damping: 30 }, height: { type: "spring", stiffness: 400, damping: 30 }, opacity: { duration: 0.15 } }}
+        layout
+      >
+        <div
+          className="w-full h-full rounded-full"
           style={{
-            x: cursorX,
-            y: cursorY,
-            translateX: "-50%",
-            translateY: "-50%",
-            transition: "width 0.2s, height 0.2s, border-color 0.2s",
-            opacity: 0,
+            background: hoverState === "hover" ? "hsl(var(--accent))" : "hsl(var(--primary))",
+            boxShadow: `0 0 ${hoverState === "hover" ? 12 : 8}px ${hoverState === "hover" ? "hsl(var(--accent) / 0.8)" : "hsl(var(--primary) / 0.8)"}`,
           }}
         />
-        <motion.div
-          ref={dotRef}
-          className="absolute w-1.5 h-1.5 rounded-full bg-primary"
-          style={{
-            x: cursorX,
-            y: cursorY,
-            translateX: "-50%",
-            translateY: "-50%",
-            opacity: 0,
-          }}
-        />
-      </div>
-    </>
+      </motion.div>
+    </div>
   )
 }
