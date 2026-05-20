@@ -1,40 +1,36 @@
 # Le Huy Portfolio
 
-A cinematic 3D one-page portfolio built with React, TypeScript, Tailwind CSS, Framer Motion, and React Three Fiber.
-
-**Builder of operational systems.** Backend-leaning full-stack developer focused on typed APIs, queues, databases, AI/CV pipelines, and local-first infrastructure.
+A one-page portfolio for Le Huy, focused on backend-heavy full-stack systems:
+typed APIs, databases, queues, workers, AI/CV workflows, and interfaces that
+reflect real operational state.
 
 ## Live Site
 
 https://lhcaps.github.io
 
-## Preview
-
-![Portfolio Preview](https://raw.githubusercontent.com/lhcaps/lhcaps.github.io/main/public/preview.jpg)
-
 ## Stack
 
-- **React 19** + **TypeScript**
-- **Vite** build tooling
-- **Tailwind CSS** for styling
-- **Framer Motion** for DOM animations
-- **Three.js / React Three Fiber / Drei** for 3D system core
-- **Lucide React** for icons
+- React 19 + TypeScript
+- Vite
+- Tailwind CSS
+- Framer Motion
+- Lucide React
 
 ## Design Direction
 
-System-core inspired portfolio. The 3D hero visualizes a living backend architecture — central core node with orbiting services (API, DB, Queue, Worker, AI, UI) representing the developer's mental model of how systems fit together.
-
-Dark premium palette: deep navy backgrounds, cyan/blue primary accents, violet secondary accents.
+The page is intentionally closer to an editorial case-study surface than a
+generic developer landing page. It uses restrained dark neutrals, precise
+hairline structure, system diagrams, and proof-oriented copy instead of neon
+glows, generic card grids, fake metrics, or decorative motion.
 
 ## Sections
 
-1. **Hero 3D** -- System core visualization with name, role, and CTAs
-2. **Selected Systems** -- Case-study project cards with architecture mini-visuals
-3. **System Stack** -- Layered tech stack by architectural tier
-4. **About** -- Sharp, focused bio
-5. **Education** -- Academic background and certifications
-6. **Contact** -- Reach out
+1. Hero - positioning and operational systems overview
+2. Selected Systems - project case studies with problem, role, proof, and diagrams
+3. Stack - layered runtime model
+4. Principles - engineering stance and working habits
+5. Proof - education and IELTS credential summary
+6. Contact - direct contact paths
 
 ## Run Locally
 
@@ -51,4 +47,4 @@ npm run build
 
 ## Deploy
 
-Push to `main` -- GitHub Actions automatically builds and deploys to GitHub Pages.
+Push to `main`. GitHub Actions builds `dist` and deploys it to GitHub Pages.

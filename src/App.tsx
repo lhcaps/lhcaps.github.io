@@ -12,7 +12,7 @@ function App() {
   return (
     <>
       <BackgroundCanvas />
-      <div className="min-h-screen">
+      <div className="min-h-[100dvh]">
         <Navigation />
         <main>
           <CoreHeroSection />

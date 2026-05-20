@@ -1,300 +1,206 @@
-import { useRef } from 'react'
-import { Github, ArrowRight, CheckCircle2 } from 'lucide-react'
-import { projects, type Project } from '@/data/projects'
-import { Container, SectionHeader } from '@/components/layout'
-import { TechPill } from '@/components/ui'
-import { useScroll, useTransform, motion } from 'framer-motion'
+import { motion } from "framer-motion"
+import { ArrowUpRight, CheckCircle2, Github } from "lucide-react"
+import { Container, SectionHeader } from "@/components/layout"
+import { TechPill } from "@/components/ui"
+import { projects, type Project } from "@/data/projects"
 
 function MiniSystemVisual({ project }: { project: Project }) {
-  const { layers, nodes, connections } = project.system
-  const nodeMap = new Map(nodes.map((n) => [n.id, n]))
-
-  const nodeKindStyle = (kind?: string) => {
-    const alpha = kind === 'primary' ? 'FF' : kind === 'runtime' ? '80' : 'AA'
-    const size = kind === 'primary' ? 'px-3 py-1.5 text-[10px]' : 'px-2.5 py-1 text-[8px]'
-    return { alpha, size }
-  }
+  const nodeMap = new Map(project.system.nodes.map((node) => [node.id, node]))
 
   return (
-    <div className="relative w-full min-h-[360px] flex flex-col">
-      {/* Subtle radial glow */}
+    <div className="relative min-h-[340px] overflow-hidden rounded-[1.75rem] border p-4" style={{ borderColor: "var(--line)" }}>
       <div
-        className="absolute inset-0 pointer-events-none rounded-xl"
+        className="absolute inset-0"
         style={{
-          background: `radial-gradient(ellipse 70% 55% at 50% 42%, ${project.color}07 0%, transparent 68%)`,
+          background:
+            "linear-gradient(135deg, color-mix(in oklch, var(--surface-strong) 70%, transparent), color-mix(in oklch, var(--surface) 78%, transparent))",
         }}
-        aria-hidden="true"
       />
-
-      {/* SVG connections — no SVG filters */}
-      <svg
-        className="absolute inset-0 w-full h-full pointer-events-none"
-        viewBox="0 0 100 100"
-        preserveAspectRatio="xMidYMid meet"
-        aria-hidden="true"
-      >
-        {connections.map(([fromId, toId], i) => {
-          const a = nodeMap.get(fromId)
-          const b = nodeMap.get(toId)
-          if (!a || !b) return null
+      <svg className="absolute inset-0 h-full w-full" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+        {project.system.connections.map(([fromId, toId]) => {
+          const from = nodeMap.get(fromId)
+          const to = nodeMap.get(toId)
+          if (!from || !to) return null
           return (
             <line
-              key={i}
-              x1={a.x}
-              y1={a.y}
-              x2={b.x}
-              y2={b.y}
+              key={`${fromId}-${toId}`}
+              x1={from.x}
+              y1={from.y}
+              x2={to.x}
+              y2={to.y}
               stroke={project.color}
-              strokeWidth="0.4"
-              strokeOpacity="0.28"
-              strokeDasharray="2 2"
+              strokeWidth="0.28"
+              strokeOpacity="0.34"
+              strokeDasharray="2 3"
             />
           )
         })}
       </svg>
 
-      {/* Nodes at explicit positions */}
-      <div className="relative flex-1 w-full">
-        {nodes.map((node, idx) => {
-          const { alpha, size } = nodeKindStyle(node.kind)
+      <div className="relative h-[270px]">
+        {project.system.nodes.map((node, index) => {
+          const isPrimary = node.kind === "primary"
           return (
-            <div
+            <motion.div
               key={node.id}
-              className="absolute"
-              style={{
-                left: `${node.x}%`,
-                top: `${node.y}%`,
-                transform: 'translate(-50%, -50%)',
-              }}
+              className="absolute -translate-x-1/2 -translate-y-1/2"
+              style={{ left: `${node.x}%`, top: `${node.y}%` }}
+              initial={{ opacity: 0, scale: 0.88 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.35, delay: index * 0.045 }}
             >
-              <motion.div
-                className={`rounded-lg font-mono font-bold tracking-[0.08em] uppercase whitespace-nowrap ${size}`}
+              <div
+                className="rounded-full border px-3 py-1.5 font-mono text-[10px] font-bold uppercase tracking-[0.08em]"
                 style={{
-                  background: `${project.color}${alpha}10`,
-                  border: `1px solid ${project.color}${alpha}28`,
+                  background: `color-mix(in oklch, ${project.color} ${isPrimary ? 16 : 9}%, var(--surface))`,
+                  borderColor: `color-mix(in oklch, ${project.color} ${isPrimary ? 45 : 24}%, transparent)`,
                   color: project.color,
-                  boxShadow: `0 0 12px ${project.color}${alpha}18, 0 2px 6px rgba(0,0,0,0.35)`,
                 }}
-                initial={{ opacity: 0, scale: 0.7 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.4, delay: idx * 0.07 }}
-                whileHover={{ scale: 1.08 }}
               >
                 {node.label}
-              </motion.div>
-            </div>
+              </div>
+            </motion.div>
           )
         })}
       </div>
 
-      {/* Pipeline bar */}
-      <div
-        className="relative flex items-center justify-center gap-0 py-2.5 px-4 border-t"
-        style={{ borderColor: `${project.color}18` }}
-      >
-        {layers.map((layer, i) => (
-          <div key={layer} className="flex items-center">
-            <div
-              className="px-2 py-0.5 rounded text-[7px] font-mono font-bold tracking-widest uppercase"
-              style={{
-                background: `${project.color}0D`,
-                border: `1px solid ${project.color}20`,
-                color: `${project.color}90`,
-              }}
-            >
-              {layer}
-            </div>
-            {i < layers.length - 1 && (
-              <svg
-                className="w-4 h-3 flex-shrink-0"
-                viewBox="0 0 16 12"
-                fill="none"
-                style={{ color: `${project.color}28` }}
-                aria-hidden="true"
-              >
-                <path d="M1 6h12M10 2l4 4-4 4" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            )}
-          </div>
+      <div className="relative flex flex-wrap items-center gap-2 border-t pt-4" style={{ borderColor: "var(--line)" }}>
+        {project.system.layers.map((layer) => (
+          <span
+            key={layer}
+            className="rounded-full border px-2.5 py-1 font-mono text-[10px] font-semibold uppercase tracking-[0.1em]"
+            style={{
+              color: "var(--muted)",
+              borderColor: "var(--line)",
+              background: "color-mix(in oklch, var(--surface) 70%, transparent)",
+            }}
+          >
+            {layer}
+          </span>
         ))}
       </div>
     </div>
   )
 }
 
-function ProjectCard({ project, index }: { project: Project; index: number }) {
-  const ref = useRef<HTMLDivElement>(null)
-  const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] })
-  const y = useTransform(scrollYProgress, [0, 1], [30, -30])
-
+function ProjectCase({ project, index }: { project: Project; index: number }) {
   return (
-    <motion.div
-      ref={ref}
-      className="relative rounded-2xl overflow-hidden"
-      style={{ y }}
-      initial={{ opacity: 0, y: 40 }}
+    <motion.article
+      className="grid gap-8 border-t py-10 md:py-14 lg:grid-cols-[0.92fr_1.08fr] lg:gap-12"
+      style={{ borderColor: "var(--line)" }}
+      initial={{ opacity: 0, y: 24 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: '-80px' }}
-      transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] }}
+      viewport={{ once: true, margin: "-90px" }}
+      transition={{ duration: 0.58, ease: [0.16, 1, 0.3, 1] }}
     >
-      <div
-        className="relative p-6 md:p-8 rounded-2xl"
-        style={{
-          background: 'linear-gradient(180deg, rgba(255,255,255,0.055), rgba(255,255,255,0.025))',
-          border: '1px solid rgba(255,255,255,0.09)',
-          boxShadow: '0 24px 80px rgba(0,0,0,0.35)',
-        }}
-      >
-        {/* Top accent line */}
-        <div
-          className="absolute top-0 left-0 right-0 h-px rounded-t-2xl"
-          style={{ background: `linear-gradient(90deg, transparent, ${project.color}, transparent)` }}
-        />
+      <div>
+        <div className="flex items-center gap-4">
+          <span className="mono-label" style={{ color: project.color }}>
+            {String(index + 1).padStart(2, "0")}
+          </span>
+          <div className="h-px flex-1 hairline" />
+        </div>
 
-        <div className="grid md:grid-cols-[1.1fr_0.9fr] gap-6 md:gap-8 items-start">
-          {/* Left: content */}
+        <h3 className="mt-5 text-3xl font-bold leading-tight md:text-5xl" style={{ color: project.color }}>
+          {project.title}
+        </h3>
+        <p className="mt-2 text-base font-semibold" style={{ color: "var(--fg)" }}>
+          {project.subtitle}
+        </p>
+        <p className="mt-5 max-w-xl text-sm leading-7 md:text-base" style={{ color: "var(--muted)" }}>
+          {project.description}
+        </p>
+
+        <div className="mt-7 space-y-5">
           <div>
-            <div className="flex items-start justify-between mb-5">
-              <div className="flex items-start gap-3">
-                <span
-                  className="text-3xl md:text-4xl font-black font-heading select-none leading-none mt-1"
-                  style={{
-                    fontStyle: 'italic',
-                    WebkitTextStroke: `1px ${project.color}28`,
-                    color: 'transparent',
-                  }}
-                >
-                  {String(index + 1).padStart(2, '0')}
-                </span>
-                <div>
-                  <h3 className="text-xl md:text-2xl font-bold mb-1 font-heading" style={{ color: project.color }}>
-                    {project.title}
-                  </h3>
-                  <p className="text-sm font-medium" style={{ color: 'hsl(var(--muted-fg))' }}>
-                    {project.subtitle}
-                  </p>
-                </div>
-              </div>
-
-              <motion.a
-                href={project.github}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="p-2.5 rounded-xl flex-shrink-0"
-                style={{ border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.03)' }}
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.92 }}
-              >
-                <Github className="w-5 h-5" style={{ color: 'hsl(var(--muted-fg))' }} />
-              </motion.a>
-            </div>
-
-            <div className="mb-4">
-              <span className="text-[10px] font-bold tracking-[0.15em] uppercase mb-1.5 block" style={{ color: `${project.color}80` }}>
-                Problem
-              </span>
-              <p className="text-sm leading-relaxed" style={{ color: 'hsl(var(--muted-fg))' }}>
-                {project.problem}
-              </p>
-            </div>
-
-            <div className="mb-4">
-              <span className="text-[10px] font-bold tracking-[0.15em] uppercase mb-2 block" style={{ color: `${project.color}80` }}>
-                Built
-              </span>
-              <ul className="space-y-1">
-                {project.built.map((item: string, i: number) => (
-                  <li key={i} className="flex items-start gap-2 text-sm" style={{ color: 'hsl(var(--muted-fg))' }}>
-                    <span className="mt-1.5 w-1 h-1 rounded-full flex-shrink-0" style={{ background: project.color }} />
-                    {item}
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            <div className="mb-5 p-4 rounded-xl" style={{ background: `${project.color}06`, border: `1px solid ${project.color}14` }}>
-              <span className="text-[10px] font-bold tracking-[0.15em] uppercase mb-2 block" style={{ color: `${project.color}80` }}>
-                Proof
-              </span>
-              <ul className="space-y-1.5">
-                {project.proof.map((item: string, i: number) => (
-                  <li key={i} className="flex items-start gap-2 text-xs" style={{ color: 'hsl(var(--muted-fg))' }}>
-                    <CheckCircle2 className="w-3.5 h-3.5 mt-0.5 flex-shrink-0" style={{ color: project.color }} />
-                    {item}
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            <div className="flex flex-wrap gap-1.5">
-              {project.tags.map((tag: string, i: number) => (
-                <TechPill key={tag} label={tag} color={project.color} index={i} />
-              ))}
-            </div>
-
-            <div className="flex items-center gap-4 mt-5">
-              <motion.a
-                href={project.github}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 text-sm font-semibold"
-                style={{ color: project.color }}
-                whileHover={{ x: 5 }}
-                transition={{ duration: 0.2 }}
-              >
-                <Github className="w-4 h-4" />
-                <span>View on GitHub</span>
-                <ArrowRight className="w-4 h-4" />
-              </motion.a>
-            </div>
+            <p className="mono-label" style={{ color: "var(--dim)" }}>
+              Problem
+            </p>
+            <p className="mt-2 text-sm leading-7" style={{ color: "var(--muted)" }}>
+              {project.problem}
+            </p>
           </div>
+          <div>
+            <p className="mono-label" style={{ color: "var(--dim)" }}>
+              My role
+            </p>
+            <p className="mt-2 text-sm leading-7" style={{ color: "var(--muted)" }}>
+              {project.role}
+            </p>
+          </div>
+        </div>
 
-          {/* Right: system visual */}
-          <div
-            className="rounded-xl overflow-hidden"
-            style={{
-              background: 'rgba(255,255,255,0.025)',
-              border: '1px solid rgba(255,255,255,0.06)',
-              minHeight: 320,
-              height: '100%',
-            }}
+        <div className="mt-7 flex flex-wrap gap-2">
+          {project.tags.map((tag, tagIndex) => (
+            <TechPill key={tag} label={tag} color={project.color} index={tagIndex} />
+          ))}
+        </div>
+
+        <div className="mt-8 flex flex-wrap items-center gap-3">
+          <a
+            href={project.github}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="action-link focus-ring px-4 py-2 text-sm font-semibold"
+            style={{ color: project.color }}
           >
-            <MiniSystemVisual project={project} />
+            <Github className="h-4 w-4" />
+            Repository
+            <ArrowUpRight className="h-4 w-4" />
+          </a>
+        </div>
+      </div>
+
+      <div className="space-y-5">
+        <MiniSystemVisual project={project} />
+        <div className="grid gap-3 sm:grid-cols-2">
+          <div className="rounded-[1.5rem] border p-5" style={{ borderColor: "var(--line)" }}>
+            <p className="mono-label" style={{ color: "var(--dim)" }}>
+              Built
+            </p>
+            <ul className="mt-4 space-y-3">
+              {project.built.map((item) => (
+                <li key={item} className="flex gap-3 text-sm leading-6" style={{ color: "var(--muted)" }}>
+                  <span className="mt-2 h-1.5 w-1.5 flex-none rounded-full" style={{ background: project.color }} />
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div className="rounded-[1.5rem] border p-5" style={{ borderColor: "var(--line)" }}>
+            <p className="mono-label" style={{ color: "var(--dim)" }}>
+              Proof
+            </p>
+            <ul className="mt-4 space-y-3">
+              {project.proof.map((item) => (
+                <li key={item} className="flex gap-3 text-sm leading-6" style={{ color: "var(--muted)" }}>
+                  <CheckCircle2 className="mt-0.5 h-4 w-4 flex-none" style={{ color: project.color }} strokeWidth={1.8} />
+                  {item}
+                </li>
+              ))}
+            </ul>
           </div>
         </div>
       </div>
-    </motion.div>
+    </motion.article>
   )
 }
 
 export function ProjectsSection() {
-  const sectionRef = useRef<HTMLDivElement>(null)
-  const { scrollYProgress } = useScroll({ target: sectionRef, offset: ['start end', 'end start'] })
-  const bgY = useTransform(scrollYProgress, [0, 1], [0, -40])
-
   return (
-    <section id="projects" ref={sectionRef} className="relative py-24 md:py-32 lg:py-44 overflow-hidden">
-      <motion.div
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[14vw] font-black select-none pointer-events-none leading-none"
-        style={{
-          fontFamily: 'var(--font-heading)',
-          fontStyle: 'italic',
-          WebkitTextStroke: '1px rgba(103, 232, 249, 0.04)',
-          color: 'transparent',
-          y: bgY,
-        }}
-        aria-hidden="true"
-      >
-        SYSTEMS
-      </motion.div>
-
+    <section id="projects" className="relative py-20 md:py-28 lg:py-32">
       <Container>
-        <SectionHeader number='01' label='Selected Systems' />
+        <SectionHeader
+          number="01"
+          label="Selected Systems"
+          title="Case studies, not thumbnails."
+          intro="Each project is framed by the operational problem it tries to make less fragile: state ownership, worker truth, local runtime, and proof that a flow can survive contact with real data."
+        />
 
-        <div className='space-y-6'>
-          {projects.map((project: Project, i: number) => (
-            <ProjectCard key={project.id} project={project} index={i} />
+        <div>
+          {projects.map((project, index) => (
+            <ProjectCase key={project.id} project={project} index={index} />
           ))}
         </div>
       </Container>

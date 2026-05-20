@@ -1,10 +1,9 @@
-import { useRef } from 'react'
-import { motion, useScroll, useTransform } from 'framer-motion'
-import { MonitorPlay, Zap, Database, Cpu, Brain } from 'lucide-react'
-import { Container, SectionHeader } from '@/components/layout'
-import { stackLayers, type StackLayer } from '@/data/stack'
+import { motion } from "framer-motion"
+import { Brain, Cpu, Database, MonitorPlay, Zap } from "lucide-react"
+import { Container, SectionHeader } from "@/components/layout"
+import { stackLayers, type StackLayer } from "@/data/stack"
 
-const LAYER_ICON_MAP: Record<StackLayer['icon'], React.ComponentType<{ className?: string; style?: React.CSSProperties }>> = {
+const LAYER_ICON_MAP: Record<StackLayer["icon"], React.ComponentType<{ className?: string; style?: React.CSSProperties; strokeWidth?: number }>> = {
   frontend: MonitorPlay,
   api: Zap,
   data: Database,
@@ -12,155 +11,81 @@ const LAYER_ICON_MAP: Record<StackLayer['icon'], React.ComponentType<{ className
   ai: Brain,
 }
 
-function StackLayerRow({ layer }: { layer: StackLayer }) {
+function StackLayerRow({ layer, index }: { layer: StackLayer; index: number }) {
   const Icon = LAYER_ICON_MAP[layer.icon]
 
   return (
     <motion.div
-      initial={{ opacity: 0, x: -32 }}
-      whileInView={{ opacity: 1, x: 0 }}
-      viewport={{ once: true, margin: '-40px' }}
-      transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
-      className="relative"
+      className="grid gap-5 border-t py-7 md:grid-cols-[180px_1fr] md:gap-8"
+      style={{ borderColor: "var(--line)" }}
+      initial={{ opacity: 0, y: 22 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-50px" }}
+      transition={{ duration: 0.5, delay: index * 0.04, ease: [0.16, 1, 0.3, 1] }}
     >
-      {stackLayers.indexOf(layer) < stackLayers.length - 1 && (
-        <div className="absolute left-8 -top-6 w-px h-6 overflow-hidden">
-          <motion.div
-            className="w-px rounded-full"
-            style={{
-              background: `linear-gradient(to bottom, ${layer.accent}40, transparent)`,
-              height: '24px',
-            }}
-            initial={{ scaleY: 0, originY: 'top' }}
-            whileInView={{ scaleY: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.4, delay: 0.2 }}
-          />
-        </div>
-      )}
-
-      <div
-        className="rounded-2xl p-5 md:p-6 relative overflow-hidden flex items-center gap-5"
-        style={{
-          background: 'linear-gradient(180deg, rgba(255,255,255,0.045), rgba(255,255,255,0.02))',
-          border: '1px solid rgba(255,255,255,0.07)',
-          boxShadow: '0 16px 48px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.04)',
-        }}
-      >
-        {/* Left accent bar */}
+      <div className="flex items-center gap-3 md:items-start">
         <div
-          className="absolute left-0 top-3 bottom-3 w-0.5 rounded-full"
+          className="grid h-11 w-11 flex-none place-items-center rounded-2xl border"
           style={{
-            background: `linear-gradient(to bottom, ${layer.accent}, transparent)`,
-            boxShadow: `0 0 12px ${layer.accent}40`,
+            borderColor: `color-mix(in oklch, ${layer.accent} 36%, transparent)`,
+            background: `color-mix(in oklch, ${layer.accent} 10%, var(--surface))`,
           }}
-        />
-
-        {/* Icon block */}
-        <motion.div
-          className="w-12 h-12 md:w-14 md:h-14 rounded-xl flex items-center justify-center flex-shrink-0"
-          style={{
-            background: `${layer.accent}10`,
-            border: `1px solid ${layer.accent}25`,
-          }}
-          whileHover={{ scale: 1.06, rotate: [0, -5, 5, 0] }}
-          transition={{ duration: 0.3 }}
         >
-          <Icon className="w-5 h-5 md:w-6 md:h-6" style={{ color: layer.accent }} />
-        </motion.div>
+          <Icon className="h-5 w-5" style={{ color: layer.accent }} strokeWidth={1.8} />
+        </div>
+        <div>
+          <p className="text-lg font-bold" style={{ color: "var(--fg)" }}>
+            {layer.label}
+          </p>
+          <p className="mono-label mt-1" style={{ color: layer.accent }}>
+            {layer.tag}
+          </p>
+        </div>
+      </div>
 
-        {/* Content */}
-        <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-3 mb-1.5">
-            <h3 className="text-base md:text-lg font-bold font-heading" style={{ color: layer.accent }}>
-              {layer.label}
-            </h3>
+      <div>
+        <p className="max-w-2xl text-sm leading-7 md:text-base" style={{ color: "var(--muted)" }}>
+          {layer.purpose}
+        </p>
+        <div className="mt-5 flex flex-wrap gap-2">
+          {layer.primary.map((item) => (
             <span
-              className="text-[9px] md:text-[10px] font-bold tracking-[0.15em] uppercase px-2 py-0.5 rounded-full"
+              key={item}
+              className="rounded-full border px-3 py-1.5 font-mono text-xs font-semibold"
               style={{
-                background: `${layer.accent}10`,
-                border: `1px solid ${layer.accent}20`,
-                color: `${layer.accent}90`,
+                color: layer.accent,
+                borderColor: `color-mix(in oklch, ${layer.accent} 26%, transparent)`,
+                background: `color-mix(in oklch, ${layer.accent} 8%, transparent)`,
               }}
             >
-              {layer.tag}
+              {item}
             </span>
-          </div>
-
-          <p className="text-[10px] md:text-xs mb-3 leading-relaxed" style={{ color: `${layer.accent}70` }}>
-            {layer.purpose}
-          </p>
-
-          <div className="flex flex-wrap gap-1.5">
-            {layer.primary.map((item: string) => (
-              <span
-                key={item}
-                className="inline-flex items-center px-2 py-0.5 rounded text-[10px] md:text-xs font-mono font-medium"
-                style={{
-                  background: `${layer.accent}08`,
-                  border: `1px solid ${layer.accent}18`,
-                  color: `${layer.accent}90`,
-                }}
-              >
-                {item}
-              </span>
-            ))}
-          </div>
-
-          {layer.supporting && layer.supporting.length > 0 && (
-            <div className="mt-1.5">
-              <span className="text-[9px] font-mono" style={{ color: `${layer.accent}45` }}>
-                Supporting:{' '}
-              </span>
-              <span className="text-[9px] font-mono" style={{ color: `${layer.accent}55` }}>
-                {layer.supporting.join(', ')}
-              </span>
-            </div>
-          )}
+          ))}
         </div>
-
-        {/* Right status dot */}
-        <div
-          className="w-2 h-2 rounded-full flex-shrink-0"
-          style={{
-            background: layer.accent,
-            boxShadow: `0 0 8px ${layer.accent}`,
-          }}
-        />
+        {layer.supporting && (
+          <p className="mt-4 text-xs font-mono leading-6" style={{ color: "var(--dim)" }}>
+            Supporting: {layer.supporting.join(", ")}
+          </p>
+        )}
       </div>
     </motion.div>
   )
 }
 
 export function StackSection() {
-  const sectionRef = useRef<HTMLDivElement>(null)
-  const { scrollYProgress } = useScroll({ target: sectionRef, offset: ['start end', 'end start'] })
-  const bgY = useTransform(scrollYProgress, [0, 1], [0, -30])
-
   return (
-    <section id="stack" ref={sectionRef} className="relative py-24 md:py-32 lg:py-44 overflow-hidden">
-      {/* Background watermark */}
-      <motion.div
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[12vw] font-black select-none pointer-events-none leading-none"
-        style={{
-          fontFamily: 'var(--font-heading)',
-          fontStyle: 'italic',
-          WebkitTextStroke: '1px rgba(103, 232, 249, 0.03)',
-          color: 'transparent',
-          y: bgY,
-        }}
-        aria-hidden="true"
-      >
-        STACK
-      </motion.div>
-
+    <section id="stack" className="relative py-20 md:py-28 lg:py-32">
       <Container>
-        <SectionHeader number='02' label='System Stack' />
+        <SectionHeader
+          number="02"
+          label="Stack"
+          title="The stack is organized around runtime truth."
+          intro="I care less about trendy tool names than about whether the layers make each other clearer. UI state should map to API contracts, persistence should be inspectable, and workers should leave evidence."
+        />
 
-        {/* Vertical pipeline */}
-        <div className="space-y-4 max-w-3xl">
-          {stackLayers.map((layer: StackLayer) => (
-            <StackLayerRow key={layer.label} layer={layer} />
+        <div className="rounded-[2rem] border px-5 md:px-7" style={{ borderColor: "var(--line)" }}>
+          {stackLayers.map((layer, index) => (
+            <StackLayerRow key={layer.label} layer={layer} index={index} />
           ))}
         </div>
       </Container>

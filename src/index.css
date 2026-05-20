@@ -1,267 +1,217 @@
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;800&family=Syne:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=Syne:wght@600;700;800&display=swap");
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* ================================================================
-   1. CSS CUSTOM PROPERTIES — SYSTEM CORE DESIGN TOKENS
-   ================================================================ */
 @layer base {
   :root {
-    --bg:             225 35% 5%;
-    --surface:        225 30% 8%;
-    --fg:             220 15% 95%;
-    --muted-fg:       220 10% 55%;
-    --primary:        200 100% 65%;
-    --accent:         270 100% 70%;
-    --border:         225 20% 14%;
+    --bg: oklch(12.5% 0.018 250);
+    --bg-soft: oklch(16.5% 0.021 248);
+    --surface: oklch(20% 0.022 248);
+    --surface-strong: oklch(24% 0.024 248);
+    --fg: oklch(94% 0.012 92);
+    --muted: oklch(79% 0.018 235);
+    --dim: oklch(65% 0.022 236);
+    --line: oklch(43% 0.026 242 / 0.38);
+    --line-strong: oklch(64% 0.032 225 / 0.42);
+    --accent: oklch(78% 0.14 154);
+    --accent-2: oklch(78% 0.13 58);
+    --accent-3: oklch(74% 0.11 230);
+    --danger: oklch(70% 0.14 28);
 
-    --font-heading:   'Syne', system-ui, sans-serif;
-    --font-body:      'Space Grotesk', system-ui, sans-serif;
-    --font-mono:      'JetBrains Mono', 'Fira Code', monospace;
+    --font-heading: "Syne", system-ui, sans-serif;
+    --font-body: "Space Grotesk", system-ui, sans-serif;
+    --font-mono: "JetBrains Mono", "Fira Code", ui-monospace, monospace;
   }
 
   *, *::before, *::after {
     box-sizing: border-box;
-    border-color: rgba(255, 255, 255, 0.07);
+    border-color: var(--line);
   }
 
   html {
     scroll-behavior: smooth;
     color-scheme: dark;
+    background: var(--bg);
   }
 
   body {
     margin: 0;
-    background: hsl(var(--bg));
-    color: hsl(var(--fg));
-    font-family: 'Space Grotesk', system-ui, sans-serif;
+    min-width: 320px;
+    overflow-x: hidden;
+    background: var(--bg);
+    color: var(--fg);
+    font-family: var(--font-body);
+    letter-spacing: 0;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    cursor: default;
-    overflow-x: hidden;
-  }
-
-  a, button, [role="button"], input, textarea, select, label {
-    cursor: pointer;
-  }
-
-  ::selection {
-    background: hsl(200 100% 65% / 0.15);
-    color: hsl(200 100% 65%);
-  }
-
-  ::-webkit-scrollbar { width: 4px; }
-  ::-webkit-scrollbar-track { background: transparent; }
-  ::-webkit-scrollbar-thumb {
-    background: hsl(200 100% 65% / 0.35);
-    border-radius: 2px;
-  }
-  ::-webkit-scrollbar-thumb:hover {
-    background: hsl(200 100% 65% / 0.55);
   }
 
   h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-heading);
-    font-weight: 700;
+    letter-spacing: 0;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  button, a {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  ::selection {
+    background: color-mix(in oklch, var(--accent) 24%, transparent);
+    color: var(--fg);
+  }
+
+  ::-webkit-scrollbar { width: 8px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb {
+    background: color-mix(in oklch, var(--accent-3) 40%, var(--bg));
+    border: 2px solid var(--bg);
+    border-radius: 999px;
   }
 }
 
-/* ================================================================
-   2. KEYFRAME ANIMATIONS — Hardware accelerated only
-   ================================================================ */
-
-@keyframes pulse-glow {
-  0%, 100% { box-shadow: 0 0 6px hsl(200 100% 65% / 0.5); }
-  50%       { box-shadow: 0 0 14px hsl(200 100% 65% / 0.85); }
-}
-
-/* ================================================================
-   3. REVEAL ANIMATION SYSTEM — CSS-driven scroll
-   ================================================================ */
-
 @keyframes reveal-up {
   from { opacity: 0; transform: translateY(28px); }
-  to   { opacity: 1; transform: translateY(0); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes reveal-left {
   from { opacity: 0; transform: translateX(-28px); }
-  to   { opacity: 1; transform: translateX(0); }
+  to { opacity: 1; transform: translateX(0); }
 }
 
 @keyframes reveal-right {
   from { opacity: 0; transform: translateX(28px); }
-  to   { opacity: 1; transform: translateX(0); }
+  to { opacity: 1; transform: translateX(0); }
 }
 
 @keyframes reveal-scale {
-  from { opacity: 0; transform: scale(0.9); }
-  to   { opacity: 1; transform: scale(1); }
+  from { opacity: 0; transform: scale(0.96); }
+  to { opacity: 1; transform: scale(1); }
 }
 
-@keyframes reveal-clip-left {
-  from { clip-path: inset(0 100% 0 0); }
-  to   { clip-path: inset(0 0% 0 0); }
+@keyframes signal-sweep {
+  0% { transform: translateX(-120%); opacity: 0; }
+  20% { opacity: 1; }
+  70%, 100% { transform: translateX(120%); opacity: 0; }
+}
+
+@keyframes marker-pulse {
+  0%, 100% { transform: scale(1); opacity: 0.72; }
+  50% { transform: scale(1.45); opacity: 1; }
 }
 
 .reveal-base { opacity: 0; }
-.reveal-dir-up    { transform: translateY(28px); }
-.reveal-dir-left  { transform: translateX(-28px); }
+.reveal-dir-up { transform: translateY(28px); }
+.reveal-dir-left { transform: translateX(-28px); }
 .reveal-dir-right { transform: translateX(28px); }
-.reveal-dir-scale { transform: scale(0.9); }
-.reveal-dir-clip  { clip-path: inset(0 100% 0 0); }
+.reveal-dir-scale { transform: scale(0.96); }
+.reveal-dir-clip { clip-path: inset(0 100% 0 0); }
+.reveal-base-visible.reveal-dir-up { animation: reveal-up 0.62s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+.reveal-base-visible.reveal-dir-left { animation: reveal-left 0.62s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+.reveal-base-visible.reveal-dir-right { animation: reveal-right 0.62s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+.reveal-base-visible.reveal-dir-scale { animation: reveal-scale 0.62s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+.reveal-base-visible.reveal-dir-clip { animation: reveal-left 0.62s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
 
-.reveal-base-visible.reveal-dir-up    { animation: reveal-up    0.6s ease-out forwards; }
-.reveal-base-visible.reveal-dir-left  { animation: reveal-left  0.6s ease-out forwards; }
-.reveal-base-visible.reveal-dir-right { animation: reveal-right 0.6s ease-out forwards; }
-.reveal-base-visible.reveal-dir-scale { animation: reveal-scale 0.6s ease-out forwards; }
-.reveal-base-visible.reveal-dir-clip  { animation: reveal-clip-left 0.6s ease-out forwards; }
+.reveal-stagger > * {
+  opacity: 0;
+  transform: translateY(18px);
+}
+.reveal-stagger-visible > *:nth-child(1) { animation: reveal-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0s forwards; }
+.reveal-stagger-visible > *:nth-child(2) { animation: reveal-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.06s forwards; }
+.reveal-stagger-visible > *:nth-child(3) { animation: reveal-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.12s forwards; }
+.reveal-stagger-visible > *:nth-child(4) { animation: reveal-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.18s forwards; }
+.reveal-stagger-visible > *:nth-child(n+5) { animation: reveal-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.24s forwards; }
 
-/* Stagger children */
-.reveal-stagger > * { opacity: 0; transform: translateY(20px); }
-.reveal-stagger-visible > *:nth-child(1)  { animation: reveal-up ease-out 0.6s 0.00s forwards; }
-.reveal-stagger-visible > *:nth-child(2)  { animation: reveal-up ease-out 0.6s 0.08s forwards; }
-.reveal-stagger-visible > *:nth-child(3)  { animation: reveal-up ease-out 0.6s 0.16s forwards; }
-.reveal-stagger-visible > *:nth-child(4)  { animation: reveal-up ease-out 0.6s 0.24s forwards; }
-.reveal-stagger-visible > *:nth-child(5)  { animation: reveal-up ease-out 0.6s 0.32s forwards; }
-.reveal-stagger-visible > *:nth-child(6)  { animation: reveal-up ease-out 0.6s 0.40s forwards; }
-.reveal-stagger-visible > *:nth-child(n+7){ animation: reveal-up ease-out 0.6s 0.48s forwards; }
-
-/* ================================================================
-   4. UTILITY CLASSES
-   ================================================================ */
-
-.gradient-text {
-  background: linear-gradient(135deg, hsl(200 100% 65%) 0%, hsl(270 100% 70%) 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
+.text-balance {
+  text-wrap: balance;
 }
 
-.glow-primary {
-  box-shadow: 0 0 20px hsl(200 100% 65% / 0.2), 0 0 40px hsl(200 100% 65% / 0.1);
+.technical-panel {
+  position: relative;
+  background:
+    linear-gradient(180deg, color-mix(in oklch, var(--surface-strong) 92%, transparent), color-mix(in oklch, var(--surface) 92%, transparent)),
+    radial-gradient(circle at 84% 14%, color-mix(in oklch, var(--accent) 14%, transparent), transparent 28rem);
+  border: 1px solid var(--line);
+  box-shadow: 0 28px 80px oklch(6% 0.02 250 / 0.28);
 }
 
-.animate-pulse-glow {
-  animation: pulse-glow 2s ease-in-out infinite;
+.hairline {
+  border-color: var(--line);
 }
 
-/* ================================================================
-   4b. GLASS MORPHISM UTILITIES
-   ================================================================ */
-
-/* Glass button variants */
-.btn-glass {
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(12px);
-  transition: all 0.3s ease;
+.mono-label {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
 }
 
-.btn-glass:hover {
-  background: rgba(255, 255, 255, 0.08);
-  border-color: rgba(103, 232, 249, 0.25);
-  box-shadow: 0 0 20px rgba(103, 232, 249, 0.08);
+.status-marker {
+  position: relative;
+  width: 0.46rem;
+  height: 0.46rem;
+  border-radius: 999px;
+  background: var(--accent);
 }
 
-.liquid-glass {
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(8px);
-  transition: all 0.3s ease;
+.status-marker::after {
+  content: "";
+  position: absolute;
+  inset: -0.2rem;
+  border-radius: inherit;
+  border: 1px solid color-mix(in oklch, var(--accent) 40%, transparent);
+  animation: marker-pulse 2.6s ease-in-out infinite;
 }
 
-.liquid-glass:hover {
-  background: rgba(255, 255, 255, 0.06);
-  border-color: rgba(255, 255, 255, 0.14);
+.action-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: color-mix(in oklch, var(--surface) 72%, transparent);
+  color: var(--fg);
+  transition: transform 220ms cubic-bezier(0.16, 1, 0.3, 1), border-color 220ms ease, background 220ms ease;
 }
 
-.liquid-glass-strong {
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  backdrop-filter: blur(16px);
+.action-link:hover {
+  transform: translateY(-2px);
+  border-color: color-mix(in oklch, var(--accent) 46%, var(--line));
+  background: color-mix(in oklch, var(--surface-strong) 84%, transparent);
 }
 
-.glass-medium {
-  background: rgba(255, 255, 255, 0.04);
-  backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+.action-link:active {
+  transform: translateY(0) scale(0.985);
 }
 
-.glass-subtle {
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.06);
+.focus-ring:focus-visible {
+  outline: 2px solid color-mix(in oklch, var(--accent) 72%, transparent);
+  outline-offset: 4px;
 }
 
-/* ================================================================
-   4c. COMPONENT UTILITIES
-   ================================================================ */
-
-/* Section number watermark text */
-.section-num {
-  font-family: var(--font-heading);
-  font-style: italic;
-  -webkit-text-stroke: 1px rgba(103, 232, 249, 0.08);
-  color: transparent;
-}
-
-/* Accent line under section headers */
-.accent-line {
-  height: 1px;
-  background: linear-gradient(to right, hsl(200 100% 65% / 0.6), hsl(270 100% 70% / 0.2), transparent);
-  width: 60px;
-}
-
-/* Navigation CTA button */
-.nav-cta {
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(12px);
-  transition: all 0.3s ease;
-}
-
-.nav-cta:hover {
-  background: rgba(103, 232, 249, 0.08);
-  border-color: rgba(103, 232, 249, 0.2);
-  box-shadow: 0 0 20px rgba(103, 232, 249, 0.1);
-}
-
-.nav-cta-mobile {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(16px);
-}
-
-/* ================================================================
-   5. RESPONSIVE HERO STAGE
-   ================================================================ */
-
-.hero-stage {
-  height: 360px;
-}
-@media (max-width: 639px) {
-  .hero-stage {
-    height: 300px !important;
-  }
-}
-
-/* ================================================================
-   6. REDUCED MOTION
-   ================================================================ */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
   }
 
-  .reveal-base          { opacity: 1; transform: none; clip-path: none; }
-  .reveal-base-visible { animation: none; opacity: 1; }
-  .reveal-dir-up, .reveal-dir-left, .reveal-dir-right, .reveal-dir-scale { transform: none; }
-  .reveal-dir-clip  { clip-path: none; }
-  .reveal-stagger > * { opacity: 1; transform: none; }
-  .reveal-stagger-visible > * { animation: none; opacity: 1; }
+  .reveal-base,
+  .reveal-base-visible,
+  .reveal-stagger > *,
+  .reveal-stagger-visible > * {
+    opacity: 1 !important;
+    transform: none !important;
+    animation: none !important;
+    clip-path: none !important;
+  }
 }

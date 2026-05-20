@@ -20,25 +20,29 @@ export function Button({
   className = "",
   external = false,
 }: ButtonProps) {
-  const base = "relative inline-flex items-center justify-center gap-2 rounded-full font-semibold transition-all duration-300 select-none"
+  const base =
+    "focus-ring inline-flex items-center justify-center gap-2 rounded-full font-semibold transition-colors select-none"
 
   const variants = {
-    primary: "btn-glass text-[hsl(var(--fg))] hover:border-[hsl(var(--primary)/0.35)]",
-    secondary: "liquid-glass text-[hsl(var(--muted-fg))] hover:text-[hsl(var(--fg))]",
-    ghost: "text-[hsl(var(--muted-fg))] hover:text-[hsl(var(--fg))]",
+    primary:
+      "bg-[var(--accent)] text-[oklch(16%_0.02_250)] hover:bg-[color-mix(in_oklch,var(--accent)_86%,var(--fg))]",
+    secondary:
+      "border hairline bg-[color-mix(in_oklch,var(--surface)_76%,transparent)] text-[var(--fg)] hover:border-[color-mix(in_oklch,var(--accent)_46%,var(--line))]",
+    ghost: "text-[var(--muted)] hover:text-[var(--fg)]",
   }
 
   const sizes = {
-    sm: "px-5 py-2.5 text-xs",
-    md: "px-7 py-3 text-sm",
-    lg: "px-9 py-4 text-base",
+    sm: "px-4 py-2 text-xs",
+    md: "px-5 py-2.5 text-sm",
+    lg: "px-6 py-3 text-base",
   }
 
   const classes = cn(base, variants[variant], sizes[size], className)
 
   const motionProps = {
-    whileHover: { scale: 1.03 },
-    whileTap: { scale: 0.97 },
+    whileHover: { y: -2 },
+    whileTap: { y: 0, scale: 0.985 },
+    transition: { duration: 0.2 },
   }
 
   if (href) {

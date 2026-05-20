@@ -1,4 +1,4 @@
-export { Hero3DSection } from "./Hero3DSection"
+export { CoreHeroSection } from "./CoreHeroSection"
 export { ProjectsSection } from "./ProjectsSection"
 export { StackSection } from "./StackSection"
 export { AboutSection } from "./AboutSection"

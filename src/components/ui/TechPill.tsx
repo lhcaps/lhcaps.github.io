@@ -9,25 +9,23 @@ interface TechPillProps {
 export function TechPill({ label, color, index = 0 }: TechPillProps) {
   return (
     <motion.span
-      key={label}
-      className="inline-flex items-center px-2.5 py-1 rounded-md text-[10px] md:text-xs font-medium font-mono select-none"
+      className="inline-flex items-center rounded-full border px-2.5 py-1 font-mono text-[10px] font-semibold md:text-xs"
       style={{
-        background: `${color}10`,
-        border: `1px solid ${color}22`,
-        color: color,
+        background: `color-mix(in oklch, ${color} 9%, transparent)`,
+        borderColor: `color-mix(in oklch, ${color} 24%, transparent)`,
+        color,
       }}
-      initial={{ opacity: 0, scale: 0.85 }}
-      whileInView={{ opacity: 1, scale: 1 }}
+      initial={{ opacity: 0, y: 6 }}
+      whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-20px" }}
       transition={{
-        duration: 0.3,
-        delay: index * 0.04,
-        ease: [0.22, 1, 0.36, 1],
+        duration: 0.28,
+        delay: index * 0.025,
+        ease: [0.16, 1, 0.3, 1],
       }}
       whileHover={{
-        scale: 1.07,
-        borderColor: `${color}60`,
-        background: `${color}1A`,
+        y: -2,
+        borderColor: `color-mix(in oklch, ${color} 48%, transparent)`,
       }}
     >
       {label}
