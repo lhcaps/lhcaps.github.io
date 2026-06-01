@@ -1,6 +1,4 @@
-export { CoreHeroSection } from "./CoreHeroSection"
-export { ProjectsSection } from "./ProjectsSection"
+export { HeroSection } from "./HeroSection"
+export { SystemsSection } from "./SystemsSection"
 export { StackSection } from "./StackSection"
-export { AboutSection } from "./AboutSection"
-export { EducationSection } from "./EducationSection"
 export { ContactSection, Footer } from "./ContactSection"

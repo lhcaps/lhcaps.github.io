@@ -1,57 +1,39 @@
-export interface StackLayer {
+export interface StackGroup {
   label: string
   tag: string
   accent: string
-  purpose: string
-  primary: string[]
-  supporting?: string[]
-  icon: "frontend" | "api" | "data" | "workers" | "ai"
+  items: string[]
 }
 
-export const stackLayers: StackLayer[] = [
+export const stackGroups: StackGroup[] = [
   {
-    label: "Frontend",
-    tag: "State Surfaces",
+    label: "UI",
+    tag: "React, Tailwind, motion",
     accent: "oklch(77% 0.11 210)",
-    purpose: "Workflow screens, review tables, progress logs, and motion that explains state changes.",
-    primary: ["React", "Vite", "Tailwind CSS", "React Query"],
-    supporting: ["Zustand", "Framer Motion"],
-    icon: "frontend",
+    items: ["React", "Vite", "Tailwind CSS", "TanStack Query", "Framer Motion"],
   },
   {
     label: "API",
-    tag: "Contract Layer",
+    tag: "Node.js, Express, FastAPI",
     accent: "oklch(78% 0.14 154)",
-    purpose: "Typed transport for sessions, jobs, streaming updates, and backend boundaries.",
-    primary: ["Express", "FastAPI", "REST", "SSE"],
-    supporting: ["TypeScript", "Node.js"],
-    icon: "api",
+    items: ["Node.js", "Express", "FastAPI", "REST", "SSE"],
   },
   {
     label: "Data",
-    tag: "Truth Store",
+    tag: "PostgreSQL, Redis, Prisma",
     accent: "oklch(74% 0.11 230)",
-    purpose: "Relational state, cache, vector retrieval, and schema-driven persistence.",
-    primary: ["PostgreSQL", "MySQL/MariaDB", "Redis", "Prisma"],
-    supporting: ["MongoDB", "Supabase", "pgvector", "SQL"],
-    icon: "data",
+    items: ["PostgreSQL", "MariaDB", "Prisma", "Redis", "pgvector"],
   },
   {
-    label: "Workers",
-    tag: "Runtime Layer",
+    label: "Runtime",
+    tag: "Docker, BullMQ, workers",
     accent: "oklch(78% 0.13 58)",
-    purpose: "Background jobs, automation, verification, packaging, and local service orchestration.",
-    primary: ["BullMQ", "Docker", "Playwright", "Vitest"],
-    supporting: ["n8n", "Docker Compose"],
-    icon: "workers",
+    items: ["Docker", "BullMQ", "Playwright", "Vitest", "n8n"],
   },
   {
     label: "AI / CV",
-    tag: "Inference Layer",
+    tag: "RAG, Ollama, OpenCV",
     accent: "oklch(76% 0.1 310)",
-    purpose: "Local model workflows, retrieval, vision experiments, and async inference review.",
-    primary: ["Ollama", "OpenCV", "ONNX", "Local RAG"],
-    supporting: ["Vector Search", "ALPR", "FastAPI Workers"],
-    icon: "ai",
+    items: ["Ollama", "pgvector", "OpenCV", "ONNX", "Local RAG"],
   },
 ]

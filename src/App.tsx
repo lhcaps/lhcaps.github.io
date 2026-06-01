@@ -1,25 +1,19 @@
 import "./index.css"
-import { Navigation } from "./components/navigation"
-import { BackgroundCanvas } from "./components/BackgroundCanvas"
-import { CoreHeroSection } from "./components/sections/CoreHeroSection"
-import { ProjectsSection } from "./components/sections/ProjectsSection"
+import { HeroSection } from "./components/sections/HeroSection"
+import { SystemsSection } from "./components/sections/SystemsSection"
 import { StackSection } from "./components/sections/StackSection"
-import { AboutSection } from "./components/sections/AboutSection"
-import { EducationSection } from "./components/sections/EducationSection"
 import { ContactSection, Footer } from "./components/sections/ContactSection"
+import { Navigation } from "./components/Navigation"
 
 function App() {
   return (
     <>
-      <BackgroundCanvas />
       <div className="min-h-[100dvh]">
         <Navigation />
         <main>
-          <CoreHeroSection />
-          <ProjectsSection />
+          <HeroSection />
+          <SystemsSection />
           <StackSection />
-          <AboutSection />
-          <EducationSection />
           <ContactSection />
         </main>
         <Footer />
