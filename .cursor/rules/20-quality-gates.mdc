@@ -1,0 +1,22 @@
+---
+description: Build, test, performance and accessibility gates
+alwaysApply: true
+---
+
+Before completing any major change, run:
+
+- npm run typecheck
+- npm run lint
+- npm run test
+- npm run build
+
+The portfolio must:
+- build from a fresh install
+- have no missing imports
+- have no console runtime errors
+- have reduced-motion support
+- have mobile fallback for WebGL-heavy sections
+- keep GLB total under 3MB when assets exist
+- keep Canvas DPR at [1, 1.5]
+- avoid layout shift around the hero
+- keep text readable above 4.5:1 contrast where practical

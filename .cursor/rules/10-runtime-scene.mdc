@@ -1,0 +1,28 @@
+---
+description: React Three Fiber architecture rules
+alwaysApply: true
+---
+
+React Three Fiber code must be performance-conscious.
+
+Rules:
+- Do not call React setState inside useFrame.
+- Use refs and lerp for per-frame animation.
+- Keep topology data-driven from runtimeConfig.ts.
+- Keep labels readable and accessible.
+- Keep Canvas DPR capped at [1, 1.5].
+- Use Suspense/lazy loading for heavy scene code.
+- Provide reduced-motion and mobile fallback.
+- Do not mount/unmount expensive 3D objects repeatedly for simple state changes.
+- Keep scene components small and named clearly.
+
+Preferred scene architecture:
+
+RuntimeSceneImpl
+├── BlenderEnvironment or ProceduralEnvironment
+├── RuntimeCore
+├── RuntimeNodeBlock
+├── DataLink
+├── DataPacket
+├── CameraRig
+└── SceneLabels

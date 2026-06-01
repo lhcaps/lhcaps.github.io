@@ -1,0 +1,28 @@
+---
+description: Portfolio copywriting rules
+alwaysApply: true
+---
+
+Tone:
+- direct
+- technical
+- confident
+- not inflated
+
+Do not write like a generic AI portfolio.
+
+Preferred positioning:
+- backend-heavy full-stack
+- system design mindset
+- typed contracts
+- API boundaries
+- database schema
+- reproducible setup
+- verification/proof
+
+Avoid:
+- "passionate developer"
+- "I love technology"
+- "cutting-edge solutions"
+- "seamless experiences"
+- "innovative digital products"

@@ -1,0 +1,28 @@
+---
+description: Blender/GLB integration rules
+alwaysApply: true
+---
+
+Use GLB assets only as visual shell. Runtime topology and interaction must remain code/data-driven.
+
+Expected model path:
+- public/models/runtime-core.glb
+
+If the GLB file does not exist:
+- use a procedural fallback RuntimeCore built with simple meshes
+- do not break the build
+- do not import missing files directly
+
+When GLB exists:
+- load via useGLTF("/models/runtime-core.glb")
+- preload it
+- keep fallback visible while loading
+
+Expected Blender asset direction:
+- low-poly runtime/server core
+- dark metal body
+- subtle emissive strips
+- floating platform
+- hologram ring
+- not overly sci-fi
+- not character-based

@@ -1,0 +1,24 @@
+---
+description: Project identity and product direction
+alwaysApply: true
+---
+
+This portfolio is "Le Huy Runtime Lab".
+
+The site must present Le Huy as a backend-heavy full-stack developer with strong system thinking.
+
+Avoid generic portfolio clichés:
+- no random spinning cubes
+- no fake SaaS copy
+- no excessive neon clutter
+- no meaningless particles
+- no anime/robot/sci-fi gimmicks unrelated to software systems
+
+The 3D scene must explain project architecture:
+- UI
+- API
+- Database
+- Queue / Worker
+- Proof / Tests
+
+Every visual interaction should support recruiter understanding.

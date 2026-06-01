@@ -1,4 +1,4 @@
-import { useRef, useMemo } from "react"
+import { useRef, useMemo, useState } from "react"
 import { useFrame } from "@react-three/fiber"
 import * as THREE from "three"
 
@@ -38,7 +38,7 @@ export function DataPacket({ links, active, reducedMotion, speed = 1.4 }: DataPa
         dir.normalize()
 
         return (
-          <_DataPacketSingle
+          <DataPacketSingle
             key={key}
             from={from}
             direction={dir}
@@ -52,7 +52,7 @@ export function DataPacket({ links, active, reducedMotion, speed = 1.4 }: DataPa
   )
 }
 
-function _DataPacketSingle({
+function DataPacketSingle({
   from,
   direction,
   length,
@@ -66,11 +66,11 @@ function _DataPacketSingle({
   speed: number
 }) {
   const meshRef = useRef<THREE.Mesh>(null)
-  const offset = useRef(Math.random() * length)
+  const [offset] = useState(() => Math.random() * length)
 
   useFrame((state) => {
     if (!meshRef.current) return
-    const t = ((state.clock.elapsedTime * speed + offset.current) % length) / length
+    const t = ((state.clock.elapsedTime * speed + offset) % length) / length
     meshRef.current.position.copy(from).addScaledVector(direction, t * length)
     meshRef.current.position.z = 0.05
   })

@@ -15,25 +15,28 @@ export function DataLink({ link, nodes, activeNodeId, reducedMotion }: DataLinkP
   const fromNode = nodes.find((n) => n.id === link.from)
   const toNode = nodes.find((n) => n.id === link.to)
 
+  const pulseRef = useRef<THREE.Mesh>(null)
+
+  useFrame((state) => {
+    if (!fromNode || !toNode) return
+    if (!pulseRef.current || reducedMotion) return
+    const from = new THREE.Vector3(...fromNode.position)
+    const to = new THREE.Vector3(...toNode.position)
+    const t = (Math.sin(state.clock.elapsedTime * 2.5 + fromNode.position[0] * 3) + 1) / 2
+    pulseRef.current.position.lerpVectors(from, to, t)
+    const isActive =
+      activeNodeId === link.from ||
+      activeNodeId === link.to ||
+      (fromNode.position[1] === toNode.position[1] && fromNode.position[1] === -0.4)
+    pulseRef.current.visible = isActive || activeNodeId === null
+  })
+
   if (!fromNode || !toNode) return null
-
-  const from = new THREE.Vector3(...fromNode.position)
-  const to = new THREE.Vector3(...toNode.position)
-
 
   const isActive =
     activeNodeId === link.from ||
     activeNodeId === link.to ||
     (fromNode.position[1] === toNode.position[1] && fromNode.position[1] === -0.4)
-
-  const pulseRef = useRef<THREE.Mesh>(null)
-
-  useFrame((state) => {
-    if (!pulseRef.current || reducedMotion) return
-    const t = (Math.sin(state.clock.elapsedTime * 2.5 + fromNode.position[0] * 3) + 1) / 2
-    pulseRef.current.position.lerpVectors(from, to, t)
-    pulseRef.current.visible = isActive || activeNodeId === null
-  })
 
   const baseOpacity = isActive ? 0.7 : 0.3
 

@@ -1,18 +1,19 @@
 import { useState } from "react"
-import { Canvas } from "@react-three/fiber"
-import { OrbitControls } from "@react-three/drei"
+import { RuntimeCanvas } from "./RuntimeCanvas"
+import { CameraRig } from "./CameraRig"
 import { RuntimeNodeBlock } from "./RuntimeNode"
 import { DataLink } from "./DataLink"
 import { DataPacket } from "./DataPacket"
 import { SceneLabels } from "./SceneLabels"
-import { type SystemScene } from "@/data/runtimeConfig"
+import { RuntimeCoreFallback } from "./RuntimeCoreFallback"
+import type { SystemScene } from "@/data/runtimeConfig"
 
 interface RuntimeSceneProps {
   scene: SystemScene
   reducedMotion: boolean
 }
 
-function RuntimeGraph({ scene, reducedMotion }: RuntimeSceneProps) {
+function RuntimeGraph({ scene, reducedMotion }: { scene: SystemScene; reducedMotion: boolean }) {
   const [hoveredId, setHoveredId] = useState<string | null>(null)
 
   const packetLinks = scene.links.map((link) => {
@@ -55,6 +56,11 @@ function RuntimeGraph({ scene, reducedMotion }: RuntimeSceneProps) {
         sceneLabel={scene.label}
         sceneTagline={scene.tagline}
       />
+
+      {/* Center runtime core */}
+      <group position={[0, 0, -0.5]}>
+        <RuntimeCoreFallback reducedMotion={reducedMotion} />
+      </group>
     </group>
   )
 }
@@ -62,28 +68,10 @@ function RuntimeGraph({ scene, reducedMotion }: RuntimeSceneProps) {
 export function RuntimeScene({ scene, reducedMotion }: RuntimeSceneProps) {
   return (
     <div className="runtime-scene-wrapper">
-      <Canvas
-        camera={{ position: [0, -0.3, 8.5], fov: 48 }}
-        dpr={[1, reducedMotion ? 1 : 1.5]}
-        gl={{
-          antialias: !reducedMotion,
-          powerPreference: "high-performance",
-        }}
-      >
-        <color attach="background" args={["#0c1425"]} />
-        <ambientLight intensity={0.5} />
-        <directionalLight position={[0, 4, 5]} intensity={1.5} color="#ffffff" />
-        <pointLight position={[0, 2, 4]} intensity={1.0} color="#60a5fa" />
-        <pointLight position={[-3, -1, 3]} intensity={0.5} color="#22c55e" />
-        <pointLight position={[3, -1, 3]} intensity={0.3} color="#a78bfa" />
+      <RuntimeCanvas reducedMotion={reducedMotion}>
         <RuntimeGraph scene={scene} reducedMotion={reducedMotion} />
-        <OrbitControls
-          enableZoom={false}
-          enablePan={false}
-          enableRotate={false}
-          autoRotate={false}
-        />
-      </Canvas>
+        <CameraRig scene={scene} reducedMotion={reducedMotion} />
+      </RuntimeCanvas>
     </div>
   )
 }
