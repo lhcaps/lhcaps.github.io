@@ -23,10 +23,10 @@ export function HeroSection() {
   const currentScene = systemScenes[activeSystem]
 
   return (
-    <section className="relative min-h-[100dvh] flex flex-col overflow-hidden">
-      <div className="flex flex-1 flex-col lg:flex-row">
+    <section className="relative min-h-[100dvh] flex flex-col">
+      <div className="mx-auto flex w-full max-w-[1180px] flex-1 flex-col lg:flex-row">
         {/* Left: Text */}
-        <div className="flex flex-col justify-center px-6 pt-28 pb-12 lg:w-[46%] lg:px-10 lg:pt-32">
+        <div className="flex flex-col justify-center px-5 pt-28 pb-10 sm:px-6 lg:w-[46%] lg:px-8 lg:pt-32">
           <motion.div
             initial={{ opacity: 0, y: 12 }}
             animate={mounted ? { opacity: 1, y: 0 } : {}}
@@ -87,7 +87,7 @@ export function HeroSection() {
         </div>
 
         {/* Right: 3D Scene */}
-        <div className="relative flex flex-1 items-center justify-center px-4 pb-8 lg:px-8 lg:pb-12">
+        <div className="relative flex flex-1 items-center justify-center px-5 pb-8 sm:px-6 lg:px-8 lg:pb-12">
           <div className="w-full max-w-[680px]">
             <div className="runtime-scene">
               <LazyRuntimeScene

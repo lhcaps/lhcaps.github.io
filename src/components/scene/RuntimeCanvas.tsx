@@ -8,18 +8,17 @@ interface RuntimeCanvasProps {
 export function RuntimeCanvas({ children, reducedMotion }: RuntimeCanvasProps) {
   return (
     <Canvas
-      camera={{ position: [0, 1.2, 7], fov: 42 }}
+      camera={{ position: [0, 0, 5.5], fov: 52 }}
       dpr={[1, reducedMotion ? 1 : 1.5]}
-      performance={{ min: 0.5 }}
       gl={{
         antialias: !reducedMotion,
         powerPreference: "high-performance",
       }}
     >
       <color attach="background" args={["#0c1425"]} />
-      <ambientLight intensity={0.5} />
-      <directionalLight position={[0, 4, 5]} intensity={1.5} color="#ffffff" />
-      <pointLight position={[0, 2, 4]} intensity={1.0} color="#60a5fa" />
+      <ambientLight intensity={0.6} />
+      <directionalLight position={[3, 4, 5]} intensity={1.2} color="#ffffff" />
+      <pointLight position={[0, 1.5, 2]} intensity={0.8} color="#60a5fa" />
       <pointLight position={[-3, -1, 3]} intensity={0.5} color="#22c55e" />
       <pointLight position={[3, -1, 3]} intensity={0.3} color="#a78bfa" />
       {children}

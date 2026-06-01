@@ -1,6 +1,5 @@
-import { useState } from "react"
+import { Component, type ReactNode } from "react"
 import { RuntimeCanvas } from "./RuntimeCanvas"
-import { CameraRig } from "./CameraRig"
 import { RuntimeNodeBlock } from "./RuntimeNode"
 import { DataLink } from "./DataLink"
 import { DataPacket } from "./DataPacket"
@@ -13,9 +12,32 @@ interface RuntimeSceneProps {
   reducedMotion: boolean
 }
 
-function RuntimeGraph({ scene, reducedMotion }: { scene: SystemScene; reducedMotion: boolean }) {
-  const [hoveredId, setHoveredId] = useState<string | null>(null)
+class SceneErrorBoundary extends Component<{ children: ReactNode }, { hasError: boolean }> {
+  constructor(props: { children: ReactNode }) {
+    super(props)
+    this.state = { hasError: false }
+  }
 
+  static getDerivedStateFromError() {
+    return { hasError: true }
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div className="flex items-center justify-center rounded-3xl border border-slate-700 bg-slate-950" style={{ height: "min(60vh, 580px)", minHeight: 300 }}>
+          <div className="text-center px-6">
+            <p className="text-sm font-medium text-slate-300">Runtime preview unavailable</p>
+            <p className="mt-2 text-xs text-slate-500 font-mono">UI → API → DB → Queue → Proof</p>
+          </div>
+        </div>
+      )
+    }
+    return this.props.children
+  }
+}
+
+function RuntimeGraph({ scene, reducedMotion }: { scene: SystemScene; reducedMotion: boolean }) {
   const packetLinks = scene.links.map((link) => {
     const from = scene.nodes.find((n) => n.id === link.from)!
     const to = scene.nodes.find((n) => n.id === link.to)!
@@ -23,13 +45,13 @@ function RuntimeGraph({ scene, reducedMotion }: { scene: SystemScene; reducedMot
   })
 
   return (
-    <group>
+    <>
       {scene.links.map((link) => (
         <DataLink
           key={`${link.from}-${link.to}`}
           link={link}
           nodes={scene.nodes}
-          activeNodeId={hoveredId}
+          activeNodeId={null}
           reducedMotion={reducedMotion}
         />
       ))}
@@ -38,8 +60,8 @@ function RuntimeGraph({ scene, reducedMotion }: { scene: SystemScene; reducedMot
         <RuntimeNodeBlock
           key={node.id}
           node={node}
-          isHovered={hoveredId === node.id}
-          onHover={setHoveredId}
+          isHovered={false}
+          onHover={() => {}}
           onClick={() => {}}
           reducedMotion={reducedMotion}
         />
@@ -51,27 +73,35 @@ function RuntimeGraph({ scene, reducedMotion }: { scene: SystemScene; reducedMot
         reducedMotion={reducedMotion}
       />
 
+      <RuntimeCoreFallback reducedMotion={reducedMotion} />
+
       <SceneLabels
-        activeNodeId={hoveredId}
+        activeNodeId={null}
         sceneLabel={scene.label}
         sceneTagline={scene.tagline}
       />
-
-      {/* Center runtime core */}
-      <group position={[0, 0, -0.5]}>
-        <RuntimeCoreFallback reducedMotion={reducedMotion} />
-      </group>
-    </group>
+    </>
   )
 }
 
 export function RuntimeScene({ scene, reducedMotion }: RuntimeSceneProps) {
   return (
-    <div className="runtime-scene-wrapper">
-      <RuntimeCanvas reducedMotion={reducedMotion}>
-        <RuntimeGraph scene={scene} reducedMotion={reducedMotion} />
-        <CameraRig scene={scene} reducedMotion={reducedMotion} />
-      </RuntimeCanvas>
+    <div className="w-full">
+      {/* Debug overlay — outside Canvas so it's always visible */}
+      <div className="pointer-events-none absolute left-4 top-4 z-10 rounded-full border border-emerald-400/30 bg-emerald-400/10 px-3 py-1 text-[10px] uppercase tracking-[0.2em] text-emerald-300">
+        {scene.label} active
+      </div>
+
+      <div
+        className="runtime-scene"
+        style={{ height: "min(60vh, 580px)", minHeight: 300 }}
+      >
+        <SceneErrorBoundary>
+          <RuntimeCanvas reducedMotion={reducedMotion}>
+            <RuntimeGraph scene={scene} reducedMotion={reducedMotion} />
+          </RuntimeCanvas>
+        </SceneErrorBoundary>
+      </div>
     </div>
   )
 }
