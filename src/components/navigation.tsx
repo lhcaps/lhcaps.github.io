@@ -14,20 +14,32 @@ export function Navigation() {
     let raf = 0
 
     const update = () => {
-      const maxScroll = document.documentElement.scrollHeight - window.innerHeight
+      const sectionIds = navItems.map((item) => item.href.replace("#", ""))
+      const pageHeight = Math.max(document.documentElement.scrollHeight, document.body.scrollHeight)
+      const maxScroll = pageHeight - window.innerHeight
+      const scrollTop = window.scrollY
+
       setIsScrolled(window.scrollY > 32)
-      setScrollProgress(maxScroll > 0 ? Math.min(1, Math.max(0, window.scrollY / maxScroll)) : 0)
+      setScrollProgress(maxScroll > 0 ? Math.min(1, Math.max(0, scrollTop / maxScroll)) : 0)
 
-      const current = navItems
-        .map((item) => item.href.replace("#", ""))
-        .find((section) => {
-          const element = document.getElementById(section)
-          if (!element) return false
-          const rect = element.getBoundingClientRect()
-          return rect.top <= 160 && rect.bottom >= 160
-        })
+      if (maxScroll > 0 && scrollTop >= maxScroll - 6) {
+        const lastSection = sectionIds[sectionIds.length - 1]
+        if (lastSection) setActiveSection(lastSection)
+        return
+      }
 
-      if (current) setActiveSection(current)
+      const anchor = Math.min(window.innerHeight * 0.42, 360)
+      const candidates = sectionIds.flatMap((section) => {
+        const element = document.getElementById(section)
+        if (!element) return []
+        const rect = element.getBoundingClientRect()
+        const visible = rect.bottom >= 96 && rect.top <= window.innerHeight * 0.76
+        if (!visible) return []
+        return [{ id: section, distance: Math.abs(rect.top - anchor) }]
+      })
+      const current = candidates.sort((a, b) => a.distance - b.distance)[0]
+
+      if (current) setActiveSection(current.id)
     }
 
     const handleScroll = () => {
@@ -127,7 +139,7 @@ export function Navigation() {
             href="#contact"
             className="action-link focus-ring hidden px-4 py-2 text-sm font-semibold md:inline-flex"
           >
-            Start a build
+            Get in touch
           </a>
 
           <button
@@ -179,10 +191,10 @@ export function Navigation() {
               ))}
               <a
                 href="#contact"
-                className="action-link focus-ring mt-2 w-full justify-center px-4 py-3 text-sm font-semibold"
+                className="action-link focus-ring mt-2 flex w-full justify-center px-4 py-3 text-sm font-semibold"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
-                Start a build
+                Get in touch
               </a>
             </motion.nav>
           </motion.div>

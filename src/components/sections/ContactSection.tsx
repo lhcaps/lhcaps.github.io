@@ -1,5 +1,5 @@
 import { motion } from "framer-motion"
-import { ArrowUpRight, Github, Mail, MapPin } from "lucide-react"
+import { ArrowUpRight, Download, Github, Mail, MapPin } from "lucide-react"
 import { Container, SectionHeader } from "@/components/layout"
 import { profile } from "@/data/profile"
 
@@ -34,8 +34,8 @@ export function ContactSection() {
         <SectionHeader
           number="05"
           label="Contact"
-          title="Bring me a messy workflow and a real source of truth."
-          intro="I am most useful when a product needs practical engineering across UI, APIs, data, workers, and verification."
+          title="Open to internships and product engineering work."
+          intro="I am based in Ho Chi Minh City. The fastest way to reach me is email. GitHub is open for code review."
         />
 
         <motion.div
@@ -48,28 +48,35 @@ export function ContactSection() {
         >
           <div>
             <p className="mono-label" style={{ color: "var(--accent)" }}>
-              Open loop
+              Get in touch
             </p>
             <h3 className="mt-3 max-w-2xl text-3xl font-bold leading-tight md:text-5xl">
-              Internships, product work, and systems that need cleaner execution.
+              Looking for: Backend / Full-stack Intern.
             </h3>
             <p className="mt-5 max-w-xl text-sm leading-7 md:text-base" style={{ color: "var(--muted)" }}>
-              I am based in Ho Chi Minh City and available for teams that care about state correctness, operator-safe UI, and backend workflows that can be verified.
+              I am available for internships and product engineering work. Best stack fit: React, TypeScript, Node.js, FastAPI, SQL, Docker. Ho Chi Minh City based.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
-              <a className="action-link focus-ring px-5 py-3 text-sm font-semibold" href={`mailto:${profile.contact.email}`}>
+              <a className="action-link focus-ring inline-flex px-5 py-3 text-sm font-semibold" href={`mailto:${profile.contact.email}`}>
                 <Mail className="h-4 w-4" />
                 Email me
                 <ArrowUpRight className="h-4 w-4" />
               </a>
               <a
-                className="action-link focus-ring px-5 py-3 text-sm font-semibold"
+                className="action-link focus-ring inline-flex px-5 py-3 text-sm font-semibold"
                 href={profile.contact.github}
                 target="_blank"
                 rel="noopener noreferrer"
               >
                 <Github className="h-4 w-4" />
                 GitHub
+              </a>
+              <a
+                className="action-link focus-ring inline-flex px-5 py-3 text-sm font-semibold"
+                href="/Le_Huy_CV.pdf"
+              >
+                <Download className="h-4 w-4" />
+                Download CV
               </a>
             </div>
           </div>

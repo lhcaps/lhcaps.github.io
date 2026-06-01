@@ -1,29 +1,32 @@
 export const profile = {
   name: "Le Huy",
   alias: "aka Louwis",
-  role: "Backend-heavy Full-Stack Developer",
+  role: "Backend-heavy Full-stack Developer",
   tagline:
-    "I build operational systems where APIs, queues, databases, workers, and review screens agree with the same source of truth.",
+    "Software Engineering student in Ho Chi Minh City building React apps, Node.js/FastAPI APIs, SQL databases, Redis queues, Docker setups, and AI/CV pipelines with verifiable local runtimes.",
+  hero: {
+    headline: "I build full-stack systems that actually work and can be verified.",
+    summary:
+      "React dashboards backed by typed APIs, SQL data layers, background queues, and verification scripts. The goal is always a system where the UI reflects real backend state, not optimistic theater.",
+    signals: ["React / TypeScript", "Node.js / FastAPI", "SQL / Prisma / Redis", "Docker / Playwright"],
+    proof: ["Typed contracts", "Migrations", "Smoke tests", "Playwright / Vitest"],
+  },
   bio: [
-    "I like systems that are boring in the right places: typed contracts, repeatable runtimes, honest UI state, and verification scripts that catch drift before users do.",
-    "Most of my projects sit one level above my comfort zone. That is intentional. Parkly taught me gate operations and payment truth, VisionFlow taught me async CV workflows, and local copilots taught me how retrieval systems fail when the plumbing is vague.",
+    "I am a Software Engineering student at HUFLIT with a backend-leaning full-stack background. I build systems that hold up under real use: structured data layers, typed API contracts, reproducible runtimes, and scripts that prove the thing works.",
+    "My projects push one level beyond tutorial territory. Parkly forced me to own gate sessions, payment queues, and migrations. VisionFlow pushed me into async CV workers and job state tracking. TFT Local Copilot taught me how retrieval systems break when ingestion and streaming are treated as separate demos.",
   ],
   principles: [
     {
-      title: "Truthful Interfaces",
-      text: "Screens should expose backend state, not optimistic theater.",
+      title: "Backend ownership",
+      text: "I am comfortable owning domain logic, migrations, queues, caching, and the evidence that the runtime works.",
     },
     {
-      title: "Typed Boundaries",
-      text: "Contracts, schemas, and queues should make invalid flows hard to express.",
+      title: "Verification habits",
+      text: "Type checks, smoke tests, E2E flows, and clear failure messages make regressions harder to hide.",
     },
     {
-      title: "Operational Proof",
-      text: "A feature is not finished until it can be smoked, replayed, or inspected.",
-    },
-    {
-      title: "Local First",
-      text: "The best dev loop is one command, real services, and useful failure messages.",
+      title: "End-to-end thinking",
+      text: "I break features into data model, API layer, UI workflow, and verification so fewer details slip through.",
     },
   ],
   availability: {

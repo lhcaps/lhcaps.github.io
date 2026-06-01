@@ -9,8 +9,8 @@ export function AboutSection() {
         <SectionHeader
           number="03"
           label="Principles"
-          title="I am trying to become the kind of engineer whose UI does not lie."
-          intro="The work is backend-heavy, but the portfolio is intentionally not just a list of repositories. It shows how I think about state, contracts, and proof."
+          title="Backend-heavy full-stack with verification habits."
+          intro="I build the full stack but I am most comfortable owning the backend: typed APIs, database migrations, background jobs, and the evidence that it all works."
         />
 
         <div className="grid gap-10 lg:grid-cols-[0.9fr_1.1fr]">

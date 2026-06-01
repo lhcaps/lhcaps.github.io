@@ -1,5 +1,5 @@
 import { motion } from "framer-motion"
-import { ArrowUpRight, CheckCircle2, Github } from "lucide-react"
+import { ArrowUpRight, CheckCircle2, Github, ImageIcon, Play } from "lucide-react"
 import { Container, SectionHeader } from "@/components/layout"
 import { TechPill } from "@/components/ui"
 import { projects, type Project } from "@/data/projects"
@@ -16,28 +16,28 @@ function MiniSystemVisual({ project }: { project: Project }) {
             "linear-gradient(135deg, color-mix(in oklch, var(--surface-strong) 70%, transparent), color-mix(in oklch, var(--surface) 78%, transparent))",
         }}
       />
-      <svg className="absolute inset-0 h-full w-full" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
-        {project.system.connections.map(([fromId, toId]) => {
-          const from = nodeMap.get(fromId)
-          const to = nodeMap.get(toId)
-          if (!from || !to) return null
-          return (
-            <line
-              key={`${fromId}-${toId}`}
-              x1={from.x}
-              y1={from.y}
-              x2={to.x}
-              y2={to.y}
-              stroke={project.color}
-              strokeWidth="0.28"
-              strokeOpacity="0.34"
-              strokeDasharray="2 3"
-            />
-          )
-        })}
-      </svg>
+      <div className="relative z-10 h-[270px]">
+        <svg className="absolute inset-0 h-full w-full" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+          {project.system.connections.map(([fromId, toId]) => {
+            const from = nodeMap.get(fromId)
+            const to = nodeMap.get(toId)
+            if (!from || !to) return null
+            return (
+              <line
+                key={`${fromId}-${toId}`}
+                x1={from.x}
+                y1={from.y}
+                x2={to.x}
+                y2={to.y}
+                stroke={project.color}
+                strokeWidth="0.34"
+                strokeOpacity="0.38"
+                strokeDasharray="2 3"
+              />
+            )
+          })}
+        </svg>
 
-      <div className="relative h-[270px]">
         {project.system.nodes.map((node, index) => {
           const isPrimary = node.kind === "primary"
           return (
@@ -80,6 +80,83 @@ function MiniSystemVisual({ project }: { project: Project }) {
           </span>
         ))}
       </div>
+    </div>
+  )
+}
+
+function ProjectScreenshot({ project }: { project: Project }) {
+  if (!project.screenshots || project.screenshots.length === 0) {
+    return (
+      <div
+        className="flex flex-col items-center justify-center gap-3 rounded-[1.25rem] border p-8 text-center"
+        style={{
+          borderColor: "color-mix(in oklch, var(--line) 60%, transparent)",
+          background: "color-mix(in oklch, var(--surface) 50%, transparent)",
+          color: "var(--dim)",
+        }}
+      >
+        <ImageIcon className="h-8 w-8 opacity-40" strokeWidth={1.5} />
+        <div>
+          <p className="text-xs font-semibold">Screenshots coming soon</p>
+          <p className="mt-1 text-[11px] opacity-60">Local demo run / video will be added</p>
+        </div>
+      </div>
+    )
+  }
+
+  return (
+    <div className="flex gap-2 overflow-x-auto">
+      {project.screenshots.map((src, i) => (
+        <img
+          key={i}
+          src={src}
+          alt={`${project.title} screenshot ${i + 1}`}
+          className="h-28 w-auto flex-none rounded-xl border object-cover"
+          style={{ borderColor: "var(--line)" }}
+          loading="lazy"
+        />
+      ))}
+    </div>
+  )
+}
+
+function ProjectProofLinks({ project }: { project: Project }) {
+  return (
+    <div className="flex flex-wrap items-center gap-2">
+      <a
+        href={project.github}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="action-link focus-ring inline-flex items-center gap-2 px-3 py-1.5 text-xs font-semibold"
+        style={{ color: project.color }}
+      >
+        <Github className="h-3.5 w-3.5" />
+        Repository
+        <ArrowUpRight className="h-3 w-3" />
+      </a>
+      {project.demo && (
+        <a
+          href={project.demo}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="action-link focus-ring inline-flex items-center gap-2 px-3 py-1.5 text-xs font-semibold"
+          style={{ color: project.color }}
+        >
+          <Play className="h-3.5 w-3.5" />
+          Demo
+          <ArrowUpRight className="h-3 w-3" />
+        </a>
+      )}
+      <a
+        href={`${project.github}#readme`}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="action-link focus-ring inline-flex items-center gap-2 px-3 py-1.5 text-xs font-semibold"
+        style={{ color: "var(--muted)" }}
+      >
+        Case study
+        <ArrowUpRight className="h-3 w-3" />
+      </a>
     </div>
   )
 }
@@ -137,23 +214,21 @@ function ProjectCase({ project, index }: { project: Project; index: number }) {
           ))}
         </div>
 
-        <div className="mt-8 flex flex-wrap items-center gap-3">
-          <a
-            href={project.github}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="action-link focus-ring px-4 py-2 text-sm font-semibold"
-            style={{ color: project.color }}
-          >
-            <Github className="h-4 w-4" />
-            Repository
-            <ArrowUpRight className="h-4 w-4" />
-          </a>
+        {/* Proof links */}
+        <div className="mt-7">
+          <p className="mono-label mb-3" style={{ color: "var(--dim)" }}>
+            Proof
+          </p>
+          <ProjectProofLinks project={project} />
         </div>
       </div>
 
-      <div className="space-y-5">
+      <div className="space-y-4">
         <MiniSystemVisual project={project} />
+
+        {/* Screenshots placeholder */}
+        <ProjectScreenshot project={project} />
+
         <div className="grid gap-3 sm:grid-cols-2">
           <div className="rounded-[1.5rem] border p-5" style={{ borderColor: "var(--line)" }}>
             <p className="mono-label" style={{ color: "var(--dim)" }}>
@@ -170,7 +245,7 @@ function ProjectCase({ project, index }: { project: Project; index: number }) {
           </div>
           <div className="rounded-[1.5rem] border p-5" style={{ borderColor: "var(--line)" }}>
             <p className="mono-label" style={{ color: "var(--dim)" }}>
-              Proof
+              Verification
             </p>
             <ul className="mt-4 space-y-3">
               {project.proof.map((item) => (
@@ -195,7 +270,7 @@ export function ProjectsSection() {
           number="01"
           label="Selected Systems"
           title="Case studies, not thumbnails."
-          intro="Each project is framed by the operational problem it tries to make less fragile: state ownership, worker truth, local runtime, and proof that a flow can survive contact with real data."
+          intro="Three real projects with real problems: gate operations, CV workflows, and local RAG. Each one has typed APIs, data layers, background workers, and evidence that the flow works."
         />
 
         <div>

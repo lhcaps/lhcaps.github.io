@@ -10,6 +10,8 @@ export interface Project {
   proof: string[]
   tags: string[]
   github: string
+  demo?: string
+  screenshots?: string[]
   color: string
   system: {
     layers: string[]
@@ -28,25 +30,26 @@ export const projects: Project[] = [
   {
     id: 1,
     title: "Parkly",
-    subtitle: "Parking Operations Platform",
+    subtitle: "Gate Operations Platform",
     signal: "Gate sessions, payments, edge replay, operator review",
     description:
-      "A parking operations system for entry, exit, review queues, payment state, and device-facing workflows.",
+      "A parking operations platform handling entry/exit sessions, payment state, review queues, and device health. Built to run locally with Docker Compose.",
     problem:
-      "Gate workflows break when capture, payment, live board, and exit logic each invent their own authority.",
+      "Gate workflows break when each part of the system invents its own version of truth instead of sharing one source.",
     role:
-      "Stabilized the core operational path around one session truth source, real payment contracts, and smokeable deployment checks.",
+      "Built the core operational path around one session truth, real payment contracts, and scripts that smoke the entry/payment/exit flow.",
     built: [
-      "Typed API and edge contracts",
-      "Session, payment, review, and incident flows",
-      "Prisma migrations with repairable local setup",
-      "Redis/BullMQ background work",
-      "Runtime smoke scripts for real paid exit paths",
+      "React operator dashboard",
+      "Express REST API with typed contracts",
+      "Prisma schema with repairable migrations",
+      "Redis/BullMQ background payment jobs",
+      "Docker Compose local runtime",
+      "Smoke scripts for real entry/payment/exit paths",
     ],
     proof: [
-      "Entry, payment, and exit flow can be smoked against the real database",
-      "Payment writes avoid generated-column drift and preserve fee truth",
-      "Operator surfaces read from backend state instead of mock success paths",
+      "Entry, payment, and exit flows can be smoked against the real database",
+      "Payment writes preserve fee truth and avoid generated-column drift",
+      "Operator screens read from backend state, not optimistic success paths",
     ],
     tags: ["TypeScript", "React", "Express", "Prisma", "Redis", "BullMQ", "MariaDB", "Docker"],
     github: "https://github.com/lhcaps/parkly",
@@ -74,13 +77,13 @@ export const projects: Project[] = [
   },
   {
     id: 2,
-    title: "VisionFlow",
+    title: "VisionFlow Studio",
     subtitle: "Computer Vision Workflow Platform",
     signal: "Media ingestion, datasets, annotation, async inference",
     description:
-      "A CV workflow app for dataset management, annotation review, worker-backed inference, and exportable results.",
+      "A CV workflow platform for dataset management, annotation review, worker-backed inference, and exportable results. Built to run locally with Turborepo.",
     problem:
-      "Computer vision tools become fragile when UI progress, worker output, and persisted job state drift apart.",
+      "CV tools become fragile when the UI, worker output, and persisted job state drift apart and each shows a different story.",
     role:
       "Connected the FastAPI CV worker, shared contracts, API client, persistence, and job UI so progress is backed by real worker output.",
     built: [
@@ -89,11 +92,12 @@ export const projects: Project[] = [
       "API-side worker client and persistence",
       "Job progress and log surfaces",
       "Playwright and package-level verification",
+      "Turborepo monorepo setup",
     ],
     proof: [
-      "Worker/API contracts stay aligned through shared schemas",
+      "Worker and API contracts stay aligned through shared schemas",
       "Inference jobs expose backend logs and real progress state",
-      "Runtime smoke checks cover worker health and job creation",
+      "Smoke checks cover worker health and job creation",
     ],
     tags: ["TypeScript", "React", "Python", "FastAPI", "Prisma", "Playwright", "Turborepo"],
     github: "https://github.com/lhcaps/Vision",
@@ -125,22 +129,22 @@ export const projects: Project[] = [
     subtitle: "Local RAG Assistant",
     signal: "Offline retrieval, streaming chat, local model loop",
     description:
-      "A local-first assistant for Markdown/game knowledge with ingestion, chunking, embeddings, vector search, and streamed responses.",
+      "A local-first assistant for game knowledge with document ingestion, chunking, embeddings, vector search, and streamed responses. No external model API required.",
     problem:
-      "Local RAG fails quietly when ingestion, retrieval, and response streaming are treated as separate demos.",
+      "RAG systems fail quietly when ingestion, retrieval, and response streaming are treated as separate demos instead of one pipeline.",
     role:
-      "Designed the local runtime path around inspectable chunks, vector retrieval, and a chat UI that streams state instead of polling.",
+      "Designed the local runtime path so chunks, vector retrieval, and the chat UI streaming state work as one verifiable loop.",
     built: [
-      "React frontend with streaming message state",
+      "React frontend with SSE streaming message state",
       "FastAPI backend with Ollama integration",
       "pgvector retrieval pipeline",
-      "n8n automation experiments",
       "Docker Compose local deployment",
+      "n8n automation experiments",
     ],
     proof: [
       "SSE streaming avoids fake loading loops",
       "Vector retrieval works without external model APIs",
-      "The stack runs locally for repeatable testing",
+      "The full stack runs locally for repeatable testing",
     ],
     tags: ["React", "Vite", "FastAPI", "Ollama", "PostgreSQL", "pgvector", "n8n", "Docker"],
     github: "https://github.com/lhcaps/TFT-CHATBOX",

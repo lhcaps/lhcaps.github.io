@@ -107,6 +107,13 @@
   50% { transform: scale(1.45); opacity: 1; }
 }
 
+@keyframes hero-scan {
+  0% { transform: translateY(-120%); opacity: 0; }
+  18% { opacity: 0.55; }
+  72% { opacity: 0.12; }
+  100% { transform: translateY(120%); opacity: 0; }
+}
+
 .reveal-base { opacity: 0; }
 .reveal-dir-up { transform: translateY(28px); }
 .reveal-dir-left { transform: translateX(-28px); }
@@ -142,6 +149,39 @@
   box-shadow: 0 28px 80px oklch(6% 0.02 250 / 0.28);
 }
 
+.hero-console {
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+.hero-console::before {
+  content: "";
+  position: absolute;
+  inset: -45% 0;
+  pointer-events: none;
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    color-mix(in oklch, var(--accent) 12%, transparent) 49%,
+    color-mix(in oklch, var(--fg) 18%, transparent) 50%,
+    transparent 51%
+  );
+  animation: hero-scan 5.6s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+}
+
+.hero-map-grid {
+  background:
+    linear-gradient(color-mix(in oklch, var(--line-strong) 22%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in oklch, var(--line-strong) 22%, transparent) 1px, transparent 1px),
+    radial-gradient(circle at 50% 50%, color-mix(in oklch, var(--accent) 10%, transparent), transparent 23rem);
+  background-size: 34px 34px, 34px 34px, auto;
+  mask-image: radial-gradient(circle at 50% 50%, black 0 58%, transparent 86%);
+}
+
+.hero-node {
+  box-shadow: inset 0 1px 0 color-mix(in oklch, var(--fg) 8%, transparent);
+}
+
 .hairline {
   border-color: var(--line);
 }
@@ -172,7 +212,6 @@
 }
 
 .action-link {
-  display: inline-flex;
   align-items: center;
   gap: 0.5rem;
   border-radius: 999px;

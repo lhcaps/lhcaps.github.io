@@ -42,8 +42,8 @@ export function EducationSection() {
         <SectionHeader
           number="04"
           label="Proof"
-          title="Credentials are useful when they stay honest and private."
-          intro="The public portfolio keeps the credential summary visible while avoiding raw personal document scans in the deployed site."
+          title="Education and credentials, kept honest and public."
+          intro="Software Engineering degree at HUFLIT, IELTS 6.5. Credibility that matters more than credentials: the projects above have real system diagrams, real stacks, and real verification evidence."
         />
 
         <div className="grid gap-6 lg:grid-cols-[1fr_0.92fr]">
@@ -141,7 +141,7 @@ export function EducationSection() {
 
             <a
               href="/credentials/ielts/index.html"
-              className="action-link focus-ring mt-6 px-4 py-2 text-sm font-semibold"
+              className="action-link focus-ring mt-6 inline-flex px-4 py-2 text-sm font-semibold"
             >
               Credential summary
               <ExternalLink className="h-4 w-4" />

@@ -79,8 +79,8 @@ export function StackSection() {
         <SectionHeader
           number="02"
           label="Stack"
-          title="The stack is organized around runtime truth."
-          intro="I care less about trendy tool names than about whether the layers make each other clearer. UI state should map to API contracts, persistence should be inspectable, and workers should leave evidence."
+          title="Core stack for backend-heavy full-stack work."
+          intro="Recruiter summary: React, TypeScript, Node.js, FastAPI, SQL (Prisma / MariaDB), Redis, BullMQ, Docker, Playwright. Organized so each layer maps to a runtime concern, not just a list of tools."
         />
 
         <div className="rounded-[2rem] border px-5 md:px-7" style={{ borderColor: "var(--line)" }}>
