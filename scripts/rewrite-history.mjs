@@ -133,7 +133,7 @@ function createCommit(root, original, rewrittenParents, message) {
 export async function auditAndRewrite(root, options) {
   const identity = repositoryIdentity({ requireClean: true, requireNonShallow: true })
   if (git(["branch", "--show-current"], root) !== "main") throw new Error("HISTORY_REWRITE_BRANCH_INVALID")
-  if (identity.sha !== options.expectedHead || !FULL_SHA.test(options.expectedRemote) || options.expectedRemote !== identity.sha) throw new Error("HISTORY_REWRITE_EXPECTATION_INVALID")
+  if (identity.sha !== options.expectedHead || !FULL_SHA.test(options.expectedRemote)) throw new Error("HISTORY_REWRITE_EXPECTATION_INVALID")
   if (remoteMain(root) !== options.expectedRemote) throw new Error("HISTORY_REWRITE_REMOTE_ADVANCED")
   await verifyExternalBundle(root, options.bundlePath, identity.sha)
 
