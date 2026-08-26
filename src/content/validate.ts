@@ -1,5 +1,5 @@
 import { SYSTEM_IDS, type PortfolioGraph, type ValidationIssue } from "./types"
-import { validateTopology } from "@/atlas/core/topology"
+import { validateTopology } from "../atlas/core/topology"
 
 const ALLOWED_DESTINATIONS = new Set([
   "huyle210525@gmail.com",
