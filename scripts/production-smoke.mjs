@@ -56,14 +56,45 @@ async function waitForIdentity(sha) {
   throw lastError ?? new Error("PRODUCTION_IDENTITY_UNAVAILABLE")
 }
 
-async function overflowCount(page) {
-  return page.evaluate(() => {
-    const width = document.documentElement.clientWidth
-    return Array.from(document.querySelectorAll("body *")).filter((element) => {
+export function horizontalOverflowSnapshot() {
+  const clientWidth = document.documentElement.clientWidth
+  const isClippedByAncestor = (element) => {
+    const rect = element.getBoundingClientRect()
+    let parent = element.parentElement
+    while (parent && parent !== document.body) {
+      const overflowX = getComputedStyle(parent).overflowX
+      const parentRect = parent.getBoundingClientRect()
+      if (["auto", "scroll", "hidden", "clip"].includes(overflowX) && (rect.left < parentRect.left || rect.right > parentRect.right)) return true
+      parent = parent.parentElement
+    }
+    return false
+  }
+  const offenders = Array.from(document.querySelectorAll("body *"))
+    .filter((element) => !isClippedByAncestor(element))
+    .map((element) => {
       const rect = element.getBoundingClientRect()
-      return rect.left < -1 || rect.right > width + 1
-    }).length + (document.documentElement.scrollWidth > width + 1 ? 1 : 0)
-  })
+      return {
+        tag: element.tagName,
+        id: element.id,
+        className: typeof element.className === "string" ? element.className : "",
+        left: rect.left,
+        right: rect.right,
+      }
+    })
+    .filter((rect) => rect.left < -1 || rect.right > clientWidth + 1)
+    .slice(0, 12)
+  return {
+    clientWidth,
+    scrollWidth: document.documentElement.scrollWidth,
+    rootOverflow: document.documentElement.scrollWidth > clientWidth + 1,
+    offenderCount: offenders.length,
+    offenders,
+  }
+}
+
+async function overflowCount(page) {
+  const snapshot = await page.evaluate(horizontalOverflowSnapshot)
+  return Number(snapshot.rootOverflow) + snapshot.offenderCount
 }
 
 function newRecord(id, viewport) {
