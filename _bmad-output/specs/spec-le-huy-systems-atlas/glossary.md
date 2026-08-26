@@ -1,0 +1,27 @@
+# Glossary
+
+- **Adaptation Loop** — The anonymous sequence Feedback → Pricing Rule → Implementation → Verification → Release → Next Revision.
+- **Claim** — A material public statement about a System, implementation, verification result, or release state.
+- **Closing** — The final contact region containing the Primary Action, GitHub, email, and verified CV.
+- **Evidence Boundary** — The rule that each Claim uses only Public-Safe Evidence at its observed evidence level and never exposes the private Evidence Ledger.
+- **Evidence Ledger** — The private, unpublished record of a Claim, source, observed implementation, evidence classification, confidence, public-safety decision, and limitation; it contains one private evidence file per System.
+- **Failed Gate** — A current or historical verification result shown with its exact failure qualification, never presented as passing.
+- **Flagship Narrative** — A deep, System-specific account of a trigger, constraint, decision, mechanism, failure mode, verification, result, or lesson.
+- **Flagship System** — Form Management, VisionFlow Studio, or Production Booking & Operations Platform.
+- **Fourth Pricing Change** — The public-safe anchor for the anonymous Production Booking & Operations Platform revision story; it identifies the fourth reviewable pricing-model revision without revealing pricing data.
+- **Manual Review Handoff** — The Parkly transition that sends a low-confidence capture to a person for a decision.
+- **Primary Action** — The exact call to action **Work with me**.
+- **Public Claim Manifest** — The publishable validation contract derived from the private Evidence Ledger. Each entry has a stable evidence key, System ID, Claim scope, evidence classification, public-safe status, and required limitation, with no private source detail.
+- **Public-Safe Evidence** — Evidence approved for public use after source, evidence level, confidence, confidentiality, and limitation review.
+- **Queue Handoff** — The VisionFlow Studio transition in which a job leaves the HTTP request path for asynchronous worker processing.
+- **Readable Equivalent Representation** — A semantic DOM, text, CSS, or SVG presentation exposing the same System selection, nodes, routes, relationships, and state meaning as the focal scene.
+- **Reduced Motion** — A reader preference that preserves state and sequence while removing continuous or nonessential movement.
+- **Release Evidence** — The command-, result-, count-, qualification-, workflow-, URL-, and exact-SHA record used to determine a release assertion.
+- **Selected System** — The one System currently in focus in the Atlas and Readable Equivalent Representation.
+- **Supporting Narrative** — A concise, evidence-bounded account for a Supporting System; it is not a compressed Flagship Narrative.
+- **Supporting System** — Parkly or TFT Local Copilot.
+- **System** — One of the five curated engineering projects represented by content and topology data.
+- **System Selector** — The pointer-, touch-, and keyboard-operable control that changes the Selected System.
+- **System Topology** — The deterministic, evidence-supported nodes, routes, layers, labels, and state mappings for one System.
+- **Systems Atlas** — The single guided and explorable architecture visualization that reconfigures among all five System Topologies.
+- **Verification Harness** — The visible narrative and executable release checks that distinguish authored output from accepted evidence.

@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Le Huy Systems Atlas — Opening and canonical Atlas</title>
+  <style>
+    /*
+      GOVERNING SPINES — this mock illustrates, and never overrides:
+      DESIGN.md: Brand & Style; Colors; Typography; Layout & Spacing; Elevation & Depth; Shapes; Components.
+      EXPERIENCE.md: Information Architecture (Opening, Systems Atlas); Systems Atlas Meaning; Voice and Tone;
+      Component Patterns (primary-action, navigation-link, system-selector, atlas-frame, readable-topology,
+      topology-node, route-annotation, evidence-marker, system-index); State Patterns (DOM ready, scene pending);
+      Key Flows UJ-1 steps 1–4 and UJ-2 steps 1–6.
+    */
+    :root {
+      --paper:#F3EFE4; --raised:#FCF9F0; --quiet:#E9E4D8; --near:#E0DACD; --mid:#D0C9BB; --far:#BBB4A7;
+      --ink:#20231E; --soft:#585C54; --faint:#656A62; --line:#C5C0B4; --strong:#85887F;
+      --rust:#B4432C; --rust-deep:#7B2B1D; --rust-wash:#EFD4CA; --on-rust:#FCF9F0;
+      --gutter:clamp(40px,5vw,72px); --mono:"Fragment Mono",ui-monospace,monospace;
+    }
+    * { box-sizing:border-box; }
+    html { background:#d5d0c5; }
+    body { margin:0; color:var(--ink); background:#d5d0c5; font-family:'Geologica Variable','Geologica',system-ui,sans-serif; }
+    .browser { width:min(1660px,calc(100vw - 48px)); margin:32px auto; overflow:hidden; background:var(--paper); border:1px solid #a8a397; border-radius:12px; box-shadow:0 24px 80px rgba(32,35,30,.16); }
+    .chrome { height:54px; display:flex; align-items:center; gap:16px; padding:0 18px; color:var(--soft); background:#e3ded3; border-bottom:1px solid #bdb8ad; font:400 11px/1 var(--mono); letter-spacing:.04em; }
+    .traffic { display:flex; gap:7px; } .traffic i { width:10px; height:10px; display:block; border-radius:50%; border:1px solid #948f84; background:#cfcbc0; }
+    .address { flex:1; max-width:680px; padding:9px 13px; background:#f5f1e7; border:1px solid #c5c0b4; border-radius:6px; text-align:center; }
+    .chrome-note { margin-left:auto; font-size:10px; color:var(--faint); }
+    .page { min-height:1110px; background:var(--paper); }
+    .skip { position:absolute; left:-999px; }
+    .site-header { height:78px; display:flex; align-items:center; justify-content:space-between; padding:0 var(--gutter); border-bottom:1px solid var(--line); }
+    .mark { font-size:13px; font-weight:620; letter-spacing:-.02em; } .mark b { color:var(--rust-deep); font-family:var(--mono); font-size:10px; margin-right:8px; }
+    nav { display:flex; align-items:center; gap:26px; font-size:14px; } nav a { color:var(--soft); text-decoration:none; } nav a.current { color:var(--rust-deep); position:relative; } nav a.current:after { content:""; position:absolute; left:0; right:0; bottom:-13px; height:1px; background:var(--rust); }
+    .mini-action { min-height:38px; display:inline-flex; align-items:center; padding:0 14px; border:1px solid var(--rust); border-radius:6px; background:var(--rust); color:var(--on-rust); font-size:13px; font-weight:560; text-decoration:none; }
+    main { max-width:1440px; margin:auto; }
+    .opening { display:grid; grid-template-columns:7fr 5fr; gap:48px; min-height:500px; padding:76px var(--gutter) 60px; }
+    .eyebrow, .section-kicker, .caption, .route-label, .status, .system-num { font:400 11px/1.45 var(--mono); letter-spacing:.055em; text-transform:uppercase; }
+    .eyebrow { color:var(--rust-deep); margin-bottom:24px; }
+    h1 { max-width:740px; margin:0; font-size:clamp(58px,6.2vw,92px); font-weight:620; line-height:.96; letter-spacing:-.055em; }
+    .role { margin:20px 0 22px; color:var(--soft); font-size:18px; font-weight:560; letter-spacing:-.02em; }
+    .intro { max-width:700px; margin:0 0 30px; font-size:19px; font-weight:390; line-height:1.58; letter-spacing:-.008em; }
+    .primary { min-height:48px; display:inline-flex; align-items:center; padding:0 20px; border:1px solid var(--rust); border-radius:6px; background:var(--rust); color:var(--on-rust); font-size:15px; font-weight:560; text-decoration:none; }
+    .opening-aside { padding-top:10px; }
+    .aside-heading { display:flex; justify-content:space-between; align-items:baseline; padding-bottom:12px; border-bottom:1px solid var(--strong); color:var(--soft); font:400 11px/1.45 var(--mono); letter-spacing:.055em; text-transform:uppercase; }
+    .aside-heading span:last-child { color:var(--rust-deep); }
+    .system-index { margin:0; padding:0; list-style:none; }
+    .system-index li { display:grid; grid-template-columns:30px 1fr; gap:12px; padding:16px 0; border-bottom:1px solid var(--line); }
+    .system-num { color:var(--rust-deep); padding-top:3px; }
+    .system-name { display:block; color:var(--ink); font-size:15px; font-weight:560; letter-spacing:-.015em; }
+    .system-detail { display:block; margin-top:5px; color:var(--soft); font-size:13px; line-height:1.42; }
+    .system-detail em { color:var(--rust-deep); font-style:normal; }
+    .atlas { padding:42px var(--gutter) 72px; border-top:1px solid var(--strong); }
+    .atlas-head { display:grid; grid-template-columns:5fr 7fr; gap:48px; align-items:end; margin-bottom:24px; }
+    .atlas-head h2 { margin:10px 0 0; max-width:440px; font-size:clamp(32px,3.2vw,46px); font-weight:570; line-height:1.08; letter-spacing:-.035em; }
+    .atlas-head p { max-width:630px; margin:0; color:var(--soft); font-size:16px; line-height:1.58; }
+    .atlas-grid { display:grid; grid-template-columns:5fr 7fr; gap:28px; align-items:stretch; }
+    .atlas-controls { display:flex; flex-direction:column; }
+    .selector-title { display:flex; justify-content:space-between; padding-bottom:10px; color:var(--soft); border-bottom:1px solid var(--strong); }
+    .selector { display:grid; grid-template-columns:1fr; border-left:1px solid var(--strong); border-right:1px solid var(--strong); }
+    .selector button { min-height:44px; display:grid; grid-template-columns:28px 1fr auto; align-items:center; gap:10px; padding:0 12px; color:var(--soft); background:var(--paper); border:0; border-bottom:1px solid var(--strong); border-radius:2px; text-align:left; font:400 11px/1.2 var(--mono); letter-spacing:.035em; }
+    .selector button[aria-pressed="true"] { color:var(--rust-deep); background:var(--rust-wash); font-weight:600; }
+    .selector .check { font-size:15px; color:var(--rust-deep); }
+    .topology { flex:1; margin-top:20px; padding:18px; background:var(--quiet); border:1px solid var(--strong); border-radius:6px; }
+    .topology h3 { margin:0 0 13px; font-size:18px; letter-spacing:-.025em; } .topology .sub { margin:0 0 14px; color:var(--soft); font-size:13px; }
+    .topology ol { margin:0; padding:0; list-style:none; } .topology li { display:grid; grid-template-columns:29px 1fr; gap:9px; padding:9px 0; border-top:1px solid var(--line); font-size:13px; line-height:1.4; }
+    .topology li b { color:var(--rust-deep); font:400 10px/1.7 var(--mono); }
+    .active-route { margin-top:14px; padding-top:12px; border-top:1px solid var(--strong); color:var(--rust-deep); }
+    .active-route span { display:block; margin-bottom:5px; }
+    .evidence { margin-top:18px; padding:11px 0; border-top:1px solid var(--strong); border-bottom:1px solid var(--strong); color:var(--soft); font:400 10px/1.55 var(--mono); letter-spacing:.025em; }
+    .evidence b { color:var(--ink); font-weight:600; } .evidence a { color:var(--rust-deep); text-decoration:none; }
+    .frame { position:relative; min-height:492px; overflow:hidden; padding:20px; background:var(--raised); border:1px solid var(--strong); border-radius:12px; box-shadow:0 24px 80px rgba(32,35,30,.10); }
+    .frame-top { display:flex; justify-content:space-between; padding-bottom:16px; color:var(--faint); border-bottom:1px solid var(--line); }
+    .mobile-bypass { display:none; padding:8px 0; }
+    .mobile-bypass strong { display:block; margin:8px 0; font-size:18px; letter-spacing:-.02em; }
+    .mobile-bypass p { margin:0; color:var(--soft); font-size:13px; line-height:1.5; }
+    .legend { display:flex; gap:12px; } .legend span:before { content:""; display:inline-block; width:7px; height:7px; margin-right:5px; border:1px solid var(--strong); vertical-align:1px; background:var(--near); } .legend span:nth-child(2):before { background:var(--mid); } .legend span:nth-child(3):before { background:var(--far); }
+    .scene { position:relative; height:404px; margin-top:16px; overflow:hidden; border:1px solid var(--line); background:var(--paper); }
+    .plane { position:absolute; left:9%; right:8%; height:105px; border:1px solid var(--strong); transform:skewY(-7deg); } .plane.far { top:64px; background:var(--far); } .plane.mid { top:148px; left:5%; right:14%; background:var(--mid); } .plane.near { top:240px; left:11%; right:4%; background:var(--near); }
+    .node { position:absolute; z-index:2; min-width:106px; padding:9px 10px; color:var(--ink); border:1px solid var(--strong); border-radius:2px; background:var(--raised); font:400 10px/1.28 var(--mono); letter-spacing:.03em; text-align:center; }
+    .node small { display:block; margin-top:4px; color:var(--soft); font-size:9px; } .node.active { color:var(--on-rust); background:var(--rust); border-color:var(--rust-deep); } .node.active small { color:var(--on-rust); }
+    .n1 { top:69px; left:15%; } .n2 { top:109px; left:39%; } .n3 { top:93px; right:13%; } .n4 { top:231px; left:21%; } .n5 { top:250px; left:52%; } .n6 { top:286px; right:11%; }
+    .route { position:absolute; z-index:1; height:1px; background:var(--strong); transform-origin:left center; } .r1 { top:117px; left:27%; width:175px; transform:rotate(9deg); } .r2 { top:129px; left:50%; width:150px; transform:rotate(-8deg); } .r3 { top:195px; left:30%; width:205px; transform:rotate(30deg); } .r4 { top:281px; left:33%; width:174px; transform:rotate(3deg); background:var(--rust); height:2px; } .r5 { top:296px; left:63%; width:140px; transform:rotate(7deg); }
+    .route-label { position:absolute; z-index:3; padding:5px 7px; color:var(--rust-deep); background:var(--raised); border:1px solid var(--rust); border-radius:2px; } .handoff { top:252px; left:35%; }
+    .scene-note { position:absolute; right:13px; bottom:12px; color:var(--faint); font:400 10px/1.45 var(--mono); letter-spacing:.035em; text-align:right; }
+    .below { display:flex; justify-content:space-between; gap:22px; margin-top:17px; color:var(--soft); font-size:13px; line-height:1.45; } .below a { color:var(--rust-deep); font-weight:560; text-decoration:none; white-space:nowrap; }
+    @media (max-width:1050px) { .opening,.atlas-head,.atlas-grid { grid-template-columns:1fr; } .opening { padding-top:54px; } .frame { min-height:500px; } }
+    @media (max-width:767px) { .browser { width:100%; margin:0; border-radius:0; } .chrome-note,nav a:not(.current) { display:none; } .site-header { padding:0 20px; } .opening,.atlas { padding-left:20px; padding-right:20px; } h1 { font-size:54px; } .frame { min-height:0; padding:18px; box-shadow:none; } .frame-top,.scene,.desktop-status { display:none; } .mobile-bypass { display:block; } .below { flex-direction:column; } }
+  </style>
+</head>
+<body>
+  <div class="browser">
+    <div class="chrome"><div class="traffic"><i></i><i></i><i></i></div><div class="address">lhcaps.github.io / systems-atlas</div><div class="chrome-note">1440 × 900 · desktop reference</div></div>
+    <div class="page">
+      <a class="skip" href="#opening">Skip to content</a>
+      <header class="site-header"><div class="mark"><b>LH/01</b> Le Huy Systems Atlas</div><nav aria-label="Primary"><a class="current" href="#opening">Opening</a><a href="#atlas">Atlas</a><a href="#systems">Systems</a><a href="#verification">Verification</a></nav><a class="mini-action" href="mailto:huyle210525@gmail.com">Work with me</a></header>
+      <main>
+        <section class="opening" id="opening" aria-labelledby="opening-title">
+          <div>
+            <div class="eyebrow">Software Engineer · Full-time Junior target</div>
+            <h1 id="opening-title">Le Huy</h1>
+            <p class="role">Backend-leaning full-stack product engineering</p>
+            <p class="intro">I build full-stack products from the backend outward: contracts, queues, allocations, review handoffs, and the gates that decide when they ship.</p>
+            <a class="primary" href="mailto:huyle210525@gmail.com">Work with me</a>
+          </div>
+          <aside class="opening-aside" aria-label="Proof index">
+            <div class="aside-heading"><span>Proof index</span><span>five systems</span></div>
+            <ol class="system-index">
+              <li><span class="system-num">01</span><span><strong class="system-name">Form Management</strong><span class="system-detail">DOCX Contract → <em>governed output</em></span></span></li>
+              <li><span class="system-num">02</span><span><strong class="system-name">VisionFlow Studio</strong><span class="system-detail">Queue Handoff → <em>cross-runtime route</em></span></span></li>
+              <li><span class="system-num">03</span><span><strong class="system-name">Production Booking &amp; Operations Platform</strong><span class="system-detail">Fourth Pricing Change → <em>adaptation loop</em></span></span></li>
+              <li><span class="system-num">04</span><span><strong class="system-name">Parkly</strong><span class="system-detail">Manual Review → <em>operational judgment</em></span></span></li>
+              <li><span class="system-num">05</span><span><strong class="system-name">TFT Local Copilot</strong><span class="system-detail">Runtime Boundary → <em>missing seams visible</em></span></span></li>
+            </ol>
+          </aside>
+        </section>
+
+        <section class="atlas" id="atlas" aria-labelledby="atlas-title">
+          <div class="atlas-head"><div><div class="section-kicker">Systems Atlas / canonical state</div><h2 id="atlas-title">Five systems. Five different failure surfaces.</h2></div><p>One selected topology stays readable in the DOM while the focal scene maps the same ownership, persistence, runtime, and review boundaries.</p></div>
+          <div class="atlas-grid">
+            <div class="atlas-controls">
+              <div class="selector-title"><span class="caption">System selector</span><span class="caption">01 / 05</span></div>
+              <div class="selector" role="group" aria-label="System selector">
+                <button type="button" aria-pressed="true"><span>01</span><span>Form Management</span><span class="check">✓</span></button>
+                <button type="button" aria-pressed="false"><span>02</span><span>VisionFlow Studio</span><span></span></button>
+                <button type="button" aria-pressed="false"><span>03</span><span>Production Booking &amp; Operations Platform</span><span></span></button>
+                <button type="button" aria-pressed="false"><span>04</span><span>Parkly</span><span></span></button>
+                <button type="button" aria-pressed="false"><span>05</span><span>TFT Local Copilot</span><span></span></button>
+              </div>
+              <article class="topology" aria-labelledby="topology-title"><h3 id="topology-title">Form Management</h3><p class="sub">The DOCX contract decides what every form is allowed to become.</p><ol><li><b>01</b><span>Identity → authorizes → Workspace</span></li><li><b>02</b><span>Workspace → resolves → DOCX Contract</span></li><li><b>03</b><span>DOCX Contract → governs → Temporary Preview or Persisted Document</span></li><li><b>04</b><span>Persisted Document → records → Audit and Verification</span></li></ol><div class="active-route"><span class="status">Active handoff</span><strong>DOCX Contract → governs → Persisted Document</strong></div></article>
+              <div class="evidence"><b>VERIFIED_IMPLEMENTED</b> · Claim scope: contract-driven form output<br>Limitation: current source inspection supports the described implementation; it does not establish a fresh runtime. · <a href="#evidence-boundary">How this claim is classified</a></div>
+            </div>
+            <article class="frame" aria-label="Atlas frame with selected Form Management schematic">
+              <div class="frame-top"><span class="caption">Coordinate 01.03 · authority / persistence / review</span><span class="legend caption"><span>authority</span><span>persistence</span><span>review</span></span></div>
+              <div class="scene" aria-hidden="true"><div class="plane far"></div><div class="plane mid"></div><div class="plane near"></div><div class="route r1"></div><div class="route r2"></div><div class="route r3"></div><div class="route r4"></div><div class="route r5"></div><div class="node n1">Identity<small>authority</small></div><div class="node n2">Authorization<small>access</small></div><div class="node n3">Workspace<small>state owner</small></div><div class="node n4">DOCX Contract<small>governance</small></div><div class="node n5 active">Persisted Document<small>active destination</small></div><div class="node n6">Audit + Verification<small>review boundary</small></div><div class="route-label handoff">ACTIVE HANDOFF · governs</div><div class="scene-note">static settled view<br>Canvas carries no exclusive text</div></div>
+              <div class="mobile-bypass"><span class="caption">Canvas bypassed below 768px</span><strong>The readable topology is the Atlas.</strong><p>Selection, ordered routes, Active Handoff, evidence limitation, and narrative destination stay complete without WebGL.</p></div>
+              <div class="below"><span class="desktop-status">Interactive scene ready. The system map remains available beside it.</span><a href="#systems">Read this case →</a></div>
+            </article>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+</body>
+</html>
