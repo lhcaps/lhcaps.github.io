@@ -5,6 +5,16 @@ import { fileURLToPath } from "node:url"
 import { FULL_SHA, git, repositoryIdentity, safeError } from "./release-utils.mjs"
 
 export const AUTHORIZED_CURSOR_TRAILER = "Co-authored-by: Cursor <cursoragent@cursor.com>"
+const EXPECTED_LOCAL_NAME = "Huy Le"
+const EXPECTED_LOCAL_EMAIL = "huyle210525@gmail.com"
+const ALLOWED_AUTHORS = new Set([
+  "Huy Le <huyle210525@gmail.com>",
+  "lhcaps <lhcaps@example.com>",
+])
+const ALLOWED_COMMITTERS = new Set([
+  ...ALLOWED_AUTHORS,
+  "GitHub <noreply@github.com>",
+])
 
 function gitBuffer(args, options = {}) {
   return execFileSync("git", args, {
@@ -80,8 +90,10 @@ export function removeAuthorizedTrailer(message) {
   return { message: Buffer.from(output, "utf8"), targetCount }
 }
 
-async function verifyExternalBundle(root, bundlePath, expectedHead) {
+async function verifyExternalBundle(root, bundlePath, expectedHead, expectedRemote) {
   if (!path.isAbsolute(bundlePath)) throw new Error("HISTORY_REWRITE_BUNDLE_NOT_ABSOLUTE")
+  const inputStats = await lstat(bundlePath)
+  if (!inputStats.isFile() || inputStats.isSymbolicLink()) throw new Error("HISTORY_REWRITE_BUNDLE_INVALID")
   const rootReal = await realpath(root)
   const bundleReal = await realpath(bundlePath)
   const relative = path.relative(rootReal, bundleReal)
@@ -92,7 +104,9 @@ async function verifyExternalBundle(root, bundlePath, expectedHead) {
   if (!stats.isFile() || stats.isSymbolicLink()) throw new Error("HISTORY_REWRITE_BUNDLE_INVALID")
   execFileSync("git", ["bundle", "verify", bundleReal], { cwd: root, encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] })
   const heads = execFileSync("git", ["bundle", "list-heads", bundleReal], { cwd: root, encoding: "utf8" })
-  if (!heads.split(/\r?\n/u).some((line) => line.startsWith(`${expectedHead} `))) throw new Error("HISTORY_REWRITE_BUNDLE_HEAD_MISSING")
+  const advertised = heads.split(/\r?\n/u).filter(Boolean)
+  if (!advertised.includes(`${expectedHead} refs/heads/main`)) throw new Error("HISTORY_REWRITE_BUNDLE_HEAD_MISSING")
+  if (!advertised.includes(`${expectedRemote} refs/remotes/origin/main`)) throw new Error("HISTORY_REWRITE_BUNDLE_REMOTE_MISSING")
 }
 
 function remoteMain(root) {
@@ -104,6 +118,11 @@ function remoteMain(root) {
 
 function commitMetadata(root, sha) {
   return splitCommit(gitBuffer(["cat-file", "commit", sha], { cwd: root }))
+}
+
+function identityKey(source, label) {
+  const identity = parseIdentity(source, label)
+  return `${identity.name} <${identity.email}>`
 }
 
 function createCommit(root, original, rewrittenParents, message) {
@@ -134,18 +153,28 @@ export async function auditAndRewrite(root, options) {
   const identity = repositoryIdentity({ requireClean: true, requireNonShallow: true })
   if (git(["branch", "--show-current"], root) !== "main") throw new Error("HISTORY_REWRITE_BRANCH_INVALID")
   if (identity.sha !== options.expectedHead || !FULL_SHA.test(options.expectedRemote)) throw new Error("HISTORY_REWRITE_EXPECTATION_INVALID")
+  if (git(["config", "--local", "--get", "user.name"], root) !== EXPECTED_LOCAL_NAME || git(["config", "--local", "--get", "user.email"], root) !== EXPECTED_LOCAL_EMAIL) {
+    throw new Error("HISTORY_REWRITE_LOCAL_IDENTITY_INVALID")
+  }
+  if (!options.expectedOrigin || git(["remote", "get-url", "origin"], root) !== options.expectedOrigin) throw new Error("HISTORY_REWRITE_ORIGIN_INVALID")
   if (remoteMain(root) !== options.expectedRemote) throw new Error("HISTORY_REWRITE_REMOTE_ADVANCED")
-  await verifyExternalBundle(root, options.bundlePath, identity.sha)
+  await verifyExternalBundle(root, options.bundlePath, identity.sha, options.expectedRemote)
 
   const commits = git(["rev-list", "--reverse", "--topo-order", "HEAD"], root).split(/\r?\n/u).filter(Boolean)
   const originals = new Map(commits.map((sha) => [sha, commitMetadata(root, sha)]))
   let targetCount = 0
   let signedCommitCount = 0
+  let rewriteRequired = false
   for (const original of originals.values()) {
     if (original.parents.length > 1) throw new Error("HISTORY_REWRITE_MERGE_UNSUPPORTED")
     const result = removeAuthorizedTrailer(original.message)
     targetCount += result.targetCount
     if (original.signed) signedCommitCount += 1
+    if (!ALLOWED_AUTHORS.has(identityKey(original.author, "AUTHOR")) || !ALLOWED_COMMITTERS.has(identityKey(original.committer, "COMMITTER"))) {
+      throw new Error("HISTORY_REWRITE_IDENTITY_UNAUDITED")
+    }
+    rewriteRequired ||= result.targetCount > 0
+    if (rewriteRequired && original.signed) throw new Error("HISTORY_REWRITE_SIGNED_COMMIT_REQUIRES_REWRITE")
   }
   if (!options.apply) return { oldHead: identity.sha, newHead: identity.sha, commitCount: commits.length, targetCount, signedCommitCount, applied: false }
   if (targetCount === 0) return { oldHead: identity.sha, newHead: identity.sha, commitCount: commits.length, targetCount, signedCommitCount, applied: false }
@@ -159,6 +188,13 @@ export async function auditAndRewrite(root, options) {
       if (!mapped) throw new Error("HISTORY_REWRITE_PARENT_ORDER_INVALID")
       return mapped
     })
+    const parentsChanged = original.parents.some((parent, index) => rewrittenParents[index] !== parent)
+    const requiresRewrite = cleaned.targetCount > 0 || parentsChanged
+    if (!requiresRewrite) {
+      rewritten.set(sha, sha)
+      continue
+    }
+    if (original.signed) throw new Error("HISTORY_REWRITE_SIGNED_COMMIT_REQUIRES_REWRITE")
     const newSha = createCommit(root, original, rewrittenParents, cleaned.message)
     const candidate = commitMetadata(root, newSha)
     if (candidate.tree !== original.tree || candidate.author !== original.author || candidate.committer !== original.committer || candidate.parents.length !== rewrittenParents.length || candidate.parents.some((parent, index) => parent !== rewrittenParents[index]) || Buffer.compare(candidate.message, cleaned.message) !== 0) {
@@ -186,6 +222,7 @@ if (isMain) {
       apply: process.argv.includes("--apply"),
       expectedHead: argument("--expected-head"),
       expectedRemote: argument("--expected-remote"),
+      expectedOrigin: argument("--expected-origin"),
       bundlePath: argument("--bundle"),
     })
     console.log(JSON.stringify(result))
