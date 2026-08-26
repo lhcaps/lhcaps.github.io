@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "scopeIds": [
+    "public-copy",
+    "metadata",
+    "cv",
+    "build-output"
+  ],
+  "reviewedContentDigest": "d127842fb1532ba46793aa09de60596a1364009241efb471e75a59ffef7216e0",
+  "result": "pass",
+  "reviewedAt": "2026-08-25T22:29:13.516Z"
+}

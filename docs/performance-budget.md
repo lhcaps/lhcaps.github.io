@@ -1,68 +1,51 @@
-# Performance Budget
+# Systems Atlas performance budget
 
-## Build Targets
+The budget is an accepting release contract, not a target inferred from a development server. `npm run verify:budget` measures the byte-exact validated Pages staging tree at `artifacts/pages-site/` after `npm run build`, `npm run validate:build`, and `npm run stage:pages`.
 
-| Metric | Target | Current |
-|---|---|---|
-| TypeScript errors | 0 | 0 |
-| ESLint errors | 0 | 0 |
-| Unit test pass rate | 100% | 100% |
-| Production build | Pass | Pass |
-| GLB total size | < 3 MB | N/A (not yet added) |
+## Numeric limits
 
-## 3D Scene Budget
+| Metric | Maximum | Reference local measurement |
+| --- | ---: | ---: |
+| Eager JavaScript | 174,080 B gzip | 75,153 B |
+| Lazy Atlas JavaScript | 435,200 B gzip | 232,248 B |
+| All CSS | 25,600 B gzip | 11,500 B |
+| First-view fonts | 225,280 B raw | 50,168 B |
+| Initial transfer | 460,800 B | 138,085 B |
+| Largest static non-font asset | 262,144 B raw | 194,569 B |
+| CV | 524,288 B raw | 5,400 B |
 
-| Constraint | Value |
-|---|---|
-| Canvas DPR | `[1, 1.5]` |
-| `performance.min` | `0.5` |
-| Max simultaneous point lights | 3 |
-| Shadows | Disabled by default |
-| Post-processing | None by default |
-| GLB assets | Load via `useGLTF`, preload at app start |
-| Fallback | Procedural meshes when GLB unavailable |
+The reference column is an observed pre-release build and is not production proof. The final SHA's generated `asset-inventory.v1.json` is authoritative.
 
-## Rendering Rules
+## Measurement rules
 
-- **No `setState` inside `useFrame`** — use refs and `lerp`.
-- **DPR capped** at `[1, 1.5]` to limit GPU fill rate on high-DPI screens.
-- **Lazy loading** — `RuntimeSceneImpl` loaded via `React.lazy`, shown only after hydration.
-- **Mobile/reduced-motion fallback** — static HTML card shown when `isMobile === "mobile"` or `prefers-reduced-motion: reduce`.
-- **Scene switch** — topology data from `runtimeConfig.ts`, not re-mounting scene objects.
+- HTML, JavaScript, CSS, JSON, XML, and text use deterministic gzip level 9; already-compressed fonts, images, and PDF use raw bytes.
+- Eager and Atlas JavaScript ownership is derived from the Vite manifest's single entry and single `src/atlas/scene/AtlasScene.tsx` dynamic root, including nested imports.
+- The build-emitted closed chunk/module inventory must match every manifest JavaScript chunk. Three.js and React Three Fiber modules are rejected from the eager role.
+- First-view fonts are derived by following the eager CSS `@font-face` URLs for the Latin ranges; filenames are not trusted as an oracle.
+- Initial transfer includes HTML, favicon, eager JavaScript, eager CSS, and the two first-view font files.
+- `pagesSiteDigest` uses domain `PAGES-SITE-V1\0` plus every staged FileRecordV1 in normalized UTF-8 path-byte order.
+- Missing/extra files, ambiguous chunk ownership, an unclassified asset, stale SHA/tree, changed bytes, or malformed totals fail closed.
 
-## Bundle Budget
+## Runtime scene limits
 
-| Chunk | Target | Current |
-|---|---|---|
-| Main JS | < 2 MB gzip | ~423 KB gzip |
-| CSS | < 20 KB gzip | ~5 KB gzip |
-| Scene chunk | Lazy, < 500 KB | ~1 KB (wrapper only) |
-| GLB assets | < 3 MB total | 0 (none yet) |
+- At most one Canvas exists, and it mounts only for an eligible viewport after the Atlas enters view.
+- Canvas DPR is capped at `[1, 1.5]`.
+- Rendering uses `frameloop="demand"`; transitions invalidate only while finite choreography is active.
+- Per-frame work mutates refs and must not call React state setters.
+- There is no bloom, post-processing, particle field, shader noise, continuous rotation, free orbit, zoom, or pan.
+- Offscreen selection and re-entry settle without replay. Scene error/context loss becomes a sticky DOM-only fallback.
+- Below 768 px and under Reduced Motion the scene module is not requested, so topology meaning stays outside the critical path.
 
-The main bundle is larger than ideal due to three.js + react-three-fiber being included. Code splitting ensures the scene chunk is deferred.
+## Reproduction
 
-## Accessibility Budget
-
-| Rule | Target |
-|---|---|
-| Color contrast (body text) | ≥ 4.5:1 where practical |
-| Interactive elements | `:focus-visible` ring on all |
-| Motion | `prefers-reduced-motion` respected |
-| Mobile | Static fallback for WebGL-heavy sections |
-
-## Adding GLB Assets
-
-1. Place `.glb` files in `public/models/`.
-2. Max file size: 3 MB per model.
-3. Load with `useGLTF("/models/filename.glb")`.
-4. Preload with `useGLTF.preload()`.
-5. Always keep a procedural fallback visible while loading.
-6. Do NOT import a missing GLB path directly — handle gracefully.
-
-## CI Gates
+From a clean non-shallow candidate with Node `22.23.1` and npm `11.12.1`:
 
 ```bash
-npm run typecheck && npm run lint && npm run test && npm run build
+npm ci
+npm run build
+npm run validate:build
+npm run stage:pages
+npm run verify:budget
 ```
 
-All four commands must pass before merging.
+The canonical `npm run verify` performs these in the required order and binds the resulting inventory into terminal generated evidence.

@@ -1,53 +1,175 @@
-name: Deploy to GitHub Pages
+name: Verify and deploy exact Systems Atlas release
 
 on:
   push:
-    branches: ["main"]
+    branches: [main]
   workflow_dispatch:
 
-permissions:
-  contents: read
-  pages: write
-  id-token: write
-
 concurrency:
-  group: "pages"
+  group: pages-main
   cancel-in-progress: false
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      actions: read
+      contents: read
+      pages: write
+    env:
+      CI: "true"
+      VITE_COMMIT_SHA: ${{ github.sha }}
+    outputs:
+      pages-artifact-id: ${{ steps.pages-upload.outputs.artifact_id }}
+      pages-artifact-name: github-pages
+      pages-site-digest: ${{ steps.site-digest.outputs.digest }}
+      release-evidence-artifact-id: ${{ steps.evidence-upload.outputs.artifact-id }}
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Node
-        uses: actions/setup-node@v4
+      - name: Checkout complete candidate history
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
-          node-version: "20"
-          cache: "npm"
+          fetch-depth: 0
 
-      - name: Install dependencies
-        run: npm ci
+      - name: Reject shallow or mismatched source
+        shell: bash
+        run: |
+          test "$(git rev-parse --is-shallow-repository)" = "false"
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
 
-      - name: Build
-        run: npm run build
-
-      - name: Setup Pages
-        uses: actions/configure-pages@v5
-
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
+      - name: Setup exact Node runtime
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
         with:
-          path: ./dist
+          node-version: 22.23.1
+          cache: npm
+
+      - name: Setup exact npm and dependencies
+        shell: bash
+        run: |
+          npm install --global npm@11.12.1
+          test "$(node --version)" = "v22.23.1"
+          test "$(npm --version)" = "11.12.1"
+          npm ci
+
+      - name: Install Chromium runtime
+        run: npx playwright install --with-deps chromium
+
+      - name: Run canonical clean full-history verification
+        run: npm run verify
+
+      - name: Export validated Pages-site digest
+        id: site-digest
+        shell: bash
+        run: node -e "const fs=require('node:fs');const x=JSON.parse(fs.readFileSync('artifacts/release/asset-inventory.v1.json','utf8'));process.stdout.write('digest='+x.pagesSiteDigest+'\n')" >> "$GITHUB_OUTPUT"
+
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d # v6
+
+      - name: Upload sole Pages artifact
+        id: pages-upload
+        uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5
+        with:
+          name: github-pages
+          path: artifacts/pages-site
+
+      - name: Upload preupload release evidence outside the site
+        id: evidence-upload
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        with:
+          name: release-evidence-${{ github.sha }}
+          path: |
+            artifacts/release
+            test-results
+            playwright-report
+            .playwright-cli
+            artifacts/screenshots
+          include-hidden-files: true
+          if-no-files-found: error
+          retention-days: 30
 
   deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-    needs: build
-    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+      id-token: write
+      pages: write
     steps:
-      - name: Deploy to GitHub Pages
+      - name: Checkout complete attestation source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          fetch-depth: 0
+
+      - name: Reject shallow or mismatched attestation source
+        shell: bash
+        run: |
+          test "$(git rev-parse --is-shallow-repository)" = "false"
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+
+      - name: Setup exact Node runtime
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version: 22.23.1
+          cache: npm
+
+      - name: Setup exact npm and dependencies
+        shell: bash
+        run: |
+          npm install --global npm@11.12.1
+          test "$(node --version)" = "v22.23.1"
+          test "$(npm --version)" = "11.12.1"
+          npm ci
+
+      - name: Restore and byte-verify preupload evidence
+        run: npm run restore:build-evidence
+        env:
+          EXPECTED_SHA: ${{ github.sha }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          RELEASE_EVIDENCE_ARTIFACT_ID: ${{ needs.build.outputs.release-evidence-artifact-id }}
+          WORKFLOW_RUN_ID: ${{ github.run_id }}
+
+      - name: Deploy the exact uploaded Pages artifact
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@cd2ce8fcbc39b97be8ca5fce6e763baed58fa128 # v5
+        with:
+          artifact_name: ${{ needs.build.outputs.pages-artifact-name }}
+
+      - name: Install production smoke Chromium runtime
+        run: npx playwright install --with-deps chromium
+
+      - name: Run ordered desktop and mobile production smoke
+        run: npm run smoke:production
+        env:
+          EXPECTED_SHA: ${{ github.sha }}
+
+      - name: Bind artifact archive, extracted site, production, and remote main
+        run: npm run finalize:deployment
+        env:
+          EXPECTED_SHA: ${{ github.sha }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PAGES_ARTIFACT_ID: ${{ needs.build.outputs.pages-artifact-id }}
+          PAGES_SITE_DIGEST: ${{ needs.build.outputs.pages-site-digest }}
+          STARTING_MAIN_SHA: ${{ github.sha }}
+          WORKFLOW_RUN_ID: ${{ github.run_id }}
+
+      - name: Seal hosted generated evidence as the final root mutation
+        run: npm run verify:generated:hosted
+
+      - name: Upload complete hosted release evidence outside the site
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        with:
+          name: release-evidence-hosted-${{ github.sha }}
+          path: |
+            artifacts/release
+            test-results
+            playwright-report
+            .playwright-cli
+            artifacts/screenshots
+          include-hidden-files: true
+          if-no-files-found: error
+          retention-days: 30

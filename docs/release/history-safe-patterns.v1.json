@@ -1,0 +1,90 @@
+{
+  "schemaVersion": 1,
+  "rulesVersion": "systems-atlas-history-safety-v1",
+  "commitMessageRules": [
+    {
+      "id": "message-secret-assignment",
+      "pattern": "(?<![A-Za-z0-9_-])(?:api[_-]?key|client[_-]?secret|password|passwd)(?![A-Za-z0-9_-])\\s*[:=]\\s*[\\x22\\x27][A-Za-z0-9_./+=!@#$%^&*-]{12,}[\\x22\\x27]",
+      "flags": "i"
+    },
+    {
+      "id": "message-bearer-token",
+      "pattern": "\\bBearer\\s+[A-Za-z0-9._~+/=-]{16,}",
+      "flags": "i"
+    }
+  ],
+  "pathRules": [
+    {
+      "id": "path-dotenv",
+      "pattern": "(?:^|/)\\.env(?:\\.[^/]+)?$",
+      "flags": "i"
+    },
+    {
+      "id": "path-private-key",
+      "pattern": "(?:^|/)(?:id_rsa|id_ed25519|[^/]+\\.(?:pem|p12|pfx|key))$",
+      "flags": "i"
+    },
+    {
+      "id": "path-private-evidence",
+      "pattern": "(?:^|/)(?:portfolio-evidence|private-evidence|evidence-ledger)(?:/|$)",
+      "flags": "i"
+    }
+  ],
+  "textRules": [
+    {
+      "id": "text-private-key-block",
+      "pattern": "-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----",
+      "flags": ""
+    },
+    {
+      "id": "text-github-token",
+      "pattern": "\\b(?:ghp|github_pat)_[A-Za-z0-9_]{20,}\\b",
+      "flags": ""
+    },
+    {
+      "id": "text-openai-token",
+      "pattern": "\\bsk-[A-Za-z0-9_-]{20,}\\b",
+      "flags": ""
+    },
+    {
+      "id": "text-aws-access-key",
+      "pattern": "\\bAKIA[0-9A-Z]{16}\\b",
+      "flags": ""
+    },
+    {
+      "id": "text-secret-assignment",
+      "pattern": "(?<![A-Za-z0-9_-])(?:api[_-]?key|client[_-]?secret|password|passwd)(?![A-Za-z0-9_-])\\s*[:=]\\s*[\\x22\\x27][A-Za-z0-9_./+=!@#$%^&*-]{12,}[\\x22\\x27]",
+      "flags": "i"
+    },
+    {
+      "id": "text-bearer-token",
+      "pattern": "\\bBearer\\s+[A-Za-z0-9._~+/=-]{16,}",
+      "flags": "i"
+    }
+  ],
+  "binaryPolicy": {
+    "allowedHistoricalExtensions": [".gif", ".jpeg", ".jpg", ".pdf", ".png", ".svg", ".webp"],
+    "allowedCurrentExtensions": [".pdf", ".png"],
+    "allowedGeneratedExtensions": [".css", ".html", ".json", ".md", ".pdf", ".png", ".svg", ".txt"],
+    "forbiddenCurrentExtensions": [".7z", ".bin", ".dll", ".exe", ".glb", ".gltf", ".p12", ".pem", ".pfx", ".tar", ".zip"],
+    "magicSignatures": [
+      { "id": "png", "extension": ".png", "hexPrefix": "89504e470d0a1a0a" },
+      { "id": "pdf", "extension": ".pdf", "hexPrefix": "255044462d" },
+      { "id": "jpeg", "extension": ".jpg", "hexPrefix": "ffd8ff" },
+      { "id": "gif", "extension": ".gif", "hexPrefix": "47494638" },
+      { "id": "svg-prefix", "extension": ".svg", "hexPrefix": "3c737667" },
+      { "id": "webp", "extension": ".webp", "hexPrefix": "52494646" }
+    ],
+    "rejectUnknownCurrentBinary": true
+  },
+  "allowedExactCommitLines": [
+    "Co-authored-by: Cursor <cursoragent@cursor.com>"
+  ],
+  "generatedEvidenceRoots": [
+    "artifacts/release",
+    "test-results",
+    "playwright-report",
+    ".playwright-cli",
+    "artifacts/screenshots"
+  ]
+}
