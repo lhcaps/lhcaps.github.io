@@ -1,9 +1,9 @@
 ---
 lens: accessibility
-sourceDigest: 01b3bcb1c7476c526b7ddf2fd3599a838ad7665b2853dbe30c8149ff5c617dde
+sourceDigest: 4fe3b693566849471450b0c76f97565160fe88707539c3f9e1245a990410187f
 verdict: pass
 findingDisposition: resolved
-reviewedAt: 2026-08-26T12:53:29.425Z
+reviewedAt: 2026-08-26T12:59:23.053Z
 ---
 
 # Accessibility review

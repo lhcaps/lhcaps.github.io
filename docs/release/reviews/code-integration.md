@@ -1,9 +1,9 @@
 ---
 lens: code-integration
-sourceDigest: 01b3bcb1c7476c526b7ddf2fd3599a838ad7665b2853dbe30c8149ff5c617dde
+sourceDigest: 4fe3b693566849471450b0c76f97565160fe88707539c3f9e1245a990410187f
 verdict: pass
 findingDisposition: resolved
-reviewedAt: 2026-08-26T12:53:29.425Z
+reviewedAt: 2026-08-26T12:59:23.053Z
 ---
 
 # Code and integration review
@@ -21,6 +21,7 @@ Reviewed state ownership, import direction, failure containment, metadata/base p
 - Workflow actions are full-SHA Node 24 pins; checkouts use full history; project runtime is Node 22.23.1/npm 11.12.1; the build runs canonical verification before the sole Pages upload.
 - Review caught a standalone TSX path-resolution defect in the content gate. The import now resolves directly and the gate passes independently.
 - Canonical verification initially exposed a Windows `npm.cmd` spawn failure. Child gates now reuse the active `npm-cli.js` through the current Node runtime, with a dedicated cross-platform fixture.
+- Pre-push rewrite review exposed a contradictory expectation that equated the unpublished local head with the remote baseline. The audit now binds those identities independently, verifies the remote live, and exercises the real two-repository flow in a regression fixture.
 
 ## Verdict
 
