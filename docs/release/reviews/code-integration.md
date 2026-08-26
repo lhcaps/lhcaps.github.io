@@ -1,9 +1,9 @@
 ---
 lens: code-integration
-sourceDigest: 1c652b85dde2736cb36d4710d05d434353a0c420f16e1f9930f2e7413a1f3416
+sourceDigest: 01b3bcb1c7476c526b7ddf2fd3599a838ad7665b2853dbe30c8149ff5c617dde
 verdict: pass
 findingDisposition: resolved
-reviewedAt: 2026-08-26T12:50:18.357Z
+reviewedAt: 2026-08-26T12:53:29.425Z
 ---
 
 # Code and integration review
@@ -20,6 +20,7 @@ Reviewed state ownership, import direction, failure containment, metadata/base p
 - Deterministic CV verification passes one page, 5,400 bytes, 11 required text markers, and two link annotations. Dependency audit reports zero advisories.
 - Workflow actions are full-SHA Node 24 pins; checkouts use full history; project runtime is Node 22.23.1/npm 11.12.1; the build runs canonical verification before the sole Pages upload.
 - Review caught a standalone TSX path-resolution defect in the content gate. The import now resolves directly and the gate passes independently.
+- Canonical verification initially exposed a Windows `npm.cmd` spawn failure. Child gates now reuse the active `npm-cli.js` through the current Node runtime, with a dedicated cross-platform fixture.
 
 ## Verdict
 

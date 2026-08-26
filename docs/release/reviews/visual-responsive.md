@@ -1,9 +1,9 @@
 ---
 lens: visual-responsive
-sourceDigest: 1c652b85dde2736cb36d4710d05d434353a0c420f16e1f9930f2e7413a1f3416
+sourceDigest: 01b3bcb1c7476c526b7ddf2fd3599a838ad7665b2853dbe30c8149ff5c617dde
 verdict: pass
 findingDisposition: resolved
-reviewedAt: 2026-08-26T12:50:18.357Z
+reviewedAt: 2026-08-26T12:53:29.425Z
 ---
 
 # Visual and responsive review
