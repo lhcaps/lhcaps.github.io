@@ -8,9 +8,9 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../..")
 const publicRoot = path.join(root, "public")
 const passthroughTextExtensions = new Set([".svg", ".txt", ".xml"])
 
-test("public passthrough text assets are LF-stable across Git checkouts", async () => {
+test("tracked text and public passthrough assets are LF-stable across Git checkouts", async () => {
   const attributes = await readFile(path.join(root, ".gitattributes"), "utf8")
-  assert.match(attributes, /^public\/\*\* text=auto eol=lf$/m)
+  assert.match(attributes, /^\* text=auto eol=lf$/m)
 
   const entries = await readdir(publicRoot, { withFileTypes: true })
   const textFiles = entries
