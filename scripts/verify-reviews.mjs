@@ -18,6 +18,7 @@ export const REVIEW_LENSES = [
 
 export const REVIEW_ROOTS = [".github/workflows", "public", "scripts", "src", "e2e"]
 export const REVIEW_FIXED_FILES = [
+  ".gitattributes",
   ".gitignore",
   "DESIGN.md",
   "EXPERIENCE.md",

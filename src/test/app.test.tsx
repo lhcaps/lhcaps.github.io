@@ -166,7 +166,7 @@ describe("Systems Atlas application", () => {
   })
 
   it("dismisses mobile navigation from its backdrop and when crossing the breakpoint", () => {
-    setViewport(390)
+    setViewport(390, true)
     const { container } = render(<App />)
     const trigger = screen.getByRole("button", { name: "Open navigation" })
 

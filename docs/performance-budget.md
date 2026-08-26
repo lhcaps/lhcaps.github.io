@@ -24,6 +24,7 @@ The reference column is an observed pre-release build and is not production proo
 - First-view fonts are derived by following the eager CSS `@font-face` URLs for the Latin ranges; filenames are not trusted as an oracle.
 - Initial transfer includes HTML, favicon, eager JavaScript, eager CSS, and the two first-view font files.
 - `pagesSiteDigest` uses domain `PAGES-SITE-V1\0` plus every staged FileRecordV1 in normalized UTF-8 path-byte order.
+- Git checkout attributes pin public passthrough text to LF, so Windows and Linux builds stage identical bytes.
 - Missing/extra files, ambiguous chunk ownership, an unclassified asset, stale SHA/tree, changed bytes, or malformed totals fail closed.
 
 ## Runtime scene limits
