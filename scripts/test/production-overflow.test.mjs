@@ -9,10 +9,18 @@ function fakeElement({ left, right, parentElement = null, tagName = "DIV", id = 
     id,
     className,
     getBoundingClientRect: () => ({ left, right, width: right - left }),
+    contains(candidate) {
+      let current = candidate
+      while (current) {
+        if (current === this) return true
+        current = current.parentElement
+      }
+      return false
+    },
   }
 }
 
-function withBrowserGlobals({ clientWidth, scrollWidth, elements, body, overflowByElement }, procedure) {
+function withBrowserGlobals({ clientWidth, scrollWidth, elements, body, overflowByElement, positionByElement = new Map(), intentionalScroller = null }, procedure) {
   const previous = {
     document: globalThis.document,
     window: globalThis.window,
@@ -21,10 +29,14 @@ function withBrowserGlobals({ clientWidth, scrollWidth, elements, body, overflow
   globalThis.document = {
     body,
     documentElement: { clientWidth, scrollWidth },
+    querySelector: () => intentionalScroller,
     querySelectorAll: () => elements,
   }
   globalThis.window = { innerWidth: clientWidth }
-  globalThis.getComputedStyle = (element) => ({ overflowX: overflowByElement.get(element) ?? "visible" })
+  globalThis.getComputedStyle = (element) => ({
+    overflowX: overflowByElement.get(element) ?? "visible",
+    position: positionByElement.get(element) ?? "static",
+  })
   try {
     return procedure()
   } finally {
@@ -46,6 +58,7 @@ test("horizontal overflow ignores children clipped by an intentional scroller", 
     elements: [scroller, clippedChild, visibleChild],
     body,
     overflowByElement: new Map([[scroller, "auto"]]),
+    intentionalScroller: scroller,
   }, horizontalOverflowSnapshot)
 
   assert.equal(snapshot.rootOverflow, false)
@@ -67,4 +80,24 @@ test("horizontal overflow still detects unclipped and root-level overflow", () =
   assert.equal(snapshot.rootOverflow, true)
   assert.equal(snapshot.offenderCount, 1)
   assert.equal(snapshot.offenders[0].id, "overflowing")
+})
+
+test("horizontal overflow detects positioned content that escapes an overflow ancestor", () => {
+  const body = fakeElement({ left: 0, right: 390, tagName: "BODY" })
+  const scroller = fakeElement({ left: 20, right: 370, parentElement: body, className: "lifecycle" })
+  const escapingChild = fakeElement({ left: 380, right: 500, parentElement: scroller, id: "escaping" })
+
+  const snapshot = withBrowserGlobals({
+    clientWidth: 390,
+    scrollWidth: 390,
+    elements: [scroller, escapingChild],
+    body,
+    overflowByElement: new Map([[scroller, "hidden"]]),
+    positionByElement: new Map([[escapingChild, "absolute"]]),
+    intentionalScroller: scroller,
+  }, horizontalOverflowSnapshot)
+
+  assert.equal(snapshot.rootOverflow, false)
+  assert.equal(snapshot.offenderCount, 1)
+  assert.equal(snapshot.offenders[0].id, "escaping")
 })

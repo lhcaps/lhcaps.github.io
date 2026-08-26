@@ -58,19 +58,21 @@ async function waitForIdentity(sha) {
 
 export function horizontalOverflowSnapshot() {
   const clientWidth = document.documentElement.clientWidth
-  const isClippedByAncestor = (element) => {
-    const rect = element.getBoundingClientRect()
-    let parent = element.parentElement
-    while (parent && parent !== document.body) {
-      const overflowX = getComputedStyle(parent).overflowX
-      const parentRect = parent.getBoundingClientRect()
-      if (["auto", "scroll", "hidden", "clip"].includes(overflowX) && (rect.left < parentRect.left || rect.right > parentRect.right)) return true
-      parent = parent.parentElement
+  const intentionalScroller = document.querySelector('ol.lifecycle[aria-label="AI-assisted engineering lifecycle"]')
+  const isClippedByIntentionalScroller = (element) => {
+    if (!intentionalScroller?.contains(element)) return false
+    if (!["auto", "scroll", "hidden", "clip"].includes(getComputedStyle(intentionalScroller).overflowX)) return false
+    let current = element
+    while (current && current !== intentionalScroller) {
+      if (["absolute", "fixed"].includes(getComputedStyle(current).position)) return false
+      current = current.parentElement
     }
-    return false
+    const rect = element.getBoundingClientRect()
+    const scrollerRect = intentionalScroller.getBoundingClientRect()
+    return rect.left < scrollerRect.left || rect.right > scrollerRect.right
   }
   const offenders = Array.from(document.querySelectorAll("body *"))
-    .filter((element) => !isClippedByAncestor(element))
+    .filter((element) => !isClippedByIntentionalScroller(element))
     .map((element) => {
       const rect = element.getBoundingClientRect()
       return {

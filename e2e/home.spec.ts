@@ -1,5 +1,6 @@
 import AxeBuilder from "@axe-core/playwright"
 import { expect, test, type Page } from "@playwright/test"
+import { horizontalOverflowSnapshot } from "../scripts/production-smoke.mjs"
 import { portfolio } from "../src/content/portfolio"
 
 const chapterIds = [
@@ -72,6 +73,33 @@ async function assertNoHorizontalOverflow(page: Page) {
   })
   expect(overflow.scrollWidth, JSON.stringify(overflow)).toBeLessThanOrEqual(overflow.clientWidth + 1)
 }
+
+test("production overflow oracle distinguishes clipped lifecycle content from an escaping positioned descendant", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 200 })
+  await page.setContent(`
+    <style>
+      html, body { margin: 0; }
+      .lifecycle { width: 100px; height: 60px; margin: 0 0 0 20px; padding: 0; overflow-x: hidden; }
+      .clipped { display: block; width: 120px; height: 20px; margin-left: 120px; }
+      #escaping { position: absolute; left: 380px; top: 0; width: 120px; height: 20px; }
+    </style>
+    <ol class="lifecycle" aria-label="AI-assisted engineering lifecycle">
+      <li class="clipped">Clipped lifecycle content</li>
+      <li id="escaping">Escaping content</li>
+    </ol>
+  `)
+
+  expect(await page.evaluate(() => document.elementFromPoint(389, 10)?.id)).toBe("escaping")
+  const escaping = await page.evaluate(horizontalOverflowSnapshot)
+  expect(escaping.rootOverflow).toBe(false)
+  expect(escaping.offenderCount).toBe(1)
+  expect(escaping.offenders[0].id).toBe("escaping")
+
+  await page.locator("#escaping").evaluate((element) => element.remove())
+  const clippedOnly = await page.evaluate(horizontalOverflowSnapshot)
+  expect(clippedOnly.rootOverflow).toBe(false)
+  expect(clippedOnly.offenderCount).toBe(0)
+})
 
 test.describe("Systems Atlas reader journeys", () => {
   test("renders the ordered nine-chapter contract and approved destinations", async ({ page }) => {
