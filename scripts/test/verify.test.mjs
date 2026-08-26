@@ -1,6 +1,6 @@
 import assert from "node:assert/strict"
 import test from "node:test"
-import { LOCAL_GATES, validateReleaseEvidence } from "../verify.mjs"
+import { LOCAL_GATES, npmInvocation, validateReleaseEvidence } from "../verify.mjs"
 
 const identity = { sha: "a".repeat(40), tree: "b".repeat(40) }
 
@@ -41,6 +41,12 @@ test("local gates preserve the required dependency order and terminal review gat
     "performance-budget",
     "independent-reviews",
   ])
+})
+
+test("canonical npm children reuse npm-cli through the current Node runtime", () => {
+  const invocation = npmInvocation(["run", "test"], { npm_execpath: "C:/runtime/npm-cli.js" })
+  assert.equal(invocation.command, process.execPath)
+  assert.deepEqual(invocation.args, ["C:/runtime/npm-cli.js", "run", "test"])
 })
 
 test("release evidence accepts a closed passing record", () => {

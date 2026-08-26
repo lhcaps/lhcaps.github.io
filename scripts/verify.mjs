@@ -32,8 +32,12 @@ export const LOCAL_GATES = [
   { category: "independent-reviews", script: "verify:reviews", evidence: "artifacts/release/review-attestations.v1.json" },
 ]
 
-function npmExecutable() {
-  return process.platform === "win32" ? "npm.cmd" : "npm"
+export function npmInvocation(args, environment = process.env) {
+  const npmCli = environment.npm_execpath
+  if (typeof npmCli === "string" && npmCli.endsWith("npm-cli.js")) {
+    return { command: process.execPath, args: [npmCli, ...args] }
+  }
+  return { command: process.platform === "win32" ? "npm.cmd" : "npm", args }
 }
 
 function commandLabel(gate) {
@@ -106,8 +110,9 @@ async function clearGeneratedRoots(root) {
 
 function runGate(root, identity, gate) {
   const args = gate.script ? ["run", gate.script] : gate.command
+  const invocation = npmInvocation(args)
   const started = performance.now()
-  const result = spawnSync(npmExecutable(), args, {
+  const result = spawnSync(invocation.command, invocation.args, {
     cwd: root,
     encoding: "utf8",
     env: process.env,
@@ -162,7 +167,8 @@ export async function verify(root = process.cwd()) {
   await writeJsonAtomic(path.join(root, ...RELEASE_EVIDENCE.split("/")), finalEvidence)
 
   process.stdout.write("\n[verify] npm run verify:generated:preupload\n")
-  const attestation = spawnSync(npmExecutable(), ["run", "verify:generated:preupload"], {
+  const invocation = npmInvocation(["run", "verify:generated:preupload"])
+  const attestation = spawnSync(invocation.command, invocation.args, {
     cwd: root,
     encoding: "utf8",
     env: process.env,
