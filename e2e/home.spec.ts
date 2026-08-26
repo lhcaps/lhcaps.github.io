@@ -206,12 +206,14 @@ test.describe("Systems Atlas reader journeys", () => {
 
 test.describe("Canvas containment", () => {
   test("mounts exactly one demand Canvas on an eligible desktop", async ({ page }) => {
+    const consoleMessages = observeConsole(page)
     await page.setViewportSize({ width: 1280, height: 800 })
     await page.goto("/#atlas")
     await expect(page.getByTestId("atlas-canvas")).toHaveCount(1, { timeout: 15_000 })
     await expect(page.getByText("Interactive scene ready")).toBeVisible()
     await expect(page.getByTestId("atlas-canvas")).toHaveAttribute("aria-hidden", "true")
     await expect(page.getByTestId("atlas-canvas")).toHaveAttribute("tabindex", "-1")
+    expect(consoleMessages).toEqual([])
   })
 
   test("never requests the scene chunk below 768 or with Reduced Motion", async ({ page }) => {
