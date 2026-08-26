@@ -1,9 +1,9 @@
 ---
 lens: motion
-sourceDigest: 4fe3b693566849471450b0c76f97565160fe88707539c3f9e1245a990410187f
+sourceDigest: 1616b30a9953c83de4fff0db5907227d2a7ccf82d5dcafbbc4c1662b57998814
 verdict: pass
 findingDisposition: resolved
-reviewedAt: 2026-08-26T12:59:23.053Z
+reviewedAt: 2026-08-26T18:23:10.270Z
 ---
 
 # Motion review
@@ -18,6 +18,7 @@ Reviewed every scene state, finite transition, interruption path, rapid selectio
 - Core motion policy distinguishes initial entry/visible selection from offscreen selection and re-entry. The latter settle immediately and issue one invalidation without replaying choreography.
 - Rapid selector changes retarget from current state. A rejected scene chunk becomes a reload-only sticky fallback while all five readable topologies remain operable.
 - Mobile and Reduced Motion do not request the Atlas scene chunk. The full browser matrix confirms Canvas absence for every sub-768 path and every Reduced Motion path.
+- The eligible Canvas journey now asserts a zero-warning/zero-error console after the scene is ready. Three r182 avoids the upstream Clock deprecation emitted by r183+ while retaining the verified demand-loop behavior.
 
 ## Verdict
 

@@ -1,9 +1,9 @@
 ---
 lens: product
-sourceDigest: 4fe3b693566849471450b0c76f97565160fe88707539c3f9e1245a990410187f
+sourceDigest: 1616b30a9953c83de4fff0db5907227d2a7ccf82d5dcafbbc4c1662b57998814
 verdict: pass
 findingDisposition: none
-reviewedAt: 2026-08-26T12:59:23.053Z
+reviewedAt: 2026-08-26T18:23:10.270Z
 ---
 
 # Product review
