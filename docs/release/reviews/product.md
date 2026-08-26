@@ -1,9 +1,9 @@
 ---
 lens: product
-sourceDigest: dfba12c64a5f1c9c71e1ec35014945898feb42724a4ed95949b5c577df8a2f78
+sourceDigest: 558a9c19c901355d095f39b1512c9ad16ea3b9757755c0cfe142bb4dee7b38a6
 verdict: pass
 findingDisposition: none
-reviewedAt: 2026-08-26T18:26:42.340Z
+reviewedAt: 2026-08-26T18:53:37.755Z
 ---
 
 # Product review
@@ -18,6 +18,7 @@ Reviewed the first-scan recruiter path, technical-reader path, five-System scope
 - The DOM exposes the required nine chapters in order; the Opening states Le Huy, Software Engineer, the full-time Junior target, the 60/40 orientation, and backend strength without a portrait or inflated employment claim.
 - Three flagship narratives and two supporting narratives retain distinct reading structures and return paths to the shared Atlas selector.
 - Email, GitHub, and the same-origin facts-only CV close the reader journey. The 36-case Chromium suite traverses these destinations and all five selections.
+- Independent LF and Windows-style checkout rehearsals preserve the exact product graph and produce the same 20-file deployable site.
 
 ## Verdict
 

@@ -1,9 +1,9 @@
 ---
 lens: accessibility
-sourceDigest: dfba12c64a5f1c9c71e1ec35014945898feb42724a4ed95949b5c577df8a2f78
+sourceDigest: 558a9c19c901355d095f39b1512c9ad16ea3b9757755c0cfe142bb4dee7b38a6
 verdict: pass
 findingDisposition: resolved
-reviewedAt: 2026-08-26T18:26:42.340Z
+reviewedAt: 2026-08-26T18:53:37.755Z
 ---
 
 # Accessibility review
@@ -19,6 +19,7 @@ Reviewed WCAG 2.2 AA automated findings and the manual floor for semantics, read
 - Mobile navigation sets inert content, contains Tab/Shift+Tab, closes on Escape/backdrop/selection, clears scroll locking, and restores focus to the trigger.
 - The Canvas is `aria-hidden`, has `tabindex="-1"`, and owns no Claim or relationship. The readable topology remains complete in every bypass/failure state.
 - Contrast and scrollable-region findings discovered by axe were corrected through the final token values and keyboard-focusable lifecycle region.
+- Exact-head unit and browser suites retain the complete normal/Reduced Motion matrix after the navigation-test isolation change; production behavior and keyboard contracts are unchanged.
 
 ## Verdict
 
