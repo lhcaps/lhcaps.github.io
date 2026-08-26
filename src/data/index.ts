@@ -1,6 +1,0 @@
-export { profile, education } from './profile'
-export { stackGroups } from './stack'
-export { projects } from './systems'
-export type { Project } from './systems'
-export { systemScenes, defaultScene } from './runtimeConfig'
-export type { SystemScene, SystemId } from './runtimeConfig'
