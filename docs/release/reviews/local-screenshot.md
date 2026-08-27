@@ -1,9 +1,9 @@
 ---
 lens: local-screenshot
-sourceDigest: 558a9c19c901355d095f39b1512c9ad16ea3b9757755c0cfe142bb4dee7b38a6
+sourceDigest: 83bc1cf7adc3a45639942b347d62cfaea659d522c93789d9262f6b809ca1de6b
 verdict: pass
 findingDisposition: none
-reviewedAt: 2026-08-26T18:53:37.755Z
+reviewedAt: 2026-08-27T12:19:31.602Z
 ---
 
 # Local screenshot review
@@ -19,7 +19,7 @@ Reviewed fresh local viewport captures at the two primary evidence sizes. Screen
 - `artifacts/screenshots/local/systems-atlas-1440x900.png` shows the desktop asymmetric Opening, proof index, navigation, and clear single action hierarchy.
 - `artifacts/screenshots/local/systems-atlas-1440x900-atlas.png` shows the desktop Atlas section, five equal selector states, selected topology, field register, and intentional vertical rhythm.
 - The captures contain no portrait, dark/neon treatment, glass cards, particle field, decorative 3D object, clipped focus, overlapping sticky header, or horizontal overflow.
-- All four captures were regenerated and visually re-inspected at exact source `6a3e85b`; the portability fix changes checkout bytes, not rendered design.
+- All four captures were regenerated at exact source `6a3e85b` and independently re-inspected. Later commits leave `src`, public assets, entry HTML, package graph, and Vite config byte-identical; the additional browser case tests release-oracle containment without changing the rendered application.
 
 ## Verdict
 

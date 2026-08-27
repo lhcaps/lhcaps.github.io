@@ -1,9 +1,9 @@
 ---
 lens: simplicity
-sourceDigest: 558a9c19c901355d095f39b1512c9ad16ea3b9757755c0cfe142bb4dee7b38a6
+sourceDigest: 83bc1cf7adc3a45639942b347d62cfaea659d522c93789d9262f6b809ca1de6b
 verdict: pass
 findingDisposition: resolved
-reviewedAt: 2026-08-26T18:53:37.755Z
+reviewedAt: 2026-08-27T12:19:31.602Z
 ---
 
 # Simplicity review
@@ -20,6 +20,8 @@ Reviewed model ownership, component boundaries, legacy paths, scene dependencies
 - Review found unused `framer-motion` and `@react-three/drei` direct dependencies. Both were removed, eliminating 38 installed packages while preserving build, tests, and the Atlas chunk contract.
 - Release helpers share canonical JSON, FileRecordV1, identity, archive, and generic safety primitives instead of duplicating acceptance logic.
 - One repository-wide Git text rule closes both Pages and review-digest checkout variance; one release fixture guards that rule and the public passthrough text bytes.
+- One browser-side snapshot function now exempts only the exact lifecycle scroller and keeps positioned escapees fail-closed. Three focused fixtures and one real-Chromium case cover intentional clipping, root/unclipped overflow, and containing-block escape.
+- Local viewport and hosted production checks call that same function, removing the earlier duplicate overflow classifier.
 
 ## Verdict
 

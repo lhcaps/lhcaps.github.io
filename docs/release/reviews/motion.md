@@ -1,9 +1,9 @@
 ---
 lens: motion
-sourceDigest: 558a9c19c901355d095f39b1512c9ad16ea3b9757755c0cfe142bb4dee7b38a6
+sourceDigest: 83bc1cf7adc3a45639942b347d62cfaea659d522c93789d9262f6b809ca1de6b
 verdict: pass
 findingDisposition: resolved
-reviewedAt: 2026-08-26T18:53:37.755Z
+reviewedAt: 2026-08-27T12:19:31.602Z
 ---
 
 # Motion review
@@ -20,6 +20,7 @@ Reviewed every scene state, finite transition, interruption path, rapid selectio
 - Mobile and Reduced Motion do not request the Atlas scene chunk. The full browser matrix confirms Canvas absence for every sub-768 path and every Reduced Motion path.
 - The eligible Canvas journey now asserts a zero-warning/zero-error console after the scene is ready. Three r182 avoids the upstream Clock deprecation emitted by r183+ while retaining the verified demand-loop behavior.
 - A navigation-only breakpoint test now uses Reduced Motion to avoid activating an unrelated queued scene probe; dedicated Atlas tests still exercise normal-motion eligibility, and CI coverage completes without React `act` or Atlas warnings.
+- The production-smoke correction changes only how clipped scroll content is classified; it does not change scene, transition, invalidation, or Reduced Motion behavior.
 
 ## Verdict
 

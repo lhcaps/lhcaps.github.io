@@ -1,9 +1,9 @@
 ---
 lens: accessibility
-sourceDigest: 558a9c19c901355d095f39b1512c9ad16ea3b9757755c0cfe142bb4dee7b38a6
+sourceDigest: 83bc1cf7adc3a45639942b347d62cfaea659d522c93789d9262f6b809ca1de6b
 verdict: pass
 findingDisposition: resolved
-reviewedAt: 2026-08-26T18:53:37.755Z
+reviewedAt: 2026-08-27T12:19:31.602Z
 ---
 
 # Accessibility review
@@ -20,6 +20,8 @@ Reviewed WCAG 2.2 AA automated findings and the manual floor for semantics, read
 - The Canvas is `aria-hidden`, has `tabindex="-1"`, and owns no Claim or relationship. The readable topology remains complete in every bypass/failure state.
 - Contrast and scrollable-region findings discovered by axe were corrected through the final token values and keyboard-focusable lifecycle region.
 - Exact-head unit and browser suites retain the complete normal/Reduced Motion matrix after the navigation-test isolation change; production behavior and keyboard contracts are unchanged.
+- The smoke-only overflow fix alters no DOM, focus, keyboard, touch, or Reduced Motion behavior. The intentional lifecycle scroller remains keyboard-focusable and separately covered by the browser matrix.
+- Overflow is rechecked while the mobile focus trap is open and after the keyboard-focusable lifecycle is horizontally scrolled; both states remain viewport-contained.
 
 ## Verdict
 
