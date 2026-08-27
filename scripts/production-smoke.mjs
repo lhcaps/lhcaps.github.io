@@ -188,10 +188,30 @@ export async function runProductionSmoke(root, sha) {
     })
 
     await observe("overflow", records, async () => {
-      const desktopOverflow = await overflowCount(desktop)
-      const mobileOverflow = await overflowCount(mobile)
-      if (desktopOverflow !== 0 || mobileOverflow !== 0) throw new Error("PRODUCTION_HORIZONTAL_OVERFLOW")
-      return 2
+      let observations = 0
+      const assertPage = async (page) => {
+        if (await overflowCount(page) !== 0) throw new Error("PRODUCTION_HORIZONTAL_OVERFLOW")
+        observations += 1
+      }
+      for (const title of SYSTEMS) {
+        await desktop.getByRole("button", { name: title, exact: true }).click()
+        await assertPage(desktop)
+      }
+      for (const title of SYSTEMS) {
+        await mobile.getByRole("button", { name: title, exact: true }).click()
+        await assertPage(mobile)
+      }
+      for (const page of [desktop, mobile]) {
+        await page.locator('ol.lifecycle[aria-label="AI-assisted engineering lifecycle"]').evaluate((element) => {
+          element.scrollLeft = element.scrollWidth
+        })
+        await assertPage(page)
+      }
+      const mobileMenu = mobile.getByRole("button", { name: "Open navigation" })
+      await mobileMenu.click()
+      await assertPage(mobile)
+      await mobile.keyboard.press("Escape")
+      return observations
     })
 
     const screenshotRoot = path.join(root, "artifacts", "screenshots", "production")

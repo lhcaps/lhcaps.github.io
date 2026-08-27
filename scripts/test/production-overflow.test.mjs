@@ -29,7 +29,10 @@ function withBrowserGlobals({ clientWidth, scrollWidth, elements, body, overflow
   globalThis.document = {
     body,
     documentElement: { clientWidth, scrollWidth },
-    querySelector: () => intentionalScroller,
+    querySelector: (selector) => {
+      assert.equal(selector, 'ol.lifecycle[aria-label="AI-assisted engineering lifecycle"]')
+      return intentionalScroller
+    },
     querySelectorAll: () => elements,
   }
   globalThis.window = { innerWidth: clientWidth }
@@ -82,22 +85,36 @@ test("horizontal overflow still detects unclipped and root-level overflow", () =
   assert.equal(snapshot.offenders[0].id, "overflowing")
 })
 
-test("horizontal overflow detects positioned content that escapes an overflow ancestor", () => {
+test("horizontal overflow detects positioned content and descendants that escape an overflow ancestor", () => {
   const body = fakeElement({ left: 0, right: 390, tagName: "BODY" })
   const scroller = fakeElement({ left: 20, right: 370, parentElement: body, className: "lifecycle" })
-  const escapingChild = fakeElement({ left: 380, right: 500, parentElement: scroller, id: "escaping" })
+  for (const position of ["absolute", "fixed"]) {
+    const escapingChild = fakeElement({ left: 380, right: 500, parentElement: scroller, id: `escaping-${position}` })
+    const snapshot = withBrowserGlobals({
+      clientWidth: 390,
+      scrollWidth: 390,
+      elements: [scroller, escapingChild],
+      body,
+      overflowByElement: new Map([[scroller, "auto"]]),
+      positionByElement: new Map([[escapingChild, position]]),
+      intentionalScroller: scroller,
+    }, horizontalOverflowSnapshot)
 
-  const snapshot = withBrowserGlobals({
+    assert.equal(snapshot.rootOverflow, false)
+    assert.equal(snapshot.offenderCount, 1)
+    assert.equal(snapshot.offenders[0].id, `escaping-${position}`)
+  }
+
+  const positionedWrapper = fakeElement({ left: 380, right: 500, parentElement: scroller, id: "wrapper" })
+  const nestedChild = fakeElement({ left: 390, right: 480, parentElement: positionedWrapper, id: "nested" })
+  const nestedSnapshot = withBrowserGlobals({
     clientWidth: 390,
     scrollWidth: 390,
-    elements: [scroller, escapingChild],
+    elements: [scroller, positionedWrapper, nestedChild],
     body,
-    overflowByElement: new Map([[scroller, "hidden"]]),
-    positionByElement: new Map([[escapingChild, "absolute"]]),
+    overflowByElement: new Map([[scroller, "auto"]]),
+    positionByElement: new Map([[positionedWrapper, "absolute"]]),
     intentionalScroller: scroller,
   }, horizontalOverflowSnapshot)
-
-  assert.equal(snapshot.rootOverflow, false)
-  assert.equal(snapshot.offenderCount, 1)
-  assert.equal(snapshot.offenders[0].id, "escaping")
+  assert.deepEqual(nestedSnapshot.offenders.map((offender) => offender.id), ["wrapper", "nested"])
 })

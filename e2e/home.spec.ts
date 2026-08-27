@@ -42,36 +42,9 @@ function observeConsole(page: Page) {
 }
 
 async function assertNoHorizontalOverflow(page: Page) {
-  const overflow = await page.evaluate(() => {
-    const clientWidth = document.documentElement.clientWidth
-    const isClippedByAncestor = (element: HTMLElement) => {
-      let parent = element.parentElement
-      while (parent && parent !== document.body) {
-        const overflowX = getComputedStyle(parent).overflowX
-        const parentRect = parent.getBoundingClientRect()
-        const rect = element.getBoundingClientRect()
-        if (["auto", "scroll", "hidden", "clip"].includes(overflowX) && (rect.left < parentRect.left || rect.right > parentRect.right)) return true
-        parent = parent.parentElement
-      }
-      return false
-    }
-    return {
-      clientWidth,
-      innerWidth: window.innerWidth,
-      scrollWidth: document.documentElement.scrollWidth,
-      body: { clientWidth: document.body.clientWidth, offsetWidth: document.body.offsetWidth, scrollWidth: document.body.scrollWidth },
-      offenders: Array.from(document.querySelectorAll<HTMLElement>("body *"))
-        .filter((element) => !isClippedByAncestor(element))
-        .map((element) => {
-          const rect = element.getBoundingClientRect()
-          return { tag: element.tagName, id: element.id, className: element.className, left: rect.left, right: rect.right, width: rect.width }
-        })
-        .filter((rect) => rect.left < -1 || rect.right > clientWidth + 1)
-        .sort((left, right) => right.right - left.right)
-        .slice(0, 12),
-    }
-  })
-  expect(overflow.scrollWidth, JSON.stringify(overflow)).toBeLessThanOrEqual(overflow.clientWidth + 1)
+  const overflow = await page.evaluate(horizontalOverflowSnapshot)
+  expect(overflow.rootOverflow, JSON.stringify(overflow)).toBe(false)
+  expect(overflow.offenderCount, JSON.stringify(overflow)).toBe(0)
 }
 
 test("production overflow oracle distinguishes clipped lifecycle content from an escaping positioned descendant", async ({ page }) => {
@@ -79,7 +52,7 @@ test("production overflow oracle distinguishes clipped lifecycle content from an
   await page.setContent(`
     <style>
       html, body { margin: 0; }
-      .lifecycle { width: 100px; height: 60px; margin: 0 0 0 20px; padding: 0; overflow-x: hidden; }
+      .lifecycle { width: 100px; height: 60px; margin: 0 0 0 20px; padding: 0; overflow-x: auto; }
       .clipped { display: block; width: 120px; height: 20px; margin-left: 120px; }
       #escaping { position: absolute; left: 380px; top: 0; width: 120px; height: 20px; }
     </style>
@@ -90,12 +63,22 @@ test("production overflow oracle distinguishes clipped lifecycle content from an
   `)
 
   expect(await page.evaluate(() => document.elementFromPoint(389, 10)?.id)).toBe("escaping")
+  const clippedVisibility = await page.locator(".clipped").evaluate((element) => {
+    const rect = element.getBoundingClientRect()
+    const x = Math.min(389, Math.max(0, rect.left + 1))
+    const y = Math.min(199, Math.max(0, rect.top + 1))
+    return { hit: document.elementFromPoint(x, y) === element, x, y }
+  })
+  expect(clippedVisibility.hit, JSON.stringify(clippedVisibility)).toBe(false)
   const escaping = await page.evaluate(horizontalOverflowSnapshot)
   expect(escaping.rootOverflow).toBe(false)
   expect(escaping.offenderCount).toBe(1)
   expect(escaping.offenders[0].id).toBe("escaping")
 
   await page.locator("#escaping").evaluate((element) => element.remove())
+  await page.locator(".lifecycle").evaluate((element) => {
+    element.scrollLeft = element.scrollWidth
+  })
   const clippedOnly = await page.evaluate(horizontalOverflowSnapshot)
   expect(clippedOnly.rootOverflow).toBe(false)
   expect(clippedOnly.offenderCount).toBe(0)
@@ -137,6 +120,7 @@ test.describe("Systems Atlas reader journeys", () => {
       await expect(page.getByRole("heading", { name: `${system.title} topology` })).toBeVisible()
       await expect(page.getByText(`${system.title} selected. ${system.topology.nodes.length} nodes, ${system.topology.routes.length} routes.`)).toHaveAttribute("aria-live", "polite")
       await expect(page.getByRole("link", { name: "Read this case" })).toHaveAttribute("href", system.anchor)
+      await assertNoHorizontalOverflow(page)
     }
 
     await selector.getByRole("button").evaluateAll((buttons) => {
@@ -181,6 +165,7 @@ test.describe("Systems Atlas reader journeys", () => {
     await expect(trigger).toHaveAccessibleName("Close navigation")
     await expect(trigger).toHaveAttribute("aria-expanded", "true")
     await expect(page.locator("main")).toHaveAttribute("inert", "")
+    await assertNoHorizontalOverflow(page)
     await expect(page.getByRole("link", { name: "Opening" })).toBeFocused()
     await page.getByRole("link", { name: "Contact" }).focus()
     await page.keyboard.press("Tab")
