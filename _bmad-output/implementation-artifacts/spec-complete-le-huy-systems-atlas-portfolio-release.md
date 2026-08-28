@@ -2,7 +2,7 @@
 title: 'Complete Le Huy Systems Atlas Portfolio Release'
 type: 'feature'
 created: '2026-08-23'
-status: 'review'
+status: 'done'
 review_loop_iteration: 1
 baseline_commit: '8ac839915f58ccb09a4c9f63d6a5c0e3ab8ac577'
 context:
@@ -57,7 +57,7 @@ context:
 - [x] `src/App.tsx`, `src/components/**`, `src/styles/**` -- build the nine semantic chapters, five distinct narratives, selector/topology, contact, and responsive navigation.
 - [x] `src/atlas/scene/**` -- add the sole demand Canvas, safe probe, finite handoff, offscreen/context-loss sticky fallback, and equivalence tests.
 - [x] `package*.json`, `vite.config.ts`, `public/**`, `scripts/**`, `docs/**`, workflow -- implement exact toolchain, CV/metadata/OG, deterministic release gates/evidence, documentation, and governed Pages pipeline.
-- [ ] `e2e/**`, review reports, Git history/Pages -- pass the full matrix/reviews, apply only the conditional trailer rule, publish the explicit candidate, and attest production to its SHA.
+- [x] `e2e/**`, review reports, Git history/Pages -- pass the full matrix/reviews, apply only the conditional trailer rule, publish the explicit candidate, and attest production to its SHA.
 
 **Acceptance Criteria:**
 - Given the final contracts, when all stories run, then FR-1–16, NFR-1–28, AR-1–22, and UX-DR1–18 pass without private or unsupported claims.

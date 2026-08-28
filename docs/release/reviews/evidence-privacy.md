@@ -1,9 +1,9 @@
 ---
 lens: evidence-privacy
-sourceDigest: 83bc1cf7adc3a45639942b347d62cfaea659d522c93789d9262f6b809ca1de6b
+sourceDigest: 07a91f1c0ab71b3346f58ebaf838036e4e0b76288031a8a615b25f8f1fe8718c
 verdict: pass
 findingDisposition: resolved
-reviewedAt: 2026-08-27T12:19:31.602Z
+reviewedAt: 2026-08-27T12:42:27.796Z
 ---
 
 # Evidence and privacy review
@@ -21,7 +21,7 @@ Reviewed Claim classification, required limitations, public destinations, privat
 - Overflow diagnostics execute only in post-deploy tooling; their bounded element metadata is neither staged in the public site nor persisted in passing Release Evidence.
 - The reachable-history/generated-root audit scans the full non-shallow history using generic, non-ledger rules and emits only aggregate rule IDs and counts.
 - Metadata cleanup permits only the exact Cursor trailer, preserves the signed prefix and both audited human identity forms, retains the GitHub service committer, and aborts on any additional author or committer identity.
-- Public copy explicitly separates Repository-backed, Derived, and Contextual Claims from VERIFIED, OBSERVED, INFERRED, and BLOCKED release assertions.
+- Public copy explicitly separates the seven exact Claim classifications from VERIFIED, OBSERVED, INFERRED, and BLOCKED release assertions; neither vocabulary upgrades the other.
 
 ## Verdict
 

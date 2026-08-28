@@ -1,9 +1,9 @@
 ---
 lens: local-screenshot
-sourceDigest: 83bc1cf7adc3a45639942b347d62cfaea659d522c93789d9262f6b809ca1de6b
+sourceDigest: 07a91f1c0ab71b3346f58ebaf838036e4e0b76288031a8a615b25f8f1fe8718c
 verdict: pass
 findingDisposition: none
-reviewedAt: 2026-08-27T12:19:31.602Z
+reviewedAt: 2026-08-27T12:42:27.796Z
 ---
 
 # Local screenshot review

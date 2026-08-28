@@ -73,7 +73,7 @@ This document provides the complete epic and story breakdown for Portfolio, deco
 
 ### Additional Requirements
 
-- **AR-1 (AD-1):** Replace duplicate legacy datasets with one typed, serializable `src/content/portfolio.ts` graph; pure content and atlas-core modules cannot import React, DOM, Three, R3F, Drei, or I/O adapters.
+- **AR-1 (AD-1):** Replace duplicate legacy datasets with one typed, serializable `src/content/portfolio.ts` graph; pure content and atlas-core modules cannot import React, DOM, Three, R3F, or I/O adapters.
 - **AR-2 (AD-2):** Derive selectors, readable topology, scene input, narrative anchors, evidence markers, capability links, metadata, and CV projection from the authoritative graph with stable IDs and validated references.
 - **AR-3 (AD-3):** Keep `selectedSystemId` as the only product selection state in the DOM owner; scene state remains adapter-local and cannot become another product authority; a one-shot detached WebGL probe releases its context/canvas and exposes only a cached boolean.
 - **AR-4 (AD-4):** Implement the scene lifecycle as `untried | loading | ready | failed-sticky`; import, initialization, render, or `webglcontextlost` failure stays bypassed until a full document reload, and late eligibility exits unmount a settled Canvas.
@@ -89,7 +89,7 @@ This document provides the complete epic and story breakdown for Portfolio, deco
 - **AR-14 (AD-14):** Generate the committed CV deterministically with pinned `pdf-lib`; regenerate and byte-compare it, then verify digest/version, extracted text/order, encryption, page count, exact URI annotations, filename, size, and production response.
 - **AR-15 (AD-15):** Treat unknown content, malformed evidence, missing receipts, failed scene imports, gate errors, missing SHAs, and deployment mismatches as explicit nonzero or bypass states; never silently degrade a release gate.
 - **AR-16 (AD-16):** Ignore generated release/Playwright output and private evidence, use exact-path staging and the required local identity, run a safe non-shallow audit of every commit message/blob reachable from candidate HEAD plus generated evidence, and perform the conditional exact-trailer rewrite only after an external verified bundle and identity audit.
-- **AR-17 (AD-17):** Keep `three`, `@react-three/fiber`, and `@react-three/drei` reachable only from the lazy Atlas scene closure; no eager module may import or re-export them.
+- **AR-17 (AD-17):** Keep `three` and `@react-three/fiber` reachable only from the lazy Atlas scene closure; no eager module may import or re-export them.
 - **AR-18 (AD-18):** Validate canonical semantic `sceneSlot` values, uniqueness, capacity, Parkly-only `separate-bottom`, required Active Handoff `focusNodeId === route.to`, and route geometry resolved exclusively from node IDs and the fixed adapter slot map.
 - **AR-19 (AD-19):** Validate a closed, non-sensitive `docs/release/confidentiality-review.v1.json` receipt using the exact SHA-256 graph-plus-sorted-artifact byte stream, excluding only the receipt and independently closed `release.json`, with explicit stale predicates and fixtures.
 - **AR-20 (brownfield):** Remove the legacy two-scene implementation, duplicate project/system data, remote fonts, infinite motion, click-only articles, case-mismatched import, `public/credentials/**`, raster hero, stale social SVG, and stale performance document before acceptance.
@@ -271,7 +271,7 @@ So that I can inspect architectural ownership and handoffs without depending on 
 **Given** tests for the canonical topology model are written first
 **When** invalid fixtures contain a sixth/missing System, duplicate or missing ID, unresolved route, orphan node, unknown layer/slot/kind, missing narrative anchor/evidence key, invalid Active Handoff, focus not equal to `route.to`, unauthorized `separate-bottom`, or scene-only text
 **Then** the pure validator fails with stable codes and paths
-**And** the five canonical fixtures in authoritative `src/content/portfolio.ts` pass with their exact nodes, responsibilities, routes, scene slots, narrative anchors, Active Handoffs, and focus nodes; static dependency tests reject React, DOM, Three/R3F/Drei, or I/O imports from `src/content/**` and `src/atlas/core/**`.
+**And** the five canonical fixtures in authoritative `src/content/portfolio.ts` pass with their exact nodes, responsibilities, routes, scene slots, narrative anchors, Active Handoffs, and focus nodes; static dependency tests reject React, DOM, Three/R3F, or I/O imports from `src/content/**` and `src/atlas/core/**`.
 
 **Given** Form Management is selected
 **When** its readable topology renders
@@ -361,7 +361,7 @@ So that depth and the Active Handoff reinforce the same relationships I can alre
 **Given** all eligibility axes pass after first Atlas viewport entry
 **When** the lazy adapter resolves
 **Then** exactly one pointer-inert, `aria-hidden`, unfocusable Canvas mounts inside reserved space with DPR `[1, 1.5]` and `frameloop="demand"`
-**And** `selectedSystemId` remains the sole DOM-owned product state; scene code consumes it read-only and cannot write selection, content, focus, or navigation, while only the lazy scene closure imports Three, R3F, or Drei and eager graph/core/DOM/section modules cannot import or re-export them.
+**And** `selectedSystemId` remains the sole DOM-owned product state; scene code consumes it read-only and cannot write selection, content, focus, or navigation, while only the lazy scene closure imports Three or R3F and eager graph/core/DOM/section modules cannot import or re-export them.
 
 **Given** a new System selection
 **When** the scene reconfigures
@@ -539,7 +539,7 @@ So that an invalid or excessive candidate cannot become a Pages artifact.
 **Given** Vitest coverage and dependency validation
 **When** `npm run test:coverage` runs
 **Then** `src/content/validate.ts`, `src/atlas/core/claims.ts`, `src/atlas/core/eligibility.ts`, `src/atlas/core/motion.ts`, `src/atlas/core/sceneSlots.ts`, and `src/atlas/core/topology.ts` each meet 100% lines, branches, functions, and statements; the project meets at least 85% lines/functions/statements and 80% branches with no exclusion of a named file
-**And** exact pins match Node `22.23.1`, npm `11.12.1`, React/DOM `19.2.6`, Vite `8.0.16`, TypeScript `6.0.3`, Tailwind `3.4.19`, Framer Motion `11.18.2`, Three `0.184.0`, R3F `9.6.1`, Drei `10.7.7`, both Fontsource packages `5.3.0`, Vitest/coverage `4.1.8`, Testing Library React `16.3.2`, Playwright `1.60.0`, axe Playwright `4.13.0`, tsx `4.23.12`, pdf-parse `2.4.5`, and pdf-lib `1.17.1`.
+**And** exact pins match Node `22.23.1`, npm `11.12.1`, React/DOM `19.2.6`, Vite `8.0.16`, TypeScript `6.0.3`, Tailwind `3.4.19`, Three `0.182.0`, R3F `9.6.1`, both Fontsource packages `5.3.0`, Vitest/coverage `4.1.8`, Testing Library React `16.3.2`, Playwright `1.60.0`, axe Playwright `4.13.0`, tsx `4.23.12`, pdf-parse `2.4.5`, and pdf-lib `1.17.1`.
 
 **Given** the exact lockfile and registry audit response
 **When** `npm run verify:dependencies` parses `npm audit --json` deterministically
@@ -548,7 +548,7 @@ So that an invalid or excessive candidate cannot become a Pages artifact.
 
 **Given** Vite build output
 **When** output, module, and budget validators run
-**Then** `dist/.vite/manifest.json`, internal chunk inventory, eager/lazy closure ownership, no eager Three/R3F/Drei, no extra dynamic root, no source map/remote font/GLB/texture/raster hero, and every numeric gzip/transfer/asset/CV budget pass
+**Then** `dist/.vite/manifest.json`, internal chunk inventory, eager/lazy closure ownership, no eager Three/R3F, no extra dynamic root, no source map/remote font/GLB/texture/raster hero, and every numeric gzip/transfer/asset/CV budget pass
 **And** entry-only, lazy-only, shared, nested-dynamic, cycle, missing-file, malformed-inventory, and budget-excess fixtures behave exactly as contracted.
 
 **Given** deterministic encoder tests

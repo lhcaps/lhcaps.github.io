@@ -88,7 +88,7 @@ The enforced limits are measured from the validated `artifacts/pages-site/` grap
 
 Public Claims use only the tracked public-safe graph and carry their classification and limitation. Raw project evidence, client identifiers, credentials, private paths, and unsupported production facts are never copied into the public build or release logs. `docs/portfolio-evidence/` is deliberately ignored; release scripts must not read it. The tracked confidentiality receipt binds public graph bytes plus every staged public byte except the separately validated closed `release.json`.
 
-Claim evidence and release assertions are different vocabularies: a public Claim may be `Repository-backed`, `Derived`, or `Contextual`; a release observation may be `VERIFIED`, `OBSERVED`, `INFERRED`, or `BLOCKED`. Neither label upgrades the other.
+Claim evidence and release assertions are different vocabularies: a public Claim uses `VERIFIED_IMPLEMENTED`, `VERIFIED_LOCAL`, `VERIFIED_TESTED`, `DOCUMENTED_ONLY`, `PLANNED`, `UNVERIFIED`, or `PRIVATE_DO_NOT_PUBLISH`; a release observation uses `VERIFIED`, `OBSERVED`, `INFERRED`, or `BLOCKED`. Neither label upgrades the other.
 
 ## GitHub Pages release
 

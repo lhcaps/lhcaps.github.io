@@ -29,7 +29,7 @@
 # - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
 # - Retrospective appends its action items to action_items; the status view surfaces open ones
 generated: 08-23-2026 01:02
-last_updated: 08-26-2026 19:44
+last_updated: 08-27-2026 19:37
 project: Portfolio
 project_key: NOKEY
 tracking_system: file-system
@@ -55,16 +55,16 @@ development_status:
   3-3-connect-capabilities-to-concrete-system-outcomes: done
   epic-3-retrospective: optional
 
-  epic-4: in-progress
+  epic-4: done
   4-1-contact-le-huy-and-download-a-facts-only-cv: done
   4-2-share-a-correctly-identified-portfolio: done
   4-3-build-and-stage-a-deterministic-release-candidate: done
-  4-4-audit-reachable-history-and-confidential-output: review
+  4-4-audit-reachable-history-and-confidential-output: done
   4-5-prove-every-reader-journey-in-real-chromium: done
-  4-6-encode-the-governed-pages-pipeline: review
+  4-6-encode-the-governed-pages-pipeline: done
   4-7-document-the-real-operator-contract: done
-  4-8-bind-independent-reviews-and-compose-canonical-verification: review
-  4-9-apply-conditional-history-governance-safely: review
-  4-10-deploy-the-sole-verified-pages-artifact: review
-  4-11-attest-production-to-the-exact-final-sha: review
+  4-8-bind-independent-reviews-and-compose-canonical-verification: done
+  4-9-apply-conditional-history-governance-safely: done
+  4-10-deploy-the-sole-verified-pages-artifact: done
+  4-11-attest-production-to-the-exact-final-sha: done
   epic-4-retrospective: optional

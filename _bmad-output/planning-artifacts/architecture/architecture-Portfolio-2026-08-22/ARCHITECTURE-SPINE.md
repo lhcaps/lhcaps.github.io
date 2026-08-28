@@ -86,7 +86,7 @@ flowchart LR
 
 - **Binds:** CAP-1 through CAP-6; all visual surfaces.
 - **Prevents:** legacy dark-dashboard styles, remote-font dependency, and generic card-system drift.
-- **Rule:** `src/styles/tokens.css` implements root `DESIGN.md` tokens; `src/index.css` owns reset and global composition; section styles are authored CSS modules or stable class blocks. Geologica Variable and Fragment Mono are packaged locally and imported once. No Google/gstatic font, CSS-in-JS theme, gradient, glass, or generic promotional-card abstraction remains.
+- **Rule:** `src/index.css` implements the root `DESIGN.md` tokens, reset, and global composition; `src/styles/tokens.ts` exposes the typed scene-color projection; section styles use stable class blocks. Geologica Variable and Fragment Mono are packaged locally and imported once. No Google/gstatic font, CSS-in-JS theme, gradient, glass, or generic promotional-card abstraction remains.
 
 ### AD-9 — Semantic DOM and contained scene failure [ADOPTED]
 
@@ -139,8 +139,8 @@ flowchart LR
 ### AD-17 — Dependency direction isolates the 3D chunk [ADOPTED]
 
 - **Binds:** CAP-2, CAP-3, CAP-7; module graph and budgets.
-- **Prevents:** eager Three/R3F/Drei imports and circular UI/core dependencies.
-- **Rule:** `content` and `atlas/core` import no UI or 3D dependency. DOM components may import core. Only the lazy `atlas/scene` adapter imports Three/R3F/Drei. Static scans and Vite manifest traversal fail if the entry closure contains those packages or if scene modules import page sections.
+- **Prevents:** eager Three/R3F imports and circular UI/core dependencies.
+- **Rule:** `content` and `atlas/core` import no UI or 3D dependency. DOM components may import core. Only the lazy `atlas/scene` adapter imports Three/R3F. Static scans and Vite manifest traversal fail if the entry closure contains those packages or if scene modules import page sections.
 
 ### AD-18 — One semantic-slot coordinate map [ADOPTED]
 
@@ -188,10 +188,8 @@ flowchart LR
 | Vite | 8.0.16 |
 | TypeScript | 6.0.3 |
 | Tailwind CSS | 3.4.19 |
-| Framer Motion | 11.18.2 |
-| Three.js | 0.184.0 |
+| Three.js | 0.182.0 |
 | React Three Fiber | 9.6.1 |
-| Drei | 10.7.7 |
 | Geologica Variable Fontsource | 5.3.0 |
 | Fragment Mono Fontsource | 5.3.0 |
 | Vitest | 4.1.8 |
