@@ -8,7 +8,7 @@ export function ContactSection() {
           <p className="eyebrow">09 / CLOSING</p>
           <h2 id="contact-heading">Bring the problem that refuses to stay still.</h2>
           <p>I am seeking a junior backend or backend-focused full-stack role, working on APIs, data boundaries, operational workflows, and verifiable releases.</p>
-          <p>HUFLIT Information Technology (Software Engineering), expected 2027. GPA: 2.99/4.00; Industrial Internship: 10/10 (A+).</p>
+          <p>{portfolio.claims.find((claim) => claim.evidenceKey === "form.academic-context")!.scope}</p>
           <a className="primary-action" href={`mailto:${portfolio.contact.email}`}>
             {portfolio.opening.primaryAction} <span aria-hidden="true">↗</span>
           </a>

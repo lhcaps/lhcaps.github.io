@@ -12,7 +12,7 @@ describe("authoritative portfolio content", () => {
     expect(portfolio.systems.map((system) => system.title)).toEqual([
       "Form Management",
       "VisionFlow Studio",
-      "Production Booking & Operations Platform",
+      "Booking & Operations Platform",
       "Parkly",
       "TFT Local Copilot",
     ])

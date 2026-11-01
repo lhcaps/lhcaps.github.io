@@ -4,7 +4,7 @@ const claims: PublicClaim[] = [
   {
     evidenceKey: "form.academic-context",
     systemId: "form-management",
-    scope: "HUFLIT Information Technology (Software Engineering), expected 2027; GPA 2.99/4.00 and Industrial Internship grade 10/10 (A+).",
+    scope: "HUFLIT Information Technology (Software Engineering), expected 2027. In the 2026 transcript snapshot: GPA 2.99/4.00 and Industrial Internship grade 10/10 (A+).",
     classification: "DOCUMENTED_ONLY",
     publicSafe: true,
     limitation: "GPA and internship grade are from the 2026 transcript snapshot; expected graduation is from the original CV.",
@@ -36,10 +36,10 @@ const claims: PublicClaim[] = [
   {
     evidenceKey: "form.corpus-gate",
     systemId: "form-management",
-    scope: "A historical local observation reported 213 locked records reviewed.",
+    scope: "A local verifier checked 213 locked contracts and found 11 blocking extraction hash mismatches.",
     classification: "VERIFIED_LOCAL",
     publicSafe: true,
-    limitation: "The gate process exited nonzero because its summary was stale; the gate must not be described or styled as green.",
+    limitation: "On 2026-11-02 the gate failed with a stale summary and, after regeneration, failed on the 11 blockers. This is not end-to-end proof.",
   },
   {
     evidenceKey: "vision.ingestion-dataset",
@@ -132,7 +132,7 @@ const systems: SystemDefinition[] = [
     anchor: "#system-form-management",
     publicAnchor: "DOCX Contract",
     summary: "The DOCX contract decides what every form is allowed to become.",
-    evidenceBoundary: "Implemented source plus a historical local gate observation; no fresh runtime claim.",
+    evidenceBoundary: "Implemented source plus a local failed corpus gate; no fresh runtime claim.",
     evidenceKeys: [
       "form.contract-governance",
       "form.identity-authorization",
@@ -172,7 +172,7 @@ const systems: SystemDefinition[] = [
       details: [
         "Temporary Preview is deliberately non-persisted and never inherits an Audit route.",
         "Persisted Document continues to Audit and Verification as a separate lifecycle outcome.",
-        "A historical local check reported 213 locked records reviewed, but a stale summary kept the corpus gate failed.",
+        "A stale report failed the gate; after regeneration, 11 extraction hash mismatches still blocked it.",
       ],
       claimInstanceIds: ["form-narrative-contract", "form-narrative-boundaries", "form-narrative-gate", "form-narrative-academic"],
     },
@@ -228,7 +228,7 @@ const systems: SystemDefinition[] = [
   },
   {
     id: "production-booking-operations",
-    title: "Production Booking & Operations Platform",
+    title: "Booking & Operations Platform",
     tier: "flagship",
     order: 3,
     anchor: "#system-production-booking-operations",

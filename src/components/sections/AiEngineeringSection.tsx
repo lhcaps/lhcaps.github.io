@@ -18,7 +18,7 @@ export function AiEngineeringSection() {
         <div className="method-boundaries">
           <article><span>01</span><h3>Contract and context</h3><p>Intent, public evidence, product scope, UX rules, and architecture constrain what implementation is allowed to mean.</p></article>
           <article><span>02</span><h3>Deterministic acceptance</h3><p>Type, content, topology, test, build, privacy, and artifact gates decide whether authored work is accepted.</p></article>
-          <article><span>03</span><h3>Observed closure</h3><p>Browser QA, independent review, Release Evidence, and exact-SHA production attestation close the remaining gap.</p></article>
+          <article><span>03</span><h3>Release verification</h3><p>Browser QA and independent review support a release; an exact-SHA production attestation is required before claiming deployed acceptance.</p></article>
         </div>
       </div>
     </section>

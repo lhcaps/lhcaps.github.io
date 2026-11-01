@@ -9,7 +9,7 @@ import { CANONICAL_URL, FULL_SHA, publicReleaseIdentity, safeError, writeJsonAto
 const SYSTEMS = [
   "Form Management",
   "VisionFlow Studio",
-  "Production Booking & Operations Platform",
+  "Booking & Operations Platform",
   "Parkly",
   "TFT Local Copilot",
 ]
