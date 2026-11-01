@@ -13,6 +13,8 @@ import {
 
 export const PUBLIC_ALLOWLIST = [
   "favicon.svg",
+  "le-huy-backend-cv-2026.pdf",
+  "le-huy-fullstack-cv-2026.pdf",
   "le-huy-software-engineer-cv.pdf",
   "og-image.png",
   "robots.txt",

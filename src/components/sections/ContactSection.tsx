@@ -7,7 +7,8 @@ export function ContactSection() {
         <div>
           <p className="eyebrow">09 / CLOSING</p>
           <h2 id="contact-heading">Bring the problem that refuses to stay still.</h2>
-          <p>I am targeting a full-time Junior Software Engineer role and the work around it: typed product surfaces, backend boundaries, operational handoffs, and proof that survives the release.</p>
+          <p>I am seeking a junior backend or backend-focused full-stack role, working on APIs, data boundaries, operational workflows, and verifiable releases.</p>
+          <p>{portfolio.claims.find((claim) => claim.evidenceKey === "form.academic-context")!.scope}</p>
           <a className="primary-action" href={`mailto:${portfolio.contact.email}`}>
             {portfolio.opening.primaryAction} <span aria-hidden="true">↗</span>
           </a>
@@ -16,6 +17,8 @@ export function ContactSection() {
           <a href={`mailto:${portfolio.contact.email}`}>{portfolio.contact.email}</a>
           <a href={portfolio.contact.github} target="_blank" rel="noopener noreferrer" aria-label="GitHub (opens in a new tab)">GitHub <span aria-hidden="true">↗</span></a>
           <a href={portfolio.contact.cv} download>Download CV <span aria-hidden="true">↓</span></a>
+          <a href="/le-huy-backend-cv-2026.pdf" download aria-label="Download Backend ATS Resume (Updated 2026-11)">Backend Resume (2026-11) <span aria-hidden="true">↓</span></a>
+          <a href="/le-huy-fullstack-cv-2026.pdf" download aria-label="Download Full-stack ATS Resume (Updated 2026-11)">Full-stack Resume (2026-11) <span aria-hidden="true">↓</span></a>
         </address>
       </div>
       <footer className="page-shell site-footer">
