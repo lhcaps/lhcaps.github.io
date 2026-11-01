@@ -17,6 +17,8 @@ export function ContactSection() {
           <a href={`mailto:${portfolio.contact.email}`}>{portfolio.contact.email}</a>
           <a href={portfolio.contact.github} target="_blank" rel="noopener noreferrer" aria-label="GitHub (opens in a new tab)">GitHub <span aria-hidden="true">↗</span></a>
           <a href={portfolio.contact.cv} download>Download CV <span aria-hidden="true">↓</span></a>
+          <a href="/le-huy-backend-cv-2026.pdf" download aria-label="Download Backend ATS Resume (Updated 2026-11)">Backend Resume (2026-11) <span aria-hidden="true">↓</span></a>
+          <a href="/le-huy-fullstack-cv-2026.pdf" download aria-label="Download Full-stack ATS Resume (Updated 2026-11)">Full-stack Resume (2026-11) <span aria-hidden="true">↓</span></a>
         </address>
       </div>
       <footer className="page-shell site-footer">
