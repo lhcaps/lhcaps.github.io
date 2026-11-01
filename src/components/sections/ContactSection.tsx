@@ -7,7 +7,8 @@ export function ContactSection() {
         <div>
           <p className="eyebrow">09 / CLOSING</p>
           <h2 id="contact-heading">Bring the problem that refuses to stay still.</h2>
-          <p>I am targeting a full-time Junior Software Engineer role and the work around it: typed product surfaces, backend boundaries, operational handoffs, and proof that survives the release.</p>
+          <p>I am seeking a junior backend or backend-focused full-stack role, working on APIs, data boundaries, operational workflows, and verifiable releases.</p>
+          <p>HUFLIT Information Technology (Software Engineering), expected 2027. GPA: 2.99/4.00; Industrial Internship: 10/10 (A+).</p>
           <a className="primary-action" href={`mailto:${portfolio.contact.email}`}>
             {portfolio.opening.primaryAction} <span aria-hidden="true">↗</span>
           </a>

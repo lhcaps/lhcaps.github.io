@@ -2,6 +2,14 @@ import type { PortfolioGraph, PublicClaim, SystemDefinition } from "./types"
 
 const claims: PublicClaim[] = [
   {
+    evidenceKey: "form.academic-context",
+    systemId: "form-management",
+    scope: "HUFLIT Information Technology (Software Engineering), expected 2027; GPA 2.99/4.00 and Industrial Internship grade 10/10 (A+).",
+    classification: "DOCUMENTED_ONLY",
+    publicSafe: true,
+    limitation: "GPA and internship grade are from the 2026 transcript snapshot; expected graduation is from the original CV.",
+  },
+  {
     evidenceKey: "form.contract-governance",
     systemId: "form-management",
     scope: "Typed DOCX contracts govern form output and validation boundaries.",
@@ -28,7 +36,7 @@ const claims: PublicClaim[] = [
   {
     evidenceKey: "form.corpus-gate",
     systemId: "form-management",
-    scope: "A fresh local observation reported 213 of 213 locked and reviewed records.",
+    scope: "A historical local observation reported 213 locked records reviewed.",
     classification: "VERIFIED_LOCAL",
     publicSafe: true,
     limitation: "The gate process exited nonzero because its summary was stale; the gate must not be described or styled as green.",
@@ -124,12 +132,13 @@ const systems: SystemDefinition[] = [
     anchor: "#system-form-management",
     publicAnchor: "DOCX Contract",
     summary: "The DOCX contract decides what every form is allowed to become.",
-    evidenceBoundary: "Implemented source plus one qualified fresh local gate observation; no fresh runtime claim.",
+    evidenceBoundary: "Implemented source plus a historical local gate observation; no fresh runtime claim.",
     evidenceKeys: [
       "form.contract-governance",
       "form.identity-authorization",
       "form.preview-persistence-audit",
       "form.corpus-gate",
+      "form.academic-context",
     ],
     topology: {
       layers: [
@@ -163,9 +172,9 @@ const systems: SystemDefinition[] = [
       details: [
         "Temporary Preview is deliberately non-persisted and never inherits an Audit route.",
         "Persisted Document continues to Audit and Verification as a separate lifecycle outcome.",
-        "A stale summary kept the corpus gate red even after 213 of 213 locked records were reviewed. Good.",
+        "A historical local check reported 213 locked records reviewed, but a stale summary kept the corpus gate failed.",
       ],
-      claimInstanceIds: ["form-narrative-contract", "form-narrative-boundaries", "form-narrative-gate"],
+      claimInstanceIds: ["form-narrative-contract", "form-narrative-boundaries", "form-narrative-gate", "form-narrative-academic"],
     },
   },
   {
@@ -354,11 +363,11 @@ export const portfolio = {
     name: "Le Huy",
     role: "Software Engineer",
     target: "Full-time Junior Software Engineer",
-    positioning: "Roughly 60% full-stack product-engineering breadth and 40% backend-depth emphasis.",
-    strongestDimension: "Backend depth is the strongest technical dimension.",
+    positioning: "Backend-focused, with full-stack experience across TypeScript, APIs, data and operational workflows.",
+    strongestDimension: "I focus on explicit contracts, reliable data boundaries and observable handoffs.",
   },
   opening: {
-    proposition: "I build full-stack products from the backend outward: contracts, queues, allocations, review handoffs, and the gates that decide when they ship.",
+    proposition: "I build operational software from the backend outward: booking and pricing workflows, parking operations, and document contracts.",
     atlasLead: "Five systems. Five different failure surfaces.",
     systemsLead: "Each artifact gets its own reading shape.",
     primaryAction: "Work with me",
@@ -377,6 +386,7 @@ export const portfolio = {
   },
   claims,
   claimInstances: [
+    { claimInstanceId: "form-narrative-academic", evidenceKey: "form.academic-context" },
     { claimInstanceId: "atlas-form-contract", evidenceKey: "form.contract-governance" },
     { claimInstanceId: "atlas-vision-queue", evidenceKey: "vision.queue-handoff" },
     { claimInstanceId: "atlas-booking-revision", evidenceKey: "booking.revision-history" },

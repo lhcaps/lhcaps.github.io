@@ -5,7 +5,7 @@ export function OpeningSection() {
     <section className="chapter opening" id="opening" aria-labelledby="opening-heading">
       <div className="page-shell opening__grid">
         <div className="opening__lead">
-          <p className="eyebrow">LE HUY / SOFTWARE SYSTEMS</p>
+          <p className="eyebrow">BACKEND-FOCUSED / FULL-STACK TYPESCRIPT</p>
           <h1 id="opening-heading">Le Huy</h1>
           <p className="opening__role">{portfolio.identity.role}</p>
           <p className="opening__target">{portfolio.identity.target}</p>
@@ -14,6 +14,10 @@ export function OpeningSection() {
             <p>{portfolio.identity.positioning}</p>
             <p>{portfolio.identity.strongestDimension}</p>
           </div>
+          <p>
+            Explore <a href="#system-production-booking-operations">booking and operations</a> and{" "}
+            <a href="#system-parkly">Parkly</a>.
+          </p>
           <a className="primary-action" href={`mailto:${portfolio.contact.email}`}>
             {portfolio.opening.primaryAction} <span aria-hidden="true">↗</span>
           </a>
