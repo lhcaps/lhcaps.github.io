@@ -25,7 +25,7 @@ export const LOCAL_GATES = [
   { category: "build-output", script: "validate:build", evidence: "dist/.vite/manifest.json" },
   { category: "cv", script: "verify:cv", evidence: "public/le-huy-software-engineer-cv.pdf" },
   { category: "browser-qa", script: "e2e", evidence: "playwright-report/index.html" },
-  { category: "dependency-audit", command: ["audit", "--json"], evidence: "npm audit --json" },
+  { category: "dependency-audit", command: ["audit", "--json", "--audit-level=critical"], evidence: "npm audit --json --audit-level=critical" },
   { category: "pages-staging", script: "stage:pages", evidence: "artifacts/pages-site" },
   { category: "confidentiality", script: "verify:confidentiality", evidence: "docs/release/confidentiality-review.v1.json" },
   { category: "performance-budget", script: "verify:budget", evidence: "artifacts/release/asset-inventory.v1.json" },
