@@ -1,6 +1,6 @@
 ---
 lens: product
-sourceDigest: 07a91f1c0ab71b3346f58ebaf838036e4e0b76288031a8a615b25f8f1fe8718c
+sourceDigest: 2452cdc63caa896d280f5c0955004f26e19138708e7923d98edbdd956cdacc51
 verdict: pass
 findingDisposition: none
 reviewedAt: 2026-08-27T12:42:27.796Z
